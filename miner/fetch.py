@@ -22,6 +22,17 @@ def fetch_posts(query="looking for an app", limit=50):
             "title": post.title,
             "body": post.selftext,
             "subreddit": post.subreddit.display_name,
-            "url": post.url
+            "url": post.url,
+            "score": post.score,
+            "num_comments": post.num_comments,
+            "upvote_ratio": post.upvote_ratio,
+            "created_utc": post.created_utc,
+            "author": str(post.author),
+            "is_original_content": post.is_original_content,
+            "edited": bool(post.edited),
+            "link_flair_text": post.link_flair_text,
+            "total_awards_received": post.total_awards_received,
+            "gilded": post.gilded
         })
+
     return posts
