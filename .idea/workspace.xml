@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="03399f76-4bb2-43c9-8570-5bad8704ce6c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/mappings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mappings.py" beforeDir="false" afterPath="$PROJECT_DIR$/mappings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notebooks/EDA.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/EDA.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +37,9 @@
     &quot;accountId&quot;: &quot;6175f676-2940-4694-b75a-f862bcc9182f&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/notebooks/EDA.ipynb" root0="SKIP_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
 }</component>
@@ -55,6 +57,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/josep/OneDrive/Desktop/Software/RedditProblemFinder/data&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -98,7 +101,15 @@
       <workItem from="1746998801331" duration="3000" />
       <workItem from="1747115793070" duration="4910000" />
       <workItem from="1747264320725" duration="20564000" />
-      <workItem from="1747291111336" duration="2395000" />
+      <workItem from="1747291111336" duration="3044000" />
+      <workItem from="1747340443371" duration="8747000" />
+      <workItem from="1747503936739" duration="24359000" />
+      <workItem from="1747549557551" duration="592000" />
+      <workItem from="1747594705829" duration="1574000" />
+      <workItem from="1747596317675" duration="10585000" />
+      <workItem from="1747625370175" duration="2216000" />
+      <workItem from="1747627639219" duration="4987000" />
+      <workItem from="1747673682657" duration="4291000" />
     </task>
     <servers />
   </component>
