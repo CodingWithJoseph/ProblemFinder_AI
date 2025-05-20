@@ -5,9 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="03399f76-4bb2-43c9-8570-5bad8704ce6c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/documents/phase_2.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documents/phase_3.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documents/phase_4.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documents/phase_5.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notebooks/Labeling.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mappings.py" beforeDir="false" afterPath="$PROJECT_DIR$/mappings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/documents/GettingStarted.md" beforeDir="false" afterPath="$PROJECT_DIR$/documents/phase_1.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notebooks/EDA.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/EDA.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,8 +23,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Jupyter Notebook" />
         <option value="Python Script" />
+        <option value="Jupyter Notebook" />
       </list>
     </option>
   </component>
@@ -56,6 +62,7 @@
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
@@ -109,7 +116,10 @@
       <workItem from="1747596317675" duration="10585000" />
       <workItem from="1747625370175" duration="2216000" />
       <workItem from="1747627639219" duration="4987000" />
-      <workItem from="1747673682657" duration="4291000" />
+      <workItem from="1747673682657" duration="4328000" />
+      <workItem from="1747699976218" duration="13710000" />
+      <workItem from="1747757537228" duration="6618000" />
+      <workItem from="1747767714440" duration="4519000" />
     </task>
     <servers />
   </component>
