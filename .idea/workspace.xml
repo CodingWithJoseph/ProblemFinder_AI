@@ -5,15 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="03399f76-4bb2-43c9-8570-5bad8704ce6c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/documents/phase_2.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documents/phase_3.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documents/phase_4.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/documents/phase_5.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/notebooks/Labeling.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notebooks/phase_1.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notebooks/phase_2.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notebooks/reddit_cleaning_for_bert.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/documents/GettingStarted.md" beforeDir="false" afterPath="$PROJECT_DIR$/documents/phase_1.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/EDA.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/EDA.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/documents/phase_1.md" beforeDir="false" afterPath="$PROJECT_DIR$/documents/phase_1.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/documents/phase_2.md" beforeDir="false" afterPath="$PROJECT_DIR$/documents/phase_2.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/EDA.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/Labeling.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/phase_0.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,7 +118,9 @@
       <workItem from="1747673682657" duration="4328000" />
       <workItem from="1747699976218" duration="13710000" />
       <workItem from="1747757537228" duration="6618000" />
-      <workItem from="1747767714440" duration="4519000" />
+      <workItem from="1747767714440" duration="5059000" />
+      <workItem from="1748197178672" duration="2865000" />
+      <workItem from="1748488949602" duration="26798000" />
     </task>
     <servers />
   </component>
