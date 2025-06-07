@@ -1,6 +1,13 @@
 # Phase 1: EDA & FE 
 Note: Current values represent training data
 
+## Initial Text Cleaning Function:
+- [X] Create a function to apply to each Reddit post:
+  - [X] Convert to lowercase.
+  - [X] Remove URLs.
+  - [X] Remove Reddit-specific elements (e.g., u/username, r/subreddit, &amp;).
+  - [X] Remove extra whitespace.
+
 ## Exploratory Data Analysis (EDA) Checklist
 
 ### Basic Dataset Analysis
@@ -32,59 +39,16 @@ Note: Current values represent training data
 
 - [X] Generate summary statistics (min, max, mean, median)
 
-### Question Pattern Analysis
-- [ ] Count question marks per post
-- [ ] Identify posts starting with question words
-- [ ] Calculate question-to-sentence ratio
-- [ ] Extract common question phrases
-- [ ] Create boolean feature for posts starting with questions
-- [ ] Identify common question patterns with regex
-- [ ] Calculate question-to-text ratio
-
 ### Visualization Tasks
-- [ ] Create histograms of text length metrics
-- [ ] Generate word clouds from titles and bodies
-- [ ] Plot subreddit distribution bar chart
-- [ ] Create a correlation heatmap of numeric features
+- [X] Create histograms of text length metrics
+- [X] Generate word clouds from titles and bodies
 
 ## 2. Feature Engineering Steps
 
 ### Text Length Features
-- [ ] Add `title_char_count` and `title_word_count` columns
-- [ ] Add `body_char_count` and `body_word_count` columns
-- [ ] Calculate `text_density` (words/characters ratio)
-- [ ] Determine the number of paragraphs in the body
+- [X] Add `title_char_count` and `title_word_count` columns
+- [X] Add `body_char_count` and `body_word_count` columns
 
 ### Sentiment Analysis Options
-- [ ] **Option 1: Use existing libraries**
-  - [ ] Implement TextBlob for quick sentiment scoring
-  - [ ] Use VADER from NLTK for social media-focused sentiment
-  - [ ] Add `title_sentiment` and `body_sentiment` columns
-  
-- [ ] **Option 2: Train custom sentiment model**
-  - [ ] Gather labeled sentiment data (optional)
-  - [ ] Extract relevant features (word embeddings, n-grams)
-  - [ ] Train simple sentiment classifier
-  - [ ] Apply model to generate sentiment scores
-
-### Problem-Indicating Keywords
-- [ ] Create a list of problem-indicating phrases
-```python
-problem_phrases = [
-    "need help", "looking for", "is there a", "wish there was",
-    "can't find", "how do I", "struggle with", "any tool for",
-    "is there any", "help me", "solution for"
-  ]
-```
-- [ ] Count occurrences of each phrase
-- [ ] Create aggregate `problem_phrase_count` feature
-- [ ] Create boolean features for common phrases
-
-### Additional Text Features
-- [ ] Extract URLs mentioned (potential existing solutions)
-- [ ] Count specific characters (%, $, numbers)
-- [ ] Identify technical terminology frequency
-- [ ] Calculate readability scores
-
-## Tokenization:
-- [ ] Apply tokenization (e.g., nltk.word_tokenize or spacy.tokenizer).
+- [X] Use VADER from NLTK for social media-focused sentiment
+- [X] Add `title_sentiment` and `body_sentiment` columns
