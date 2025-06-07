@@ -5,14 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="03399f76-4bb2-43c9-8570-5bad8704ce6c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/notebooks/phase_1.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/notebooks/phase_2.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/notebooks/reddit_cleaning_for_bert.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notebooks/phase_3.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notebooks/phase_4.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/documents/phase_1.md" beforeDir="false" afterPath="$PROJECT_DIR$/documents/phase_1.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/documents/phase_2.md" beforeDir="false" afterPath="$PROJECT_DIR$/documents/phase_2.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/EDA.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/Labeling.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/phase_0.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/documents/phase_3.md" beforeDir="false" afterPath="$PROJECT_DIR$/documents/phase_3.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/phase_0.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/phase_1.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/phase_1.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/phase_2.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/phase_2.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/reddit_cleaning_for_bert.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,8 +91,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-PY-251.25410.122" />
-        <option value="bundled-python-sdk-880ecab49056-36ea0e71a18c-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-251.25410.122" />
+        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-PY-251.25410.159" />
+        <option value="bundled-python-sdk-e0ed3721d81e-36ea0e71a18c-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-251.25410.159" />
       </set>
     </attachedChunks>
   </component>
@@ -120,7 +124,12 @@
       <workItem from="1747757537228" duration="6618000" />
       <workItem from="1747767714440" duration="5059000" />
       <workItem from="1748197178672" duration="2865000" />
-      <workItem from="1748488949602" duration="26798000" />
+      <workItem from="1748488949602" duration="28650000" />
+      <workItem from="1748634343443" duration="687000" />
+      <workItem from="1748654485823" duration="3117000" />
+      <workItem from="1748894567759" duration="4977000" />
+      <workItem from="1749157122121" duration="626000" />
+      <workItem from="1749233418478" duration="21345000" />
     </task>
     <servers />
   </component>

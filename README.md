@@ -28,7 +28,7 @@ This project follows the philosophy of building products quickly based on real u
 
 - [x] Set up project and Reddit API access
 - [x] Collect Reddit posts using broad search queries
-- [ ] Label 300 posts to train a machine learning model
+- [X] Label 300 posts to train a machine learning model
 - [ ] Build and test a problem-detection model
 - [ ] Create a basic Streamlit UI to display detected problems
 
