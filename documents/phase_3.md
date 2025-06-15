@@ -21,7 +21,7 @@
   - Train the chosen model on your combined feature set (`X`) and `market_viability` target (`y`).
 
 ## Evaluate Model Performance:
-- [ ] Make predictions on your held-out test set.
+- [ ] Make predictions on your held-out test s et.
 - [ ] Calculate key metrics:
   - [ ] **F1-score** (macro or weighted): Primary metric for binary classification with potential imbalance.
   - [ ] **Precision and Recall**: For each class (Viable Problem, Non-Viable Problem).

@@ -58,7 +58,7 @@ if __name__ == "__main__":
     df = df.drop_duplicates(subset=['url'])
 
     # Save all posts
-    df.to_csv("data/raw_reddit_posts.csv", index=False)
+    df.to_csv("data/raw_data.csv", index=False)
     print(f"Saved {len(df)} posts.")
 
     # Create labeled dataset sample

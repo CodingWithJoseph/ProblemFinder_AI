@@ -5,18 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="03399f76-4bb2-43c9-8570-5bad8704ce6c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/notebooks/phase_3.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/notebooks/phase_4.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/documents/phase_1.md" beforeDir="false" afterPath="$PROJECT_DIR$/documents/phase_1.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/documents/phase_2.md" beforeDir="false" afterPath="$PROJECT_DIR$/documents/phase_2.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/documents/phase_3.md" beforeDir="false" afterPath="$PROJECT_DIR$/documents/phase_3.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/phase_0.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mappings.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/notebooks/phase_1.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/phase_1.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notebooks/phase_2.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/phase_2.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/reddit_cleaning_for_bert.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notebooks/phase_3.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/phase_3.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +70,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.LLMThirdPartyAiProvidersConfigurable&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -129,7 +124,11 @@
       <workItem from="1748654485823" duration="3117000" />
       <workItem from="1748894567759" duration="4977000" />
       <workItem from="1749157122121" duration="626000" />
-      <workItem from="1749233418478" duration="21345000" />
+      <workItem from="1749233418478" duration="23829000" />
+      <workItem from="1749508026640" duration="529000" />
+      <workItem from="1749863145097" duration="13144000" />
+      <workItem from="1749940970312" duration="4036000" />
+      <workItem from="1749945049469" duration="5985000" />
     </task>
     <servers />
   </component>
