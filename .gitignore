@@ -20,13 +20,35 @@ ENV/
 .ipynb_checkpoints
 
 # IDE specific files
+# ------------------
+# PyCharm / IntelliJ IDEA
 .idea/
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+.idea/**/contentModel.xml
+
+# Remove project-specific settings if you want them ignored
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+
+# Optional: ignore module files if they shouldn't be versioned
+*.iml
+
+# VSCode (in case you sometimes use it)
 .vscode/
+
+# Vim swap files
 *.swp
 *.swo
-*.xml
 
-## Project specific
+# Project-specific
 #*.log
 #data/*.csv
 #data/*.json
