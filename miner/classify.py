@@ -1,5 +1,12 @@
 # miner/classify.py
 
+from dotenv import load_dotenv
+import openai
+import os
+
+load_dotenv()
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
 PROBLEM_PROMPT = """
 You are a classifier that determines if a Reddit post describes a problem.
 
@@ -36,3 +43,5 @@ Post:
 
 Return ONLY one of: software_only, software+hardware, hardware_only
 """
+
+
