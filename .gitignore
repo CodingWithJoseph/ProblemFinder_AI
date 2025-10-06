@@ -25,12 +25,12 @@ ENV/
 *.swp
 *.swo
 
-# Project specific
-*.log
-data/*.csv
-data/*.json
-data/*.xlsx
-!data/sample_data.csv
+## Project specific
+#*.log
+#data/*.csv
+#data/*.json
+#data/*.xlsx
+#!data/sample_data.csv
 
 # Environments
 .env

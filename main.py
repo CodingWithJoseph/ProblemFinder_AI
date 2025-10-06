@@ -60,9 +60,3 @@ if __name__ == "__main__":
     # Save all posts
     df.to_csv("data/raw_data.csv", index=False)
     print(f"Saved {len(df)} posts.")
-
-    # Create labeled dataset sample
-    shuffled_data = df.sample(frac=1, random_state=42).reset_index(drop=True)
-    label_data = shuffled_data[:500]
-    label_data.to_csv("data/labeled_post.csv", index=False)
-    print(f"Saved {len(label_data)} posts for labeling.")
