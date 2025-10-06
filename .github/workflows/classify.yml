@@ -29,6 +29,9 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            pip install pywin32==310
+          fi
 
       - name: Run classifier script
         run: python miner/classify.py
