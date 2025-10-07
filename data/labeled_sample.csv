@@ -19,7 +19,7 @@ Nebula Capsule 3
   
 I saw some of these go on Sale recently and could of snagged the MoGo 3 Pro with a stand for £300 but didnt want to jump any gun!
 
-Appreciate the help!",1,hardware_only
+Appreciate the help!",1,hardware_primary
 How bad is the 8 speed transmission of the 2017's?,"Hi there, looking at a 2017 Sienna AWD with about 65k miles (108k km)... I've read pre-february 2017 build date is worse than after... 
 
 How bad are the transmission actually? To the point I'll definitely have issues? To avoid entirely? 
@@ -105,7 +105,7 @@ But you can:
 * Train your team to adapt
 * Use data to pivot faster than your competitors
 
-And *that* is what separates the survivors from the companies writing crisis comms on a Friday night.",1,software_only
+And *that* is what separates the survivors from the companies writing crisis comms on a Friday night.",1,software_plus_external
 Budget Mini PC for Obsidian and more,"Hey everyone,
 
 I've been skimming over this subreddit to look for information about some mini PCs as I am looking for the best ""bang for a buck"" solution. Beforce anything, I am located in Germany and in best case, I plan to order from Amazon.
@@ -146,7 +146,7 @@ So I was hoping to get some good advice which to choose from.
 If there is a better system in the same price range, feel free to recommend it. Although it should be available in Germany.
 
   
-So - thank you for reading up to here and thanks in advance for any recommendations.",1,software+hardware
+So - thank you for reading up to here and thanks in advance for any recommendations.",1,software_plus_hardware
 Musicians and Friends,"Being a musician (and founder) can be an incredibly lonely existence.
 
 As a violinist for over 3 decades I've found making friends nearly impossible for most of my life. From practicing hours a day to become the best musician possible to finding communication with non-musicians difficult to painful, I've sought a better way to find friends for a very long time.
@@ -292,7 +292,7 @@ Thank you for being a part of our community of soulslike gamers. We're excited a
 ",0,-
 "34"" OLED/QD-OLED Monitor for 80:20 productivity/gaming work - any suggestions?","I'm looking for a 1440p high refresh rate monitor that works for both gaming and productivity in the split I mentioned. Where I'm struggling is finding a *gaming* monitor that offers USB-C display and 60+W PD. Monitors like the AW3423DWF or Samsung G8 seem like great choices, but don't offer that USB-C connection. 
 
-For context, I'm a soon to graduate university student in computer engineering, with a Mac for work (hence the USB-C connection), generally software engineering workloads, and occassional gaming in esports titles on a Windows PC. I am looking to get into singleplayer story games (still need to play RDR2 and GoW!).",1,hardware_only
+For context, I'm a soon to graduate university student in computer engineering, with a Mac for work (hence the USB-C connection), generally software engineering workloads, and occassional gaming in esports titles on a Windows PC. I am looking to get into singleplayer story games (still need to play RDR2 and GoW!).",1,hardware_primary
 How do you go about designing and creating scenes for analog horror?,I have a writeup for an analog horror series that takes on a found footage lens. How do I create scenes that look of acceptable quality? Collage? Do I have to draw the scenery myself? I'm not a very proficient drawing artist. I'm considering using scenes from videogames. What software do you guys use?,0,-
 HDR looks dull and washed out in every game I've tried... (The new AOC Q27G40XMN),"I recently bought the new AOC Q27G40XMN (1440p, Mini-LED, VA). This is my first experience with HDR at all. As far as I'm aware, the only calibration I can do in the monitor settings as far as HDR goes is adjusting the HDR Mode (I assume this means preset), which includes: DisplayHDR, HDR Picture, HDR Movie, and HDR Game. While in HDR, the only other picture settings I can configure are contrast (from 0-100, which is unavailable in DisplayHDR mode) and local dimming settings (off, low, medium, high). From my testing on HDR youtube videos (namely this one: [https://www.youtube.com/watch?v=LxnMg0I0LZM&ab\_channel=TFTCentral](https://www.youtube.com/watch?v=LxnMg0I0LZM&ab_channel=TFTCentral) ), the ""HDR Game"" preset (which is also the default mode) with local dimming set to ""low"" seems to be the best, as anything above low local dimming removes too many details in dark scenery. The video looks gorgeous in HDR! Super black darks, super bright highlights. However, I have tested these games in HDR (confirmed that my Windows settings say ""HDR on"", my monitor settings say ""HDR Game"" to on, the games' settings say HDR is on, and the games are all in fullscreen):
 
@@ -304,7 +304,7 @@ Dragon's Dogma 2
 
 Baldur's Gate 3
 
-All these games tested in ""HDR Game"" mode with local dimming on low, contrast on 55 (these are the only PC games I own with HDR settings so far). They all looked very grey, dull, washed out. Worse than SDR.  Some of these titles are salvageable with shaders, but others looks better or the same in SDR. I'm very confused if I am missing calibration settings in some form of software or if I have a faulty monitor. But the HDR videos look sexy so idk. I have tried Nvidia filters as other posts suggest, but every single one makes me crash almost instantly sooo (which is a shame, some of them I enjoy...) Thanks for any advice :>",1,software_only
+All these games tested in ""HDR Game"" mode with local dimming on low, contrast on 55 (these are the only PC games I own with HDR settings so far). They all looked very grey, dull, washed out. Worse than SDR.  Some of these titles are salvageable with shaders, but others looks better or the same in SDR. I'm very confused if I am missing calibration settings in some form of software or if I have a faulty monitor. But the HDR videos look sexy so idk. I have tried Nvidia filters as other posts suggest, but every single one makes me crash almost instantly sooo (which is a shame, some of them I enjoy...) Thanks for any advice :>",1,software_plus_hardware
 Reviving Omnivore: Measuring interest in re-hosting and maintaining Omnivore,"Hi! 
 A lot of Obsidian users here used Omnivore, a beloved read-it-later service that was killed rapidly in a private buy-out.
 
@@ -326,7 +326,7 @@ https://omnivorenext.substack.com
 About me:
 I am a seasoned developer who has worked on every part of the stack at FAANG companies, startups, mid sized companies. I hate big tech, private equity, and how poor quality software has become. I know how to run a full fledged large-scale service well and would have fun doing this as a sort of farm-to-table software project and labor of love (for omnivore and obsidian!).
 
-[View Poll](https://www.reddit.com/poll/1kmsf8n)",1,software_only
+[View Poll](https://www.reddit.com/poll/1kmsf8n)",1,software_plus_external
 Mining with old laptops,"The first question is how much I can theoretically mine with this specs and is it even possible:
 Laptop1(Acer Aspire 5742z):
 -Intel Pentium p6200 2.13GHz 2 cores 2 threads
@@ -352,7 +352,7 @@ I know Samsung used some sort of special filter on the panel designed to elimina
 
 So my question is: did we all just IMAGINE that the Samsung Odyssey+ looked a lot sharper at some point in the past and it was ALWAYS this blurry?
 
-Or did something actually change in the software chain at some point to make this flaw a lot worse?",1,software_only
+Or did something actually change in the software chain at some point to make this flaw a lot worse?",1,software_plus_hardware
 "28 [M4F] UK - Fun, caring talkative introvert for the same?","Hi! I'm **Marc**. I'm **28**, and I live in **England**. I'm just putting my feelers out there to see if anybody is interested in me. Honestly, I'm open to dating or friendship. I don't have many friends, so why not? But I'm not desperate either :) I'm **open to long-distance**, but I should stress that other than Ireland, I doubt I would move far from Britain, because I don't think many places have the right balance of things that we do here.
 
 I'm a talkative introvert. I mostly keep to myself, but when I really like somebody, I'm very open with them, and I care for them a lot. I'm just trying to get through life without too much chaos, while causing minimal harm :) I like occasional bits of silly fun - I'll grow up fully when I'm dead -, but I also know how to be serious - and life has not been suuuper kind to me these past few years, so I feel like a bit of an old man, even though I do not look like it. I'm definitely not a university student anymore - I can't relate to that mentality, do you understand me? I worked for 6 years after university in software development, but due to long-term illness I'm presently unemployed. I'm trying to get back into work, but I need to prioritise working on my health first. So I guess I'm a long-term investment, not a quick win :) Hence why I'm not on Tinder lol.
@@ -380,7 +380,7 @@ Fast forward to today and I got a notice I had a package at my door. I open it a
 
 After like 5 months of ghosting me Lian Li randomly sends me a replacement AIO. Searched my email and on Monday I had one from a Mike saying my request had been approved and dispatched and they sincerely apologize for the delay caused by a shortage of raw materials. 
 
-So now I have a new AIO and no motivation to replace it atm lol",1,hardware_only
+So now I have a new AIO and no motivation to replace it atm lol",1,hardware_primary
 Is replacing employees with AI even economically possible?,"So, as of this day and age, it's becoming very apparent that some companies are slowly replacing individuals with AI. CEOs of these companies give long lectures (or e-mails in the case of Fiverr's CEO) about why AI employees are better, cheaper and ""more efficient"". And of course, there's no denying that a well-trained AI could do many things a lot better, which is even if you ignore the fact that AI is essentially just software and software can be improved substantially every day.  
   
 However, if you look at the Industrial Revolution: it caused people to look for other types of jobs and created a lot of new jobs because someone needed to build, fix and operate those same machines. Now, with AI, we have essentially created an alternative to a human, so it is far different from a machine user in a manufacturing facility. The thing is, ultimately, the Industrial Revolution had a positive outcome for employees since many such jobs prior to machines were unhealthy and dangerous.  
@@ -391,7 +391,7 @@ But with AI, I don't think it can be like that. There have been two thoughts goi
 
 I don't see a world where an economy could work if we, the (mostly) non-CEOs don't even have money to afford anything. Now, there is of course a discussion for a Universal Base Income (UBI) which would work for the small percentage that gets laid off before everything is essentially AI-based.
 
-So, ultimately, assuming that my two points could be true, wouldn't AI be both the end of our economy as well as allowing us humans to just do whatever we want instead of having to work — so being extremely positive in the end? (Ignoring what the effect of not having to work could be.)",1,software_only
+So, ultimately, assuming that my two points could be true, wouldn't AI be both the end of our economy as well as allowing us humans to just do whatever we want instead of having to work — so being extremely positive in the end? (Ignoring what the effect of not having to work could be.)",1,not_applicable
 Song process,"Hiii
 
 I was quite inspired by that vid someone linked to of Charli’s live song writing process and wondered if anyone knew the software she uses? And how you would record vocals for it I.e what type of microphone etc. Don’t worry - I’m definitely not about to mimic her art (could never), I just think it looks super fun.",0,-
@@ -408,7 +408,7 @@ Would it be bad to take this SQL dev job assuming I get the offer? I’m torn be
 
 I’d appreciate any advice to help me think through this.
 
-",1,software_only
+",1,not_applicable
 "1.5 Years of Unemployment: Lost, Learning and Looking for Direction","Hello everyone,
 
 In this post, I want to share my 1.5 year period of unemployment, the mental challenges I faced and how I lost my direction. If you’re in a similar situation or have been through something like this before, please don’t leave without commenting. Your advice could be incredibly valuable to me.
@@ -451,7 +451,7 @@ Here are some questions I have on my mind:
 
 Writing this feels like I’m pouring my heart out. I really feel lost. I want to move forward and find a way, but I don't know how. Advice from experienced people would mean a lot to me. Thank you for reading. I’m sorry for taking up your time. I hope I’ve been able to express myself clearly.
 
-Note: I haven’t been able to do anything for the past five months and have been in deep depression. However, I applied to the “Linux Kernel Bug Fixing Summer” program hoping it would help me and it looks like I will most likely be accepted.",1,software_only
+Note: I haven’t been able to do anything for the past five months and have been in deep depression. However, I applied to the “Linux Kernel Bug Fixing Summer” program hoping it would help me and it looks like I will most likely be accepted.",1,not_applicable
 Is now a good time to get into car sales?,"I’ve been in sales for over a decade, mostly high end independent clothing stores where I made very good money; I would do over a million in sales in my sleep as it was a short sales cycle and I liked the business. 
 
 Right now I’m in fine art selling at an art gallery and it’s awful due to inconsistency. Some months I’ll sell 175k, then nothing the next month, then the next month I’ll sell over 100k through financing, then crumbs for a few months, etc. I can make my whole month selling one piece, but last year that only happened on about five ups.
@@ -462,7 +462,7 @@ I live very close to a car mall and have considered getting into car sales befor
 
 Tariffs, and unstable economy would usually mean hold onto what you have and stay put, but my savings is rapidly depleting and I will be in bad shape if I don’t turn things around very soon. I’m really not qualified for much else, and software sales or something similar would require me to relocate. 
 
-Thanks, I appreciate all input. ",1,software_only
+Thanks, I appreciate all input. ",1,not_applicable
 From Infrastructure to Influence: How Dacxi Chain Is Redefining the Power Structures of Global Capit,"https://preview.redd.it/ct62hhx7it0f1.png?width=1120&format=png&auto=webp&s=24ff2912c4b63a81d73c48bef037f37833f2f15d
 
 The story of global equity crowdfunding is often told through the lens of regulation, democratization, and technology. But that story is incomplete. The real shift underway is structural — not just in how capital is raised, but in who controls the mechanisms of capital formation itself.
@@ -567,7 +567,7 @@ Here are some questions I have on my mind:
 
 Writing this feels like I’m pouring my heart out. I really feel lost. I want to move forward and find a way, but I don't know how. Advice from experienced people would mean a lot to me. Thank you for reading. I’m sorry for taking up your time. I hope I’ve been able to express myself clearly.
 
-Note: I haven’t been able to do anything for the past five months and have been in deep depression. However, I applied to the “Linux Kernel Bug Fixing Summer” program hoping it would help me and it looks like I will most likely be accepted.",1,software_only
+Note: I haven’t been able to do anything for the past five months and have been in deep depression. However, I applied to the “Linux Kernel Bug Fixing Summer” program hoping it would help me and it looks like I will most likely be accepted.",1,not_applicable
 "1.5 Years of Unemployment: Lost, Learning and Looking for Direction","Hello everyone,
 
 In this post, I want to share my 1.5 year period of unemployment, the mental challenges I faced and how I lost my direction. If you’re in a similar situation or have been through something like this before, please don’t leave without commenting. Your advice could be incredibly valuable to me.
@@ -610,7 +610,7 @@ Here are some questions I have on my mind:
 
 Writing this feels like I’m pouring my heart out. I really feel lost. I want to move forward and find a way, but I don't know how. Advice from experienced people would mean a lot to me. Thank you for reading. I’m sorry for taking up your time. I hope I’ve been able to express myself clearly.
 
-Note: I haven’t been able to do anything for the past five months and have been in deep depression. However, I applied to the “Linux Kernel Bug Fixing Summer” program hoping it would help me and it looks like I will most likely be accepted.",1,software_only
+Note: I haven’t been able to do anything for the past five months and have been in deep depression. However, I applied to the “Linux Kernel Bug Fixing Summer” program hoping it would help me and it looks like I will most likely be accepted.",1,not_applicable
 Looking to make a waterfall chart,"Hello. I am looking to make a waterfall chart similar to this: [https://www.youtube.com/watch?v=z\_XZOa2-6CQ](https://www.youtube.com/watch?v=z_XZOa2-6CQ) . I have also included a picture of what I am looking to do for anyone not wanting to watch a video.
 
 I have found some examples, but they are all the 3D versions instead of what can be found on software defined radio type interfaces. All of the examples I could find were related to FFTs, but the plot I have included is what the raw data looks like (so there is no frequency domain).
@@ -666,7 +666,7 @@ Here are some questions I have on my mind:
 
 Writing this feels like I’m pouring my heart out. I really feel lost. I want to move forward and find a way, but I don't know how. Advice from experienced people would mean a lot to me. Thank you for reading. I’m sorry for taking up your time. I hope I’ve been able to express myself clearly.
 
-Note: I haven’t been able to do anything for the past five months and have been in deep depression. However, I applied to the “Linux Kernel Bug Fixing Summer” program hoping it would help me and it looks like I will most likely be accepted.",1,software_only
+Note: I haven’t been able to do anything for the past five months and have been in deep depression. However, I applied to the “Linux Kernel Bug Fixing Summer” program hoping it would help me and it looks like I will most likely be accepted.",1,not_applicable
 Starting PM role,"Starting as a Product Manager at a startup (only PM on the team). Don’t have traditional SaaS PM experience but greater experience running NPI programs and product launch across large orgs. 
 
 New to Jira and Scrum/Kanban in the SaaS so I’m curious how you guys recommend to structure the product planning and prioritization. 
@@ -691,7 +691,7 @@ How would you guys organize the flow of activities and structure your product pl
 
 I know it’s long but I don’t have traditional software PM experience so looking for your guys’ experience, tips and tricks, resources or anything else that will help
 
-Thanks in advance ",1,software_only
+Thanks in advance ",1,not_applicable
 Starting PM role,"Starting as a PM at a startup (only PM on the team). Don’t have traditional SaaS PM experience but greater experience running NPI programs and product launch across large orgs. 
 
 New to Jira and Scrum/Kanban in the SaaS so I’m curious how you guys recommend to structure the product planning and prioritization. 
@@ -716,7 +716,7 @@ How would you guys organize the flow of activities and structure your product pl
 
 I know it’s long but I don’t have traditional software PM experience so looking for your guys’ experience, tips and tricks, resources or anything else that will help
 
-Thanks in advance ",1,software_only
+Thanks in advance ",1,not_applicable
 JS2TS - your ultimate code conversion companion - Tool for code conversions,"**Pricing**: One-time/USD
 
 **Category**: code conversions
@@ -736,7 +736,7 @@ And to be clear, *I'm fine with this.* I get paid well. So it's worth sacrificin
 
 However, this morning my boss rings me up and rants at me for not working correctly. He says, every unit of code I write from now on should be its own commit, and attached to its own work item on azure devops that is itself documented, and discussed with management beforehand. Every single unit of code. He is mad because, as a solo dev, I don't really have any need to commit very often. I'm not collaborating with anybody. so I usually commit full features. I.e, if there is a button that does a thing, I usually submit the front end, backend, and infrastructure requirements of that button as a single commit when its done. Which are themselves behind feature flags. He also wants to be able to see a daily progression of commits so we can have daily stand-ups to discuss the work I'm doing. He doesn't want me committing once per week with a big feature, because the volume of code I'm writing overwhelms him, and he can't be bothered to look over it at all (my code is also diligently commented, so it's obvious what everything is doing). So he's demanding I change my workflow, and day and structure it around a daily stand-up to make sure boxes are checked, and agile work items are linked together and documented instead of delivering... well, quite literally millions in value to our client.
 
-That's insane, right? What do I do here...? Or am I being unreasonable? My boss is extremely stubborn, and always falls back to ""I've got x decades of experience in software, you don't, I know what's best"", when in reality his code is stoned college junior level, he's just a business man that manages companies. I feel like this is a totally wild expectation lumped on top of an already wild expectation that I be *every* tech department in this business. I don't really want to leave, the client and I have a super good relationship, and my options are superb. What I can I do to explain to him that helicoptering in occasionally and demanding I change my entire workflow is not the play? I feel like this will 3x any development time I have because I'll constantly be compartmentalizing work, and managing work items and documentation of each work item nobody is ever going to read in a thousand years. ",1,software_only
+That's insane, right? What do I do here...? Or am I being unreasonable? My boss is extremely stubborn, and always falls back to ""I've got x decades of experience in software, you don't, I know what's best"", when in reality his code is stoned college junior level, he's just a business man that manages companies. I feel like this is a totally wild expectation lumped on top of an already wild expectation that I be *every* tech department in this business. I don't really want to leave, the client and I have a super good relationship, and my options are superb. What I can I do to explain to him that helicoptering in occasionally and demanding I change my entire workflow is not the play? I feel like this will 3x any development time I have because I'll constantly be compartmentalizing work, and managing work items and documentation of each work item nobody is ever going to read in a thousand years. ",1,not_applicable
 New job requires to pay for invoicing. Can I opt out?,"So I have just started work for a delivery company as a self employed driver. 
 
 After the whole process and getting the job, I was told I would have to use an invoice app to invoice the company. The invoicing costs £12.50 a week! £50 a month! Thats more than minimum wage and would take over 4 hours to pay for so bascially I am working the first 4 hours of a week for free to pay some company to allow me to have my wage.
@@ -747,12 +747,12 @@ I cant find anything on the HMRC website about being made to use any kind of sof
 
 However my question is, is this mandatory or compulsory? Can Inopt out? Can I not submit my own invoice? 
 
-Any help is appreciated ",1,software_only
+Any help is appreciated ",1,not_applicable
 The International EPD System selling licenses to consultancies?,"Does anyone have a list of who the consultancies are that purchased licenses to operate the different regions from the International EPD System?  Looking on their website (https://www.environdec.com/global-network/regional-partners), it's not obvious at all who these organizations are.
 
 Asking since I'm just noticing that the North American licensee is WAP Sustainability, and many of the International EPD System's EPD for this region are also either by WAP Sustainability or using their EPD tool Theta.  These EPDs shouldn't be marketed as type III (i.e. third party verified), since they don't meet the ISO 14025 requirements due to the program operator (WAP Sustainability) is also the consultant performing the EPD, the data/software provider, and also hand picking the verifiers.  This is similar to the EPD Hub, who are operated by OneClick who also provides the data/software and selects the verified.
 
-Too bad the International EPD System is selling out like this, they used to be looked at as a leader in the EPD field.",1,software_only
+Too bad the International EPD System is selling out like this, they used to be looked at as a leader in the EPD field.",1,not_applicable
 Using Simulink + Embedded Coder with ZCU106 (Zynq Ultrascale+ MPSoC) – Do I Need Vitis for ARM Targets?,"Hi all,
 
 I'm starting out with the ZCU106 evaluation board (Zynq Ultrascale+ MPSoC) and looking to use a model-based design approach with Simulink and Embedded Coder — targeting the ARM cores only (Cortex-A53 or R5).
@@ -769,7 +769,7 @@ That said, I’m finding it unclear what’s actually required to get this flow 
 
 If anyone has experience using Simulink with ZCU106 (or similar Zynq Ultrascale+ boards) purely on the embedded software side, I’d really appreciate your insights. Especially interested in knowing which add-ons/tools are *actually* needed to go from model to running code.
 
-Thanks.",1,software+hardware
+Thanks.",1,software_plus_hardware
 Digital Hunter: Black Rose Update #1.,"Hey everyone
 
 First off, a massive **thank you** for all your donations! Seriously, every bit has been a huge help. That support has gone directly into speeding up development, getting better tools (software/AI) to make the game shine, and honestly, helping me keep the lights on and food on the table.
@@ -868,7 +868,7 @@ Questions:
 
 Would love any thoughts, sanity checks, or advice. I'm just looking to have a prototype ready before the winter. It doesn't have to be high tech by any means. Just record temp data inside the blanket and transmit it somewhere so I can read it. Once I figure out it's even possible I can complicate it then.
 
-Thanks so much!",1,software+hardware
+Thanks so much!",1,software_plus_hardware
 Entry Level Roles Are A Dime A Dozen,"I’ve noticed how brutal the entry-level developer job market is, there are barely any entry level positions, every role you find is swamped with 200+ applicants, and you hear crickets after sending your resume on LinkedIn or Indeed.
 
 I felt that frustration a few months ago, until I switched to a three-step playbook that got me a couple more interviews in just two weeks: first, stop applying everywhere and laser-focus on the few entry-level roles that actually match your skills—whether that’s JavaScript frameworks or basic SQL etc... I like to use revers search google method:
@@ -960,7 +960,7 @@ classes I still need to take at Sophia
     
     Network and Security - Foundations
     
-    Data Management - Foundations",0,-
+    Data Management - Foundations",1,not_applicable
 Cursor's ban of Indian students have wide reaching consequences,"What’s happening with the Cursor ban isn’t just about one app—it’s a reflection of a deeper, more uncomfortable truth that’s starting to catch up with us. We love calling ourselves a tech superpower, we keep saying India is leading the charge in AI and software, but actions like this quietly tell a different story. When a promising AI tool like Cursor, used by developers and students worldwide, suddenly starts blocking Indian users—especially students—without any explanation, it hits differently. It chips away at something bigger than just access. It chips away at belief. At competitiveness. At our future.
 
 Because while we’re being locked out, students in other parts of the world—some barely in high school—are already integrating these tools into their learning. They’re writing better code, faster. They’re building AI-native workflows, experimenting, launching side projects, and becoming future-ready. And on the other side, you have Indian students—just as talented, just as hungry—forced to scavenge for offline alternatives or patchy workarounds because Cursor now sees an Indian IP as a risk, not a contributor. The tragic part? It’s not because of a lack of talent. It’s not even about infrastructure. It’s about trust. And that trust is something we, as a community, have slowly eroded.
@@ -973,19 +973,19 @@ This isn’t just about Cursor. It’s about our identity in the global tech wor
 
 Because if we don’t fix this, we’ll keep waking up to more silent bans, more locked features, and a world that keeps moving forward—without us.
 
-",1,software_only
+",1,not_applicable
 Soon MHA graduate feeling unqualified....,"I’ve been at Children’s Hospital Colorado for 12 years and I’m working on transitioning into healthcare administration. I’ll be finishing my MHA this December. Lately, I’ve started looking at job postings that interest me, but it’s been tough to find something I’m qualified for without taking a big pay cut.
 
 Over the years at Children’s, I’ve worked as an ophthalmic technician and was promoted three years ago to an ophthalmic educator. In that role, I handle onboarding, training, interviewing, policy alignment, and performance management—though I don’t technically have direct reports. I’ve also done clinical scheduling and a lot of hands-on patient care, but I’m ready to move away from anything patient-facing.
 
-I’m really interested in roles related to project management, operations, or data analytics, but I don’t have certifications or experience in those areas. I’d love to get into that kind of work, but I'm feeling unqualified without any experience or knowledge of specific data/project software. I think I could get a clinical management position but this isn't what I'm looking for. Ayn recommendations on roles I should look for? Are there any easier project/data certifications that would help me break into the hospital administration field? ",1,software_only
+I’m really interested in roles related to project management, operations, or data analytics, but I don’t have certifications or experience in those areas. I’d love to get into that kind of work, but I'm feeling unqualified without any experience or knowledge of specific data/project software. I think I could get a clinical management position but this isn't what I'm looking for. Ayn recommendations on roles I should look for? Are there any easier project/data certifications that would help me break into the hospital administration field? ",1,not_applicable
 "Opportunity in sales, how much would it change future opportunities?","Hello Everyone,
 
 I have been on this sub a little while but decided to make a throwaway account to ask for some advice on an opportunity that was recently presented to me.
 
 I graduated college exactly 1 year ago and have worked as a consultant for a software company since then. I’ve realized I am not overly thrilled about this type of work/industry but feel as if I am compensated greatly and have low stress overall which I am grateful for. I have had reservations for a while now as I had to relocate far from family/friends, move to a city I don’t like all that much, and have a feeling of existential dread when reflecting on life in the corporate world. However, I see those around me being given great opportunities when they move on from a role like mine. Top MBA/Masters programs, lucrative roles at startups, and more traditional roles in tech. As a result my working plan was to spend the next 5-6 years in my current company or consulting/tech generally (not sales) and then shoot for a top MBA program. If accepted, I’d like to take my chances as a professional/semi-professional poker player before and while in school as this is one of my passions. This additional education would come with the hopes of working in Management Consulting post-grad and or other more traditional post-MBA routes.
 
-Recently an opportunity that interests me has come up but has also made me second guess my plans. A fully remote Account Representative role for a software company. The base pay is about $17k lower than my current role but with estimated commission of $30k-$50k. I have never done anything sales related and am concerned that I may have trouble leaving the sales world if I ever choose to do so. Do people end up siloed in this line of work or are there opportunities to pivot elsewhere if it doesn’t work out? My main concern is that while this immediately might be an improvement compensation and lifestyle wise, it could be a hinderance to opportunities in the future. Just looking for some advice on the world of sales and exits if I hate it? Also, does the lifestyle feel vastly different than say a data analyst at a large company or another business function that is typically 9-5?",1,software_only
+Recently an opportunity that interests me has come up but has also made me second guess my plans. A fully remote Account Representative role for a software company. The base pay is about $17k lower than my current role but with estimated commission of $30k-$50k. I have never done anything sales related and am concerned that I may have trouble leaving the sales world if I ever choose to do so. Do people end up siloed in this line of work or are there opportunities to pivot elsewhere if it doesn’t work out? My main concern is that while this immediately might be an improvement compensation and lifestyle wise, it could be a hinderance to opportunities in the future. Just looking for some advice on the world of sales and exits if I hate it? Also, does the lifestyle feel vastly different than say a data analyst at a large company or another business function that is typically 9-5?",1,not_applicable
 Bangalore vs Berlin: Evaluating a tough choice between two solid offers 🇮🇳🇩🇪,"Hey everyone,
 
 I’m a software engineer with approx 2.5 YOE trying to decide between two strong offers, but I’m struggling to evaluate them holistically — factoring in compensation, location, family life, and long-term growth. Would love your thoughts!
@@ -1012,7 +1012,7 @@ On the other hand, the Bangalore startup offer is aggressive in comp, offers me 
 
 What would you prioritize in this case? Should I go for the international exposure and better WLB, or stick to the higher PPP-adjusted package in India with family stability?
 
-Appreciate any honest feedback from those who’ve faced similar crossroads",1,software_only
+Appreciate any honest feedback from those who’ve faced similar crossroads",1,not_applicable
 "Have experience in software engineering and equipment validation, what roles can I apply to?","Hello,
 
 I have a little over 2 years of experience as a fullstack software engineer as well as \~5 years of experience working as a validation specialist/engineer for medical device / biotech companies, specializing in equipment validation. 
@@ -1040,7 +1040,7 @@ https://preview.redd.it/a90vg3161t0f1.png?width=576&format=png&auto=webp&s=e8f87
 
 https://preview.redd.it/o5m9nz321t0f1.png?width=882&format=png&auto=webp&s=6838cdf4229117fed7f0643d53177944094af5f6
 
-",1,software+hardware
+",1,software_plus_hardware
 Bangalore vs Berlin: Evaluating a tough choice between two solid offers 🇮🇳🇩🇪,"Hey everyone,
 
 I’m a software engineer with approx 2.5 YOE trying to decide between two strong offers, but I’m struggling to evaluate them holistically — factoring in compensation, location, family life, and long-term growth. Would love your thoughts!
@@ -1067,7 +1067,7 @@ On the other hand, the Bangalore startup offer is aggressive in comp, offers me 
 
 What would you prioritize in this case? Should I go for the international exposure and better WLB, or stick to the higher PPP-adjusted package in India with family stability?
 
-Appreciate any honest feedback from those who’ve faced similar crossroads 🙏",1,software_only
+Appreciate any honest feedback from those who’ve faced similar crossroads 🙏",1,not_applicable
 Does leaving High paying job in India and moving to Germany worth it?,"Hey folks,
 
 I’m currently working in India, earning around 22 LPA with 4 years of experience. My fiancée is also working and earning 30 LPA. We've been thinking about moving to Germany for a Master's in AI/ML Engineering, Computer science or Data Science, and we’d likely go together.
@@ -1097,7 +1097,7 @@ To clarify what I have done so far. I have visited a therapist several times and
 
 I am not sure what should I do? Help your brother here and I am willing to try everything I can. 
 
-How can I be a person who is anger free and wise?",1,software_only
+How can I be a person who is anger free and wise?",1,not_applicable
 I Built CatDoes: Your Words to Native Apps,"# What is CatDoes?
 
 [https://catdoes.com](https://catdoes.com) is a no-code AI app builder that transforms conversations into fully functional **native** mobile apps. You simply describe your app idea, and AI agents handle everything else from understanding the app's requirements to releasing on the app stores.
