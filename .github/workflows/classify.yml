@@ -37,7 +37,7 @@ jobs:
           fi
 
       - name: Run classifier script
-        run: python scripts/classify_sample.py
+        run: python scripts/classify.py
 
       - name: Commit labeled sample data
         run: |

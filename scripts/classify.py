@@ -1,10 +1,26 @@
-# scripts/classify.py
+"""Classify a sample of Reddit posts using OpenAI prompts.
 
-from dotenv import load_dotenv
+This script loads the first 50 rows of the raw dataset, combines the title and
+body into a single text block, classifies each entry for whether it describes a
+problem, and determines the likely solution domain. Results are stored in
+``data/labeled_sample.csv``.
+"""
+
+import logging
 import os
-import pandas as pd
-from openai import OpenAI
 import time
+from typing import Optional
+
+import pandas as pd
+from dotenv import load_dotenv
+from openai import OpenAI
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+)
+logger = logging.getLogger(__name__)
 
 # Load environment variables
 load_dotenv()
@@ -33,65 +49,97 @@ Post:
 """
 
 SOLUTION_PROMPT = """
-You are a classifier that categorizes the likely type of solution needed for the following problem post.
+You are a classifier that categorizes the likely type of solution needed for the following post.
 
 Definitions:
-- software_only: The problem can be solved with software (apps, websites, APIs, algorithms, automation, etc.) and does not require new hardware.
-- software+hardware: The problem requires a combination of software and physical hardware (e.g., IoT devices, robotics, smart devices).
-- hardware_only: The solution is primarily physical or mechanical and software alone would not solve it.
+- not_applicable: The post is not a real problem, pain point, or unmet need. 
+- software_only: The problem can be solved purely with software — apps, websites, APIs, algorithms, or automation — without new physical infrastructure.
+- software_plus_external: The solution is primarily software but requires coordination of or interaction with existing external systems (e.g., humans, vehicles, logistics, physical services).
+- software_plus_hardware: The solution requires new or specialized hardware in addition to software (e.g., IoT devices, robotics, sensors).
+- hardware_primary: The solution is primarily physical or mechanical and cannot be solved by software alone.
 
-Choose the category that best matches the post's described problem.
+**Important:** 
+- If the post is not describing a problem or does not fit any category above, you MUST return `not_applicable`.
+- `not_applicable` should be your default answer if none of the others clearly apply.
 
 Post:
 {post_text}
 
-Return ONLY one of: software_only, software+hardware, hardware_only
+Return ONLY one of: not_applicable, software_only, software_plus_external, software_plus_hardware, hardware_primary
 """
 
-# --- READ RAW DATA ---
-df = pd.read_csv("data/raw_data.csv")
 
-results = []
-
-for idx, row in df.iterrows():
-    # Combine title and body to give GPT more context
-    post_text = f"Title: {row['title']}\n\nBody: {row['body']}"
-    print(f"Processing post {idx+1}/{len(df)}...")
-
-    # --- Stage 1: Problem classification ---
-    try:
-        problem_response = client.chat.completions.create(
-            model="gpt-4.1",  # or gpt-4o if you have access
-            messages=[{"role": "user", "content": PROBLEM_PROMPT.format(post_text=post_text)}]
-        )
-        is_problem = problem_response.choices[0].message.content.strip()
-    except Exception as e:
-        print(f"Error on problem classification: {e}")
-        is_problem = "error"
-
-    # --- Stage 2: Solution domain (only if problem == 1) ---
-    solution_domain = "-"
-    if is_problem == "1":
+def _call_with_retry(prompt: str, *, max_attempts: int = 3, initial_delay: float = 1.0) -> Optional[str]:
+    """Call the chat completion endpoint with retry logic."""
+    delay = initial_delay
+    for attempt in range(1, max_attempts + 1):
         try:
-            solution_response = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[{"role": "user", "content": SOLUTION_PROMPT.format(post_text=post_text)}]
+            response = client.chat.completions.create(
+                model="gpt-4.1",
+                messages=[{"role": "user", "content": prompt}],
             )
-            solution_domain = solution_response.choices[0].message.content.strip()
-        except Exception as e:
-            print(f"Error on solution classification: {e}")
+            return response.choices[0].message.content.strip()
+        except Exception as exc:  # pylint: disable=broad-except
+            logger.error("Attempt %d failed: %s", attempt, exc)
+            if attempt == max_attempts:
+                return None
+            time.sleep(delay)
+            delay *= 2
+    return None
 
-    results.append({
-        "title": row["title"],
-        "body": row["body"],
-        "is_problem": is_problem,
-        "solution_domain": solution_domain
-    })
 
-    # Sleep to avoid hitting rate limits
-    time.sleep(0.5)
+def main() -> None:
+    logger.info("Loading raw data…")
+    df = pd.read_csv("data/raw_data.csv").fillna("")
+    sample_df = df.head(50).copy()
 
-# --- SAVE OUTPUT ---
-output_df = pd.DataFrame(results)
-output_df.to_csv("data/labeled_data.csv", index=False)
-print("✅ Classification complete! Results saved to data/labeled_data.csv")
+    if sample_df.empty:
+        logger.warning("No data found in raw dataset. Exiting.")
+        return
+
+    results = []
+    total = len(sample_df)
+    logger.info("Processing %d posts.", total)
+
+    for index, row in sample_df.iterrows():
+        position = len(results) + 1
+        logger.info("Processing post %d/%d (index %s)…", position, total, index)
+        post_text = f"Title: {row.get('title', '')}\n\nBody: {row.get('body', '')}"
+
+        problem_prompt = PROBLEM_PROMPT.format(post_text=post_text)
+        problem_result = _call_with_retry(problem_prompt)
+
+        if problem_result is None:
+            logger.error("Problem classification failed after retries.")
+            is_problem = "error"
+        else:
+            is_problem = problem_result
+
+        solution_domain = "-"
+        if is_problem == "1":
+            solution_prompt = SOLUTION_PROMPT.format(post_text=post_text)
+            solution_result = _call_with_retry(solution_prompt)
+            if solution_result is None:
+                logger.error("Solution classification failed after retries.")
+            else:
+                solution_domain = solution_result
+
+        results.append(
+            {
+                "title": row.get("title", ""),
+                "body": row.get("body", ""),
+                "is_problem": is_problem,
+                "solution_domain": solution_domain,
+            }
+        )
+
+        time.sleep(0.5)
+
+    output_df = pd.DataFrame(results)
+    output_path = "data/labeled_sample.csv"
+    output_df.to_csv(output_path, index=False)
+    logger.info("Classification complete. Results saved to %s", output_path)
+
+
+if __name__ == "__main__":
+    main()
