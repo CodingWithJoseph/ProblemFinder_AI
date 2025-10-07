@@ -65,7 +65,7 @@ Definitions:
 Post:
 {post_text}
 
-Return ONLY one of: not_applicable, software_only, software_plus_external, software_plus_hardware, hardware_primary
+Return ONLY one of: not_applicable, software, software_external, software_hardware, hardware
 """
 
 
