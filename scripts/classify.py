@@ -49,24 +49,29 @@ Post:
 """
 
 SOLUTION_PROMPT = """
-You are a classifier that categorizes the likely type of solution needed for the following post.
-
-**Important:** 
-- If the post is not describing a problem or does not fit any category, you MUST return `not_applicable`.
-- `not_applicable` should be your default answer if none of the others clearly apply.
+You are a classifier that categorizes the likely type of solution needed for the following post. 
+Classify based only on the content of the post and its implied solution type.
 
 Definitions:
-- not_applicable: The post is not a real problem, pain point, or unmet need. 
-- software: The problem can be solved purely with software — apps, websites, APIs, algorithms, or automation — without new physical infrastructure.
-- software_external: The solution is primarily software but requires coordination of or interaction with existing external systems (e.g., humans, vehicles, logistics, physical services).
-- software_hardware: The solution requires new or specialized hardware in addition to software (e.g., IoT devices, robotics, sensors).
-- hardware: The solution is primarily physical or mechanical and cannot be solved by software alone.
+- not_applicable: The post is not a real problem, pain point, or unmet need.
+- software: The problem can be solved entirely with software — apps, websites, APIs, algorithms, or automation — without requiring new physical infrastructure or external coordination.
+- software_external: The solution is primarily software but must coordinate with or interact with existing external systems such as humans, vehicles, logistics networks, or third-party services.
+- software_hardware: The solution requires new or specialized hardware in addition to software (e.g., IoT devices, robotics, sensors, smart devices).
+- hardware: The solution is primarily a new physical or mechanical invention. Software alone cannot solve it.
+- external: The solution is mainly about deploying, organizing, or coordinating existing physical resources, infrastructure, people, or logistics — and does not fundamentally require new software or hardware to be built.
+
+Instructions:
+- Choose the single category that best fits the described solution type.
+- If the post does not clearly describe a problem or none of the categories apply, return `not_applicable`.
+- If you are uncertain between `software_external` and `external`, use `external` only if the solution is primarily about resource deployment or coordination with minimal new software.
 
 Post:
 {post_text}
 
-Return ONLY one of: not_applicable, software, software_external, software_hardware, hardware
+Return ONLY one of:
+not_applicable, software, software_external, software_hardware, hardware, external
 """
+
 
 
 def _call_with_retry(prompt: str, *, max_attempts: int = 3, initial_delay: float = 1.0) -> Optional[str]:
@@ -91,7 +96,7 @@ def _call_with_retry(prompt: str, *, max_attempts: int = 3, initial_delay: float
 def main() -> None:
     logger.info("Loading raw data…")
     df = pd.read_csv("data/raw_data.csv").fillna("")
-    sample_df = df.head(50).copy()
+    sample_df = df.head(100).copy()
 
     if sample_df.empty:
         logger.warning("No data found in raw dataset. Exiting.")
