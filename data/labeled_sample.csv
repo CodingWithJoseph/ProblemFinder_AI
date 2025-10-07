@@ -19,7 +19,7 @@ Nebula Capsule 3
   
 I saw some of these go on Sale recently and could of snagged the MoGo 3 Pro with a stand for £300 but didnt want to jump any gun!
 
-Appreciate the help!",1,hardware_primary
+Appreciate the help!",0,-
 How bad is the 8 speed transmission of the 2017's?,"Hi there, looking at a 2017 Sienna AWD with about 65k miles (108k km)... I've read pre-february 2017 build date is worse than after... 
 
 How bad are the transmission actually? To the point I'll definitely have issues? To avoid entirely? 
@@ -30,7 +30,7 @@ Also a TSB that gives an extended warranty...
 
 Anyhow, just wanted to know since it's a colleague who sells... Well priced and would be convenient in the timing and all. 
 
-Thanks",0,-
+Thanks",1,software_plus_external
 Can You Actually Future-Proof a Supply Chain—Or Is That Just a Buzzword?,"**If I had a dollar for every time someone said their supply chain was “future-proof,” I’d have enough to buy a small fleet of refrigerated trucks and name each one after a buzzword from a vendor webinar.**
 
 **Here’s the thing:**  
@@ -146,7 +146,7 @@ So I was hoping to get some good advice which to choose from.
 If there is a better system in the same price range, feel free to recommend it. Although it should be available in Germany.
 
   
-So - thank you for reading up to here and thanks in advance for any recommendations.",1,software_plus_hardware
+So - thank you for reading up to here and thanks in advance for any recommendations.",1,hardware_primary
 Musicians and Friends,"Being a musician (and founder) can be an incredibly lonely existence.
 
 As a violinist for over 3 decades I've found making friends nearly impossible for most of my life. From practicing hours a day to become the best musician possible to finding communication with non-musicians difficult to painful, I've sought a better way to find friends for a very long time.
@@ -292,7 +292,7 @@ Thank you for being a part of our community of soulslike gamers. We're excited a
 ",0,-
 "34"" OLED/QD-OLED Monitor for 80:20 productivity/gaming work - any suggestions?","I'm looking for a 1440p high refresh rate monitor that works for both gaming and productivity in the split I mentioned. Where I'm struggling is finding a *gaming* monitor that offers USB-C display and 60+W PD. Monitors like the AW3423DWF or Samsung G8 seem like great choices, but don't offer that USB-C connection. 
 
-For context, I'm a soon to graduate university student in computer engineering, with a Mac for work (hence the USB-C connection), generally software engineering workloads, and occassional gaming in esports titles on a Windows PC. I am looking to get into singleplayer story games (still need to play RDR2 and GoW!).",1,hardware_primary
+For context, I'm a soon to graduate university student in computer engineering, with a Mac for work (hence the USB-C connection), generally software engineering workloads, and occassional gaming in esports titles on a Windows PC. I am looking to get into singleplayer story games (still need to play RDR2 and GoW!).",1,hardware_only
 How do you go about designing and creating scenes for analog horror?,I have a writeup for an analog horror series that takes on a found footage lens. How do I create scenes that look of acceptable quality? Collage? Do I have to draw the scenery myself? I'm not a very proficient drawing artist. I'm considering using scenes from videogames. What software do you guys use?,0,-
 HDR looks dull and washed out in every game I've tried... (The new AOC Q27G40XMN),"I recently bought the new AOC Q27G40XMN (1440p, Mini-LED, VA). This is my first experience with HDR at all. As far as I'm aware, the only calibration I can do in the monitor settings as far as HDR goes is adjusting the HDR Mode (I assume this means preset), which includes: DisplayHDR, HDR Picture, HDR Movie, and HDR Game. While in HDR, the only other picture settings I can configure are contrast (from 0-100, which is unavailable in DisplayHDR mode) and local dimming settings (off, low, medium, high). From my testing on HDR youtube videos (namely this one: [https://www.youtube.com/watch?v=LxnMg0I0LZM&ab\_channel=TFTCentral](https://www.youtube.com/watch?v=LxnMg0I0LZM&ab_channel=TFTCentral) ), the ""HDR Game"" preset (which is also the default mode) with local dimming set to ""low"" seems to be the best, as anything above low local dimming removes too many details in dark scenery. The video looks gorgeous in HDR! Super black darks, super bright highlights. However, I have tested these games in HDR (confirmed that my Windows settings say ""HDR on"", my monitor settings say ""HDR Game"" to on, the games' settings say HDR is on, and the games are all in fullscreen):
 
@@ -304,7 +304,7 @@ Dragon's Dogma 2
 
 Baldur's Gate 3
 
-All these games tested in ""HDR Game"" mode with local dimming on low, contrast on 55 (these are the only PC games I own with HDR settings so far). They all looked very grey, dull, washed out. Worse than SDR.  Some of these titles are salvageable with shaders, but others looks better or the same in SDR. I'm very confused if I am missing calibration settings in some form of software or if I have a faulty monitor. But the HDR videos look sexy so idk. I have tried Nvidia filters as other posts suggest, but every single one makes me crash almost instantly sooo (which is a shame, some of them I enjoy...) Thanks for any advice :>",1,software_plus_hardware
+All these games tested in ""HDR Game"" mode with local dimming on low, contrast on 55 (these are the only PC games I own with HDR settings so far). They all looked very grey, dull, washed out. Worse than SDR.  Some of these titles are salvageable with shaders, but others looks better or the same in SDR. I'm very confused if I am missing calibration settings in some form of software or if I have a faulty monitor. But the HDR videos look sexy so idk. I have tried Nvidia filters as other posts suggest, but every single one makes me crash almost instantly sooo (which is a shame, some of them I enjoy...) Thanks for any advice :>",1,software_only
 Reviving Omnivore: Measuring interest in re-hosting and maintaining Omnivore,"Hi! 
 A lot of Obsidian users here used Omnivore, a beloved read-it-later service that was killed rapidly in a private buy-out.
 
@@ -326,7 +326,7 @@ https://omnivorenext.substack.com
 About me:
 I am a seasoned developer who has worked on every part of the stack at FAANG companies, startups, mid sized companies. I hate big tech, private equity, and how poor quality software has become. I know how to run a full fledged large-scale service well and would have fun doing this as a sort of farm-to-table software project and labor of love (for omnivore and obsidian!).
 
-[View Poll](https://www.reddit.com/poll/1kmsf8n)",1,software_plus_external
+[View Poll](https://www.reddit.com/poll/1kmsf8n)",1,software_only
 Mining with old laptops,"The first question is how much I can theoretically mine with this specs and is it even possible:
 Laptop1(Acer Aspire 5742z):
 -Intel Pentium p6200 2.13GHz 2 cores 2 threads
@@ -352,7 +352,7 @@ I know Samsung used some sort of special filter on the panel designed to elimina
 
 So my question is: did we all just IMAGINE that the Samsung Odyssey+ looked a lot sharper at some point in the past and it was ALWAYS this blurry?
 
-Or did something actually change in the software chain at some point to make this flaw a lot worse?",1,software_plus_hardware
+Or did something actually change in the software chain at some point to make this flaw a lot worse?",1,software_only
 "28 [M4F] UK - Fun, caring talkative introvert for the same?","Hi! I'm **Marc**. I'm **28**, and I live in **England**. I'm just putting my feelers out there to see if anybody is interested in me. Honestly, I'm open to dating or friendship. I don't have many friends, so why not? But I'm not desperate either :) I'm **open to long-distance**, but I should stress that other than Ireland, I doubt I would move far from Britain, because I don't think many places have the right balance of things that we do here.
 
 I'm a talkative introvert. I mostly keep to myself, but when I really like somebody, I'm very open with them, and I care for them a lot. I'm just trying to get through life without too much chaos, while causing minimal harm :) I like occasional bits of silly fun - I'll grow up fully when I'm dead -, but I also know how to be serious - and life has not been suuuper kind to me these past few years, so I feel like a bit of an old man, even though I do not look like it. I'm definitely not a university student anymore - I can't relate to that mentality, do you understand me? I worked for 6 years after university in software development, but due to long-term illness I'm presently unemployed. I'm trying to get back into work, but I need to prioritise working on my health first. So I guess I'm a long-term investment, not a quick win :) Hence why I'm not on Tinder lol.
@@ -380,7 +380,7 @@ Fast forward to today and I got a notice I had a package at my door. I open it a
 
 After like 5 months of ghosting me Lian Li randomly sends me a replacement AIO. Searched my email and on Monday I had one from a Mike saying my request had been approved and dispatched and they sincerely apologize for the delay caused by a shortage of raw materials. 
 
-So now I have a new AIO and no motivation to replace it atm lol",1,hardware_primary
+So now I have a new AIO and no motivation to replace it atm lol",1,hardware_only
 Is replacing employees with AI even economically possible?,"So, as of this day and age, it's becoming very apparent that some companies are slowly replacing individuals with AI. CEOs of these companies give long lectures (or e-mails in the case of Fiverr's CEO) about why AI employees are better, cheaper and ""more efficient"". And of course, there's no denying that a well-trained AI could do many things a lot better, which is even if you ignore the fact that AI is essentially just software and software can be improved substantially every day.  
   
 However, if you look at the Industrial Revolution: it caused people to look for other types of jobs and created a lot of new jobs because someone needed to build, fix and operate those same machines. Now, with AI, we have essentially created an alternative to a human, so it is far different from a machine user in a manufacturing facility. The thing is, ultimately, the Industrial Revolution had a positive outcome for employees since many such jobs prior to machines were unhealthy and dangerous.  
@@ -391,7 +391,7 @@ But with AI, I don't think it can be like that. There have been two thoughts goi
 
 I don't see a world where an economy could work if we, the (mostly) non-CEOs don't even have money to afford anything. Now, there is of course a discussion for a Universal Base Income (UBI) which would work for the small percentage that gets laid off before everything is essentially AI-based.
 
-So, ultimately, assuming that my two points could be true, wouldn't AI be both the end of our economy as well as allowing us humans to just do whatever we want instead of having to work — so being extremely positive in the end? (Ignoring what the effect of not having to work could be.)",1,not_applicable
+So, ultimately, assuming that my two points could be true, wouldn't AI be both the end of our economy as well as allowing us humans to just do whatever we want instead of having to work — so being extremely positive in the end? (Ignoring what the effect of not having to work could be.)",0,-
 Song process,"Hiii
 
 I was quite inspired by that vid someone linked to of Charli’s live song writing process and wondered if anyone knew the software she uses? And how you would record vocals for it I.e what type of microphone etc. Don’t worry - I’m definitely not about to mimic her art (could never), I just think it looks super fun.",0,-
@@ -623,7 +623,7 @@ Thanks.
 
 [What my incoming data looks like](https://preview.redd.it/vtsv3aifft0f1.png?width=1123&format=png&auto=webp&s=671b3cdb351379cefebe2f927212577234becc15)
 
-",0,-
+",1,software_only
 "1.5 Years of Unemployment - Lost, Learning and Looking for Direction","Hello everyone,
 
 In this post, I want to share my 1.5 year period of unemployment, the mental challenges I faced and how I lost my direction. If you’re in a similar situation or have been through something like this before, please don’t leave without commenting. Your advice could be incredibly valuable to me.
@@ -691,7 +691,7 @@ How would you guys organize the flow of activities and structure your product pl
 
 I know it’s long but I don’t have traditional software PM experience so looking for your guys’ experience, tips and tricks, resources or anything else that will help
 
-Thanks in advance ",1,not_applicable
+Thanks in advance ",1,software_only
 Starting PM role,"Starting as a PM at a startup (only PM on the team). Don’t have traditional SaaS PM experience but greater experience running NPI programs and product launch across large orgs. 
 
 New to Jira and Scrum/Kanban in the SaaS so I’m curious how you guys recommend to structure the product planning and prioritization. 
@@ -716,7 +716,7 @@ How would you guys organize the flow of activities and structure your product pl
 
 I know it’s long but I don’t have traditional software PM experience so looking for your guys’ experience, tips and tricks, resources or anything else that will help
 
-Thanks in advance ",1,not_applicable
+Thanks in advance ",1,software_only
 JS2TS - your ultimate code conversion companion - Tool for code conversions,"**Pricing**: One-time/USD
 
 **Category**: code conversions
@@ -747,7 +747,7 @@ I cant find anything on the HMRC website about being made to use any kind of sof
 
 However my question is, is this mandatory or compulsory? Can Inopt out? Can I not submit my own invoice? 
 
-Any help is appreciated ",1,not_applicable
+Any help is appreciated ",1,software_only
 The International EPD System selling licenses to consultancies?,"Does anyone have a list of who the consultancies are that purchased licenses to operate the different regions from the International EPD System?  Looking on their website (https://www.environdec.com/global-network/regional-partners), it's not obvious at all who these organizations are.
 
 Asking since I'm just noticing that the North American licensee is WAP Sustainability, and many of the International EPD System's EPD for this region are also either by WAP Sustainability or using their EPD tool Theta.  These EPDs shouldn't be marketed as type III (i.e. third party verified), since they don't meet the ISO 14025 requirements due to the program operator (WAP Sustainability) is also the consultant performing the EPD, the data/software provider, and also hand picking the verifiers.  This is similar to the EPD Hub, who are operated by OneClick who also provides the data/software and selects the verified.
@@ -812,7 +812,7 @@ The more detailed, constructive, and creative your feedback, the higher your cha
 
 I'm genuinely excited for you to jump in and experience all these changes. Your feedback is the cornerstone of development for Digital Hunter: Black Rose, especially with me being a solo dev. So please, share your thoughts, suggestions, or any bugs you might encounter in the comments below.
 
-Thank you for your incredible support and for playing!",1,software_only
+Thank you for your incredible support and for playing!",0,-
 Vevor Smart 1 alternative software.,"I can't POSSIBLY be the only person that thinks the software Vevor includes with the Smart1 cutter is barely functional if not downright infuriating.
 
 And their licensing limitations are enough to tick off the pope...
@@ -827,7 +827,7 @@ I have it installed in my desktop and need to dive deep into it, but for now, lo
 
 Hopefully this helps someone else out.
 
-",1,software_only
+",1,software_plus_hardware
 Temp + Humidity Sensor for Horse Blankets using LoRa. Can I build this with minimal engineering experience?,"Hi everyone! I'm trying to make a prototype for a simple, rugged temperature + humidity sensor that attaches to a horse blanket to monitor comfort and overheating. So far what makes the most sense is transmitting data via LoRa to a gateway nearby. I want to log temps throughout the day and check them remotely.
 
 The long term goal is to basically have an ecobee type setup but for a horse's temperature. Sensor, Gateway, App that alerts you if your horse is too hot/humid.
@@ -960,7 +960,7 @@ classes I still need to take at Sophia
     
     Network and Security - Foundations
     
-    Data Management - Foundations",1,not_applicable
+    Data Management - Foundations",0,-
 Cursor's ban of Indian students have wide reaching consequences,"What’s happening with the Cursor ban isn’t just about one app—it’s a reflection of a deeper, more uncomfortable truth that’s starting to catch up with us. We love calling ourselves a tech superpower, we keep saying India is leading the charge in AI and software, but actions like this quietly tell a different story. When a promising AI tool like Cursor, used by developers and students worldwide, suddenly starts blocking Indian users—especially students—without any explanation, it hits differently. It chips away at something bigger than just access. It chips away at belief. At competitiveness. At our future.
 
 Because while we’re being locked out, students in other parts of the world—some barely in high school—are already integrating these tools into their learning. They’re writing better code, faster. They’re building AI-native workflows, experimenting, launching side projects, and becoming future-ready. And on the other side, you have Indian students—just as talented, just as hungry—forced to scavenge for offline alternatives or patchy workarounds because Cursor now sees an Indian IP as a risk, not a contributor. The tragic part? It’s not because of a lack of talent. It’s not even about infrastructure. It’s about trust. And that trust is something we, as a community, have slowly eroded.
@@ -1023,7 +1023,7 @@ After some time thinking, it might be best for me to move on from continuing to 
 
 I wanted to ask for some advice on what roles I can look into that could use both of my experiences here? From roles I've researched, a lot of them require years of experience where I don't think i have much relevant experience. 
 
-Appreciate anyone's advice, thank you",0,-
+Appreciate anyone's advice, thank you",1,not_applicable
 Problem with Plustek scanner (or my lack of knowledge),"I wanted to dust off my hobby of film photography and went ahead to scan my first roll of film in a while. I have a Plustek 7200i scanner with the original SilverFast SE software for Windows.
 
 A while ago, when I did my first scans, I would scan the film as negative and use the SilverFast software to do inversion for me and some preprocessing before editing the image in GIMP, but I was always a bit disappointed with the results.
@@ -1067,7 +1067,7 @@ On the other hand, the Bangalore startup offer is aggressive in comp, offers me 
 
 What would you prioritize in this case? Should I go for the international exposure and better WLB, or stick to the higher PPP-adjusted package in India with family stability?
 
-Appreciate any honest feedback from those who’ve faced similar crossroads 🙏",1,not_applicable
+Appreciate any honest feedback from those who’ve faced similar crossroads 🙏",0,-
 Does leaving High paying job in India and moving to Germany worth it?,"Hey folks,
 
 I’m currently working in India, earning around 22 LPA with 4 years of experience. My fiancée is also working and earning 30 LPA. We've been thinking about moving to Germany for a Master's in AI/ML Engineering, Computer science or Data Science, and we’d likely go together.
