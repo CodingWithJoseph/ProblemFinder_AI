@@ -78,15 +78,15 @@ not_applicable, software, software_external, software_hardware, hardware, extern
 
 
 def _call_with_retry(prompt: str, *, max_attempts: int = 3, initial_delay: float = 1.0) -> Optional[str]:
-    """Call the chat completion endpoint with retry logic."""
+    """Call the Responses API with retry logic."""
     delay = initial_delay
     for attempt in range(1, max_attempts + 1):
         try:
-            response = client.chat.completions.create(
+            response = client.responses.create(
                 model="gpt-5-pro",
-                messages=[{"role": "user", "content": prompt}],
+                input=prompt
             )
-            return response.choices[0].message.content.strip()
+            return response.output_text.strip()
         except Exception as exc:  # pylint: disable=broad-except
             logger.error("Attempt %d failed: %s", attempt, exc)
             if attempt == max_attempts:
