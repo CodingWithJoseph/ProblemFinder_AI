@@ -1,4 +1,4 @@
-title,body,is_problem,solution_domain
+title,body,is_problem,is_software_solvable,is_external
 Looking for a Projector within/around £300 in the UK for bedroom,"Hi BudgetProjectors!
 
 I live in the UK in London and I'm looking for a home projector that i can use to watch movies/youtube/games in my bedroom with some flexibility  
@@ -19,7 +19,7 @@ Nebula Capsule 3
   
 I saw some of these go on Sale recently and could of snagged the MoGo 3 Pro with a stand for £300 but didnt want to jump any gun!
 
-Appreciate the help!",0,-
+Appreciate the help!",0,0,0
 How bad is the 8 speed transmission of the 2017's?,"Hi there, looking at a 2017 Sienna AWD with about 65k miles (108k km)... I've read pre-february 2017 build date is worse than after... 
 
 How bad are the transmission actually? To the point I'll definitely have issues? To avoid entirely? 
@@ -30,7 +30,7 @@ Also a TSB that gives an extended warranty...
 
 Anyhow, just wanted to know since it's a colleague who sells... Well priced and would be convenient in the timing and all. 
 
-Thanks",1,not_applicable
+Thanks",1,0,0
 Can You Actually Future-Proof a Supply Chain—Or Is That Just a Buzzword?,"**If I had a dollar for every time someone said their supply chain was “future-proof,” I’d have enough to buy a small fleet of refrigerated trucks and name each one after a buzzword from a vendor webinar.**
 
 **Here’s the thing:**  
@@ -105,7 +105,7 @@ But you can:
 * Train your team to adapt
 * Use data to pivot faster than your competitors
 
-And *that* is what separates the survivors from the companies writing crisis comms on a Friday night.",0,-
+And *that* is what separates the survivors from the companies writing crisis comms on a Friday night.",1,0,1
 Budget Mini PC for Obsidian and more,"Hey everyone,
 
 I've been skimming over this subreddit to look for information about some mini PCs as I am looking for the best ""bang for a buck"" solution. Beforce anything, I am located in Germany and in best case, I plan to order from Amazon.
@@ -146,7 +146,7 @@ So I was hoping to get some good advice which to choose from.
 If there is a better system in the same price range, feel free to recommend it. Although it should be available in Germany.
 
   
-So - thank you for reading up to here and thanks in advance for any recommendations.",1,not_applicable
+So - thank you for reading up to here and thanks in advance for any recommendations.",1,0,0
 Musicians and Friends,"Being a musician (and founder) can be an incredibly lonely existence.
 
 As a violinist for over 3 decades I've found making friends nearly impossible for most of my life. From practicing hours a day to become the best musician possible to finding communication with non-musicians difficult to painful, I've sought a better way to find friends for a very long time.
@@ -185,7 +185,7 @@ f) Our notification system sends notifications to users with the highest matchin
 
 We are looking for musicians to help us spread our mission by reaching out to their personal favorite musicians to ask their fans and online followers to signup for the nonprofit Befriend app with the purpose of making friends with fellow fans in person and to finally solve this shared global problem once and for all!
 
-[befriend.app](https://befriend.app)",0,-
+[befriend.app](https://befriend.app)",1,1,0
 Updated Rules and User Guidelines,"Hey everyone, it’s been a long time since I posted like this. To everyone new here, welcome to r/soulslikes! Since taking over, this sub has grown from a niche community where I interacted on *every* post, to one of the top 3% of communities of this kind on reddit, getting 3 million visitors each month. I am blown away by all your support, yet my intention of this subreddit still remains the same. To be a safe space for people to post and discuss their favourite genre.
 
 With a community this size, we have recently begun receiving more feedback with regards to moderation decisions. In an effort to maximize fairness and consistency for our community, we have evaluated and updated the sub rules. 
@@ -289,11 +289,11 @@ Reasonable exceptions will be ignored by the mods (e.g. we expect an increase of
 
 Thank you for being a part of our community of soulslike gamers. We're excited about the growth we have seen both in our sub here, but also in the genre as whole. It's an exciting time to be a part of the soulslike community and there's no shortage of great games on the horizon. Take care!
 
-",0,-
+",0,0,0
 "34"" OLED/QD-OLED Monitor for 80:20 productivity/gaming work - any suggestions?","I'm looking for a 1440p high refresh rate monitor that works for both gaming and productivity in the split I mentioned. Where I'm struggling is finding a *gaming* monitor that offers USB-C display and 60+W PD. Monitors like the AW3423DWF or Samsung G8 seem like great choices, but don't offer that USB-C connection. 
 
-For context, I'm a soon to graduate university student in computer engineering, with a Mac for work (hence the USB-C connection), generally software engineering workloads, and occassional gaming in esports titles on a Windows PC. I am looking to get into singleplayer story games (still need to play RDR2 and GoW!).",1,not_applicable
-How do you go about designing and creating scenes for analog horror?,I have a writeup for an analog horror series that takes on a found footage lens. How do I create scenes that look of acceptable quality? Collage? Do I have to draw the scenery myself? I'm not a very proficient drawing artist. I'm considering using scenes from videogames. What software do you guys use?,0,-
+For context, I'm a soon to graduate university student in computer engineering, with a Mac for work (hence the USB-C connection), generally software engineering workloads, and occassional gaming in esports titles on a Windows PC. I am looking to get into singleplayer story games (still need to play RDR2 and GoW!).",1,0,0
+How do you go about designing and creating scenes for analog horror?,I have a writeup for an analog horror series that takes on a found footage lens. How do I create scenes that look of acceptable quality? Collage? Do I have to draw the scenery myself? I'm not a very proficient drawing artist. I'm considering using scenes from videogames. What software do you guys use?,0,0,0
 HDR looks dull and washed out in every game I've tried... (The new AOC Q27G40XMN),"I recently bought the new AOC Q27G40XMN (1440p, Mini-LED, VA). This is my first experience with HDR at all. As far as I'm aware, the only calibration I can do in the monitor settings as far as HDR goes is adjusting the HDR Mode (I assume this means preset), which includes: DisplayHDR, HDR Picture, HDR Movie, and HDR Game. While in HDR, the only other picture settings I can configure are contrast (from 0-100, which is unavailable in DisplayHDR mode) and local dimming settings (off, low, medium, high). From my testing on HDR youtube videos (namely this one: [https://www.youtube.com/watch?v=LxnMg0I0LZM&ab\_channel=TFTCentral](https://www.youtube.com/watch?v=LxnMg0I0LZM&ab_channel=TFTCentral) ), the ""HDR Game"" preset (which is also the default mode) with local dimming set to ""low"" seems to be the best, as anything above low local dimming removes too many details in dark scenery. The video looks gorgeous in HDR! Super black darks, super bright highlights. However, I have tested these games in HDR (confirmed that my Windows settings say ""HDR on"", my monitor settings say ""HDR Game"" to on, the games' settings say HDR is on, and the games are all in fullscreen):
 
 Red Dead Redemption 2
@@ -304,7 +304,7 @@ Dragon's Dogma 2
 
 Baldur's Gate 3
 
-All these games tested in ""HDR Game"" mode with local dimming on low, contrast on 55 (these are the only PC games I own with HDR settings so far). They all looked very grey, dull, washed out. Worse than SDR.  Some of these titles are salvageable with shaders, but others looks better or the same in SDR. I'm very confused if I am missing calibration settings in some form of software or if I have a faulty monitor. But the HDR videos look sexy so idk. I have tried Nvidia filters as other posts suggest, but every single one makes me crash almost instantly sooo (which is a shame, some of them I enjoy...) Thanks for any advice :>",1,software
+All these games tested in ""HDR Game"" mode with local dimming on low, contrast on 55 (these are the only PC games I own with HDR settings so far). They all looked very grey, dull, washed out. Worse than SDR.  Some of these titles are salvageable with shaders, but others looks better or the same in SDR. I'm very confused if I am missing calibration settings in some form of software or if I have a faulty monitor. But the HDR videos look sexy so idk. I have tried Nvidia filters as other posts suggest, but every single one makes me crash almost instantly sooo (which is a shame, some of them I enjoy...) Thanks for any advice :>",1,0,0
 Reviving Omnivore: Measuring interest in re-hosting and maintaining Omnivore,"Hi! 
 A lot of Obsidian users here used Omnivore, a beloved read-it-later service that was killed rapidly in a private buy-out.
 
@@ -326,7 +326,7 @@ https://omnivorenext.substack.com
 About me:
 I am a seasoned developer who has worked on every part of the stack at FAANG companies, startups, mid sized companies. I hate big tech, private equity, and how poor quality software has become. I know how to run a full fledged large-scale service well and would have fun doing this as a sort of farm-to-table software project and labor of love (for omnivore and obsidian!).
 
-[View Poll](https://www.reddit.com/poll/1kmsf8n)",0,-
+[View Poll](https://www.reddit.com/poll/1kmsf8n)",0,0,0
 Mining with old laptops,"The first question is how much I can theoretically mine with this specs and is it even possible:
 Laptop1(Acer Aspire 5742z):
 -Intel Pentium p6200 2.13GHz 2 cores 2 threads
@@ -343,7 +343,7 @@ The second question is what software, cryptocurrency should I use?
 
 
 Just to aclare, I have unlimited free electricity so I can left my laptops on for a long, loooong time, I'm not looking into smth serious, a couple of dozens of cents per day is pretty much fine for me.
-(Please don't ask why I want this or tell me that it's not profitable idc just answer :p)",0,-
+(Please don't ask why I want this or tell me that it's not profitable idc just answer :p)",0,0,0
 Samsung Odyssey+ Owners! Was this Headset ALWAYS Blurry? Was It Ever Really Sharp/In-focus?,"I own a bunch of HMDs but have had a real love/hate relationship with my Samsung Odyssey+ over the years. Today I dusted it off and plugged it in to see how it holds up today and was dismayed at how blurry the image is compared to all my other headsets. Much blurrier than I remembered it being.
 
 Now, if you search for this issue, you'll find many posts from users who claim the picture on their Odyssey headsets USED to be much sharper and that something--Steam VR, Windows, WMR itself--changed along the way to cause the image to become blurrier than it used to be. There are several different proposed solutions but none that seem to actually fix the issue for a majority of users--myself very much included.
@@ -352,7 +352,7 @@ I know Samsung used some sort of special filter on the panel designed to elimina
 
 So my question is: did we all just IMAGINE that the Samsung Odyssey+ looked a lot sharper at some point in the past and it was ALWAYS this blurry?
 
-Or did something actually change in the software chain at some point to make this flaw a lot worse?",1,unknown
+Or did something actually change in the software chain at some point to make this flaw a lot worse?",1,0,0
 "28 [M4F] UK - Fun, caring talkative introvert for the same?","Hi! I'm **Marc**. I'm **28**, and I live in **England**. I'm just putting my feelers out there to see if anybody is interested in me. Honestly, I'm open to dating or friendship. I don't have many friends, so why not? But I'm not desperate either :) I'm **open to long-distance**, but I should stress that other than Ireland, I doubt I would move far from Britain, because I don't think many places have the right balance of things that we do here.
 
 I'm a talkative introvert. I mostly keep to myself, but when I really like somebody, I'm very open with them, and I care for them a lot. I'm just trying to get through life without too much chaos, while causing minimal harm :) I like occasional bits of silly fun - I'll grow up fully when I'm dead -, but I also know how to be serious - and life has not been suuuper kind to me these past few years, so I feel like a bit of an old man, even though I do not look like it. I'm definitely not a university student anymore - I can't relate to that mentality, do you understand me? I worked for 6 years after university in software development, but due to long-term illness I'm presently unemployed. I'm trying to get back into work, but I need to prioritise working on my health first. So I guess I'm a long-term investment, not a quick win :) Hence why I'm not on Tinder lol.
@@ -367,8 +367,8 @@ If you think I might make a good friend, or even a good boyfriend, feel free to 
 
 And if you're still not persuaded, then I wish you a good day or night, anyway!
 
-Marc.",0,-
-First PC purchase,I’m a recently graduated engineering major who would like a desktop pc that could not only run CAD and FEA software but also be able to be used for gameplay. I would also like to attach a bamboo lab 3D printer in the future. What specs should I be looking for? This would be my first pc ever bought. I want it to last a good amount of time. What are some options for pre builds as well since I don’t really have time to build one? ,0,-
+Marc.",0,0,0
+First PC purchase,I’m a recently graduated engineering major who would like a desktop pc that could not only run CAD and FEA software but also be able to be used for gameplay. I would also like to attach a bamboo lab 3D printer in the future. What specs should I be looking for? This would be my first pc ever bought. I want it to last a good amount of time. What are some options for pre builds as well since I don’t really have time to build one? ,0,0,0
 Randomly got a package in the mail,"So about half a year ago, I think in October, I got an update for my Galahad lcd AIO that killed the screen. 
 
 The firmware the connect software tried to install didn’t play nice or something and since then I’ve had a dead lcd and have had to set the pump speed through the bios to get everything working. 
@@ -380,7 +380,7 @@ Fast forward to today and I got a notice I had a package at my door. I open it a
 
 After like 5 months of ghosting me Lian Li randomly sends me a replacement AIO. Searched my email and on Monday I had one from a Mike saying my request had been approved and dispatched and they sincerely apologize for the delay caused by a shortage of raw materials. 
 
-So now I have a new AIO and no motivation to replace it atm lol",1,not_applicable
+So now I have a new AIO and no motivation to replace it atm lol",1,0,0
 Is replacing employees with AI even economically possible?,"So, as of this day and age, it's becoming very apparent that some companies are slowly replacing individuals with AI. CEOs of these companies give long lectures (or e-mails in the case of Fiverr's CEO) about why AI employees are better, cheaper and ""more efficient"". And of course, there's no denying that a well-trained AI could do many things a lot better, which is even if you ignore the fact that AI is essentially just software and software can be improved substantially every day.  
   
 However, if you look at the Industrial Revolution: it caused people to look for other types of jobs and created a lot of new jobs because someone needed to build, fix and operate those same machines. Now, with AI, we have essentially created an alternative to a human, so it is far different from a machine user in a manufacturing facility. The thing is, ultimately, the Industrial Revolution had a positive outcome for employees since many such jobs prior to machines were unhealthy and dangerous.  
@@ -391,10 +391,10 @@ But with AI, I don't think it can be like that. There have been two thoughts goi
 
 I don't see a world where an economy could work if we, the (mostly) non-CEOs don't even have money to afford anything. Now, there is of course a discussion for a Universal Base Income (UBI) which would work for the small percentage that gets laid off before everything is essentially AI-based.
 
-So, ultimately, assuming that my two points could be true, wouldn't AI be both the end of our economy as well as allowing us humans to just do whatever we want instead of having to work — so being extremely positive in the end? (Ignoring what the effect of not having to work could be.)",0,-
+So, ultimately, assuming that my two points could be true, wouldn't AI be both the end of our economy as well as allowing us humans to just do whatever we want instead of having to work — so being extremely positive in the end? (Ignoring what the effect of not having to work could be.)",0,0,0
 Song process,"Hiii
 
-I was quite inspired by that vid someone linked to of Charli’s live song writing process and wondered if anyone knew the software she uses? And how you would record vocals for it I.e what type of microphone etc. Don’t worry - I’m definitely not about to mimic her art (could never), I just think it looks super fun.",0,-
+I was quite inspired by that vid someone linked to of Charli’s live song writing process and wondered if anyone knew the software she uses? And how you would record vocals for it I.e what type of microphone etc. Don’t worry - I’m definitely not about to mimic her art (could never), I just think it looks super fun.",0,0,0
 Advice on whether to take an SQL developer job.,"3 years experience (Web Development)
 B.S. Comp Sci
 
@@ -408,7 +408,7 @@ Would it be bad to take this SQL dev job assuming I get the offer? I’m torn be
 
 I’d appreciate any advice to help me think through this.
 
-",1,not_applicable
+",1,0,0
 "1.5 Years of Unemployment: Lost, Learning and Looking for Direction","Hello everyone,
 
 In this post, I want to share my 1.5 year period of unemployment, the mental challenges I faced and how I lost my direction. If you’re in a similar situation or have been through something like this before, please don’t leave without commenting. Your advice could be incredibly valuable to me.
@@ -451,7 +451,7 @@ Here are some questions I have on my mind:
 
 Writing this feels like I’m pouring my heart out. I really feel lost. I want to move forward and find a way, but I don't know how. Advice from experienced people would mean a lot to me. Thank you for reading. I’m sorry for taking up your time. I hope I’ve been able to express myself clearly.
 
-Note: I haven’t been able to do anything for the past five months and have been in deep depression. However, I applied to the “Linux Kernel Bug Fixing Summer” program hoping it would help me and it looks like I will most likely be accepted.",1,not_applicable
+Note: I haven’t been able to do anything for the past five months and have been in deep depression. However, I applied to the “Linux Kernel Bug Fixing Summer” program hoping it would help me and it looks like I will most likely be accepted.",1,0,0
 Is now a good time to get into car sales?,"I’ve been in sales for over a decade, mostly high end independent clothing stores where I made very good money; I would do over a million in sales in my sleep as it was a short sales cycle and I liked the business. 
 
 Right now I’m in fine art selling at an art gallery and it’s awful due to inconsistency. Some months I’ll sell 175k, then nothing the next month, then the next month I’ll sell over 100k through financing, then crumbs for a few months, etc. I can make my whole month selling one piece, but last year that only happened on about five ups.
@@ -462,7 +462,7 @@ I live very close to a car mall and have considered getting into car sales befor
 
 Tariffs, and unstable economy would usually mean hold onto what you have and stay put, but my savings is rapidly depleting and I will be in bad shape if I don’t turn things around very soon. I’m really not qualified for much else, and software sales or something similar would require me to relocate. 
 
-Thanks, I appreciate all input. ",1,not_applicable
+Thanks, I appreciate all input. ",1,0,0
 From Infrastructure to Influence: How Dacxi Chain Is Redefining the Power Structures of Global Capit,"https://preview.redd.it/ct62hhx7it0f1.png?width=1120&format=png&auto=webp&s=24ff2912c4b63a81d73c48bef037f37833f2f15d
 
 The story of global equity crowdfunding is often told through the lens of regulation, democratization, and technology. But that story is incomplete. The real shift underway is structural — not just in how capital is raised, but in who controls the mechanisms of capital formation itself.
@@ -519,12 +519,12 @@ Dacxi Chain, in this light, isn’t a product. It’s a **paradigm**. It replac
 
 If the internet age taught us anything, it’s that the systems we build define the futures we get. Dacxi Chain represents an opportunity — not just for investment, but for participation in the design of a new capital market.
 
-It invites local platforms to link up, regulators to lean in, and investors to look beyond borders. Not in search of the next unicorn, but in service of a global economy that allocates capital based on **potential, not privilege**.",0,-
+It invites local platforms to link up, regulators to lean in, and investors to look beyond borders. Not in search of the next unicorn, but in service of a global economy that allocates capital based on **potential, not privilege**.",0,0,0
 Data event stream,"Hello guys, I’ve joined a company and I’ve been assigned to work on a data event stream. This means that data will come from Transact (a core banking software), and I have to send that data to the TED team. I have to work with Apache Kafka in this entire process — I’ll use Apache Kafka for handling the events, and I also need to look into things like apache Spark, etc. I’ll also have to monitor everything using Prometheus, Helm charts, etc.
 
 But all of this is new to me. I have no prior experience. The company has given me a virtual machine and one week to learn all of this. However, I’m feeling lost, and since I’m new here, there’s no one to help me — I’m working alone.
 
-So, can you guys tell me where to start properly, what to focus on, and what areas usually cause the most issues?",1,software
+So, can you guys tell me where to start properly, what to focus on, and what areas usually cause the most issues?",1,1,0
 "1.5 Years of Unemployment: Lost, Learning and Looking for Direction","Hello everyone,
 
 In this post, I want to share my 1.5 year period of unemployment, the mental challenges I faced and how I lost my direction. If you’re in a similar situation or have been through something like this before, please don’t leave without commenting. Your advice could be incredibly valuable to me.
@@ -567,7 +567,7 @@ Here are some questions I have on my mind:
 
 Writing this feels like I’m pouring my heart out. I really feel lost. I want to move forward and find a way, but I don't know how. Advice from experienced people would mean a lot to me. Thank you for reading. I’m sorry for taking up your time. I hope I’ve been able to express myself clearly.
 
-Note: I haven’t been able to do anything for the past five months and have been in deep depression. However, I applied to the “Linux Kernel Bug Fixing Summer” program hoping it would help me and it looks like I will most likely be accepted.",1,unknown
+Note: I haven’t been able to do anything for the past five months and have been in deep depression. However, I applied to the “Linux Kernel Bug Fixing Summer” program hoping it would help me and it looks like I will most likely be accepted.",1,0,0
 "1.5 Years of Unemployment: Lost, Learning and Looking for Direction","Hello everyone,
 
 In this post, I want to share my 1.5 year period of unemployment, the mental challenges I faced and how I lost my direction. If you’re in a similar situation or have been through something like this before, please don’t leave without commenting. Your advice could be incredibly valuable to me.
@@ -610,7 +610,7 @@ Here are some questions I have on my mind:
 
 Writing this feels like I’m pouring my heart out. I really feel lost. I want to move forward and find a way, but I don't know how. Advice from experienced people would mean a lot to me. Thank you for reading. I’m sorry for taking up your time. I hope I’ve been able to express myself clearly.
 
-Note: I haven’t been able to do anything for the past five months and have been in deep depression. However, I applied to the “Linux Kernel Bug Fixing Summer” program hoping it would help me and it looks like I will most likely be accepted.",1,unknown
+Note: I haven’t been able to do anything for the past five months and have been in deep depression. However, I applied to the “Linux Kernel Bug Fixing Summer” program hoping it would help me and it looks like I will most likely be accepted.",1,0,0
 Looking to make a waterfall chart,"Hello. I am looking to make a waterfall chart similar to this: [https://www.youtube.com/watch?v=z\_XZOa2-6CQ](https://www.youtube.com/watch?v=z_XZOa2-6CQ) . I have also included a picture of what I am looking to do for anyone not wanting to watch a video.
 
 I have found some examples, but they are all the 3D versions instead of what can be found on software defined radio type interfaces. All of the examples I could find were related to FFTs, but the plot I have included is what the raw data looks like (so there is no frequency domain).
@@ -623,7 +623,7 @@ Thanks.
 
 [What my incoming data looks like](https://preview.redd.it/vtsv3aifft0f1.png?width=1123&format=png&auto=webp&s=671b3cdb351379cefebe2f927212577234becc15)
 
-",1,software
+",1,1,0
 "1.5 Years of Unemployment - Lost, Learning and Looking for Direction","Hello everyone,
 
 In this post, I want to share my 1.5 year period of unemployment, the mental challenges I faced and how I lost my direction. If you’re in a similar situation or have been through something like this before, please don’t leave without commenting. Your advice could be incredibly valuable to me.
@@ -666,7 +666,7 @@ Here are some questions I have on my mind:
 
 Writing this feels like I’m pouring my heart out. I really feel lost. I want to move forward and find a way, but I don't know how. Advice from experienced people would mean a lot to me. Thank you for reading. I’m sorry for taking up your time. I hope I’ve been able to express myself clearly.
 
-Note: I haven’t been able to do anything for the past five months and have been in deep depression. However, I applied to the “Linux Kernel Bug Fixing Summer” program hoping it would help me and it looks like I will most likely be accepted.",1,not_applicable
+Note: I haven’t been able to do anything for the past five months and have been in deep depression. However, I applied to the “Linux Kernel Bug Fixing Summer” program hoping it would help me and it looks like I will most likely be accepted.",1,0,0
 Starting PM role,"Starting as a Product Manager at a startup (only PM on the team). Don’t have traditional SaaS PM experience but greater experience running NPI programs and product launch across large orgs. 
 
 New to Jira and Scrum/Kanban in the SaaS so I’m curious how you guys recommend to structure the product planning and prioritization. 
@@ -691,7 +691,7 @@ How would you guys organize the flow of activities and structure your product pl
 
 I know it’s long but I don’t have traditional software PM experience so looking for your guys’ experience, tips and tricks, resources or anything else that will help
 
-Thanks in advance ",1,software
+Thanks in advance ",1,0,0
 Starting PM role,"Starting as a PM at a startup (only PM on the team). Don’t have traditional SaaS PM experience but greater experience running NPI programs and product launch across large orgs. 
 
 New to Jira and Scrum/Kanban in the SaaS so I’m curious how you guys recommend to structure the product planning and prioritization. 
@@ -716,7 +716,7 @@ How would you guys organize the flow of activities and structure your product pl
 
 I know it’s long but I don’t have traditional software PM experience so looking for your guys’ experience, tips and tricks, resources or anything else that will help
 
-Thanks in advance ",1,software
+Thanks in advance ",1,0,0
 JS2TS - your ultimate code conversion companion - Tool for code conversions,"**Pricing**: One-time/USD
 
 **Category**: code conversions
@@ -725,7 +725,7 @@ JS2TS - your ultimate code conversion companion - Tool for code conversions,"**P
 
 **About Tool:** The Javascript to Typescript Converter with ChatGPT is a tool that allows users to quickly and easily convert Javascript code into Typescript. By leveraging AI technology, the tool automates the conversion process, saving users time and effort.  The tool offers a simple and intuitive user interface where users can paste their Javascript code into a designated code box. After clicking the ""Convert Now"" button, the AI algorithm takes over and performs the conversion in a matter of seconds.  Once the conversion is complete, users can easily copy the resulting Typescript code from the output box. Additionally, users have the option to start over with new code if needed.  Developed by Bytequest Softwares - 011BQ, this tool aims to streamline the process of migrating Javascript projects to Typescript, allowing developers to take advantage of the benefits that Typescript offers, such as static typing and enhanced code safety.Overall, the Javascript to Typescript Converter with ChatGPT offers a convenient solution for developers looking to convert their Javascript codebase to Typescript with speed and efficiency.
 
-**Product Link:** [Visit Js2ts - your ultimate code conversion companion](https://toolwave.io/tool/js2ts-your-ultimate-code-conversion-companion)",0,-
+**Product Link:** [Visit Js2ts - your ultimate code conversion companion](https://toolwave.io/tool/js2ts-your-ultimate-code-conversion-companion)",0,0,0
 Is this insane micromanaging? (rant),"Can I just check if I'm being crazy here, or if this is just normal, as I feel like I'm being gaslit by my boss here.
 
 So I'm a senior software developer, I work for a software house, and am currently working on a project that I started 1 year ago from the first initial commit, to now where it is grossing £3.5m per year, and we haven't even really gotten started yet with scaling customers, so that number can scale a lot higher. We started selling the service just 2 months ago. As we're now making bank, the boss is taking more if a leading role in this project and is starting to pay more attention to it.
@@ -736,7 +736,7 @@ And to be clear, *I'm fine with this.* I get paid well. So it's worth sacrificin
 
 However, this morning my boss rings me up and rants at me for not working correctly. He says, every unit of code I write from now on should be its own commit, and attached to its own work item on azure devops that is itself documented, and discussed with management beforehand. Every single unit of code. He is mad because, as a solo dev, I don't really have any need to commit very often. I'm not collaborating with anybody. so I usually commit full features. I.e, if there is a button that does a thing, I usually submit the front end, backend, and infrastructure requirements of that button as a single commit when its done. Which are themselves behind feature flags. He also wants to be able to see a daily progression of commits so we can have daily stand-ups to discuss the work I'm doing. He doesn't want me committing once per week with a big feature, because the volume of code I'm writing overwhelms him, and he can't be bothered to look over it at all (my code is also diligently commented, so it's obvious what everything is doing). So he's demanding I change my workflow, and day and structure it around a daily stand-up to make sure boxes are checked, and agile work items are linked together and documented instead of delivering... well, quite literally millions in value to our client.
 
-That's insane, right? What do I do here...? Or am I being unreasonable? My boss is extremely stubborn, and always falls back to ""I've got x decades of experience in software, you don't, I know what's best"", when in reality his code is stoned college junior level, he's just a business man that manages companies. I feel like this is a totally wild expectation lumped on top of an already wild expectation that I be *every* tech department in this business. I don't really want to leave, the client and I have a super good relationship, and my options are superb. What I can I do to explain to him that helicoptering in occasionally and demanding I change my entire workflow is not the play? I feel like this will 3x any development time I have because I'll constantly be compartmentalizing work, and managing work items and documentation of each work item nobody is ever going to read in a thousand years. ",1,not_applicable
+That's insane, right? What do I do here...? Or am I being unreasonable? My boss is extremely stubborn, and always falls back to ""I've got x decades of experience in software, you don't, I know what's best"", when in reality his code is stoned college junior level, he's just a business man that manages companies. I feel like this is a totally wild expectation lumped on top of an already wild expectation that I be *every* tech department in this business. I don't really want to leave, the client and I have a super good relationship, and my options are superb. What I can I do to explain to him that helicoptering in occasionally and demanding I change my entire workflow is not the play? I feel like this will 3x any development time I have because I'll constantly be compartmentalizing work, and managing work items and documentation of each work item nobody is ever going to read in a thousand years. ",1,0,0
 New job requires to pay for invoicing. Can I opt out?,"So I have just started work for a delivery company as a self employed driver. 
 
 After the whole process and getting the job, I was told I would have to use an invoice app to invoice the company. The invoicing costs £12.50 a week! £50 a month! Thats more than minimum wage and would take over 4 hours to pay for so bascially I am working the first 4 hours of a week for free to pay some company to allow me to have my wage.
@@ -747,12 +747,12 @@ I cant find anything on the HMRC website about being made to use any kind of sof
 
 However my question is, is this mandatory or compulsory? Can Inopt out? Can I not submit my own invoice? 
 
-Any help is appreciated ",1,unknown
+Any help is appreciated ",1,0,0
 The International EPD System selling licenses to consultancies?,"Does anyone have a list of who the consultancies are that purchased licenses to operate the different regions from the International EPD System?  Looking on their website (https://www.environdec.com/global-network/regional-partners), it's not obvious at all who these organizations are.
 
 Asking since I'm just noticing that the North American licensee is WAP Sustainability, and many of the International EPD System's EPD for this region are also either by WAP Sustainability or using their EPD tool Theta.  These EPDs shouldn't be marketed as type III (i.e. third party verified), since they don't meet the ISO 14025 requirements due to the program operator (WAP Sustainability) is also the consultant performing the EPD, the data/software provider, and also hand picking the verifiers.  This is similar to the EPD Hub, who are operated by OneClick who also provides the data/software and selects the verified.
 
-Too bad the International EPD System is selling out like this, they used to be looked at as a leader in the EPD field.",1,unknown
+Too bad the International EPD System is selling out like this, they used to be looked at as a leader in the EPD field.",1,0,0
 Using Simulink + Embedded Coder with ZCU106 (Zynq Ultrascale+ MPSoC) – Do I Need Vitis for ARM Targets?,"Hi all,
 
 I'm starting out with the ZCU106 evaluation board (Zynq Ultrascale+ MPSoC) and looking to use a model-based design approach with Simulink and Embedded Coder — targeting the ARM cores only (Cortex-A53 or R5).
@@ -769,7 +769,7 @@ That said, I’m finding it unclear what’s actually required to get this flow 
 
 If anyone has experience using Simulink with ZCU106 (or similar Zynq Ultrascale+ boards) purely on the embedded software side, I’d really appreciate your insights. Especially interested in knowing which add-ons/tools are *actually* needed to go from model to running code.
 
-Thanks.",1,software
+Thanks.",1,1,0
 Digital Hunter: Black Rose Update #1.,"Hey everyone
 
 First off, a massive **thank you** for all your donations! Seriously, every bit has been a huge help. That support has gone directly into speeding up development, getting better tools (software/AI) to make the game shine, and honestly, helping me keep the lights on and food on the table.
@@ -812,7 +812,7 @@ The more detailed, constructive, and creative your feedback, the higher your cha
 
 I'm genuinely excited for you to jump in and experience all these changes. Your feedback is the cornerstone of development for Digital Hunter: Black Rose, especially with me being a solo dev. So please, share your thoughts, suggestions, or any bugs you might encounter in the comments below.
 
-Thank you for your incredible support and for playing!",0,-
+Thank you for your incredible support and for playing!",0,0,0
 Vevor Smart 1 alternative software.,"I can't POSSIBLY be the only person that thinks the software Vevor includes with the Smart1 cutter is barely functional if not downright infuriating.
 
 And their licensing limitations are enough to tick off the pope...
@@ -827,7 +827,7 @@ I have it installed in my desktop and need to dive deep into it, but for now, lo
 
 Hopefully this helps someone else out.
 
-",1,software
+",1,1,0
 Temp + Humidity Sensor for Horse Blankets using LoRa. Can I build this with minimal engineering experience?,"Hi everyone! I'm trying to make a prototype for a simple, rugged temperature + humidity sensor that attaches to a horse blanket to monitor comfort and overheating. So far what makes the most sense is transmitting data via LoRa to a gateway nearby. I want to log temps throughout the day and check them remotely.
 
 The long term goal is to basically have an ecobee type setup but for a horse's temperature. Sensor, Gateway, App that alerts you if your horse is too hot/humid.
@@ -868,7 +868,7 @@ Questions:
 
 Would love any thoughts, sanity checks, or advice. I'm just looking to have a prototype ready before the winter. It doesn't have to be high tech by any means. Just record temp data inside the blanket and transmit it somewhere so I can read it. Once I figure out it's even possible I can complicate it then.
 
-Thanks so much!",1,software_external
+Thanks so much!",1,1,0
 Entry Level Roles Are A Dime A Dozen,"I’ve noticed how brutal the entry-level developer job market is, there are barely any entry level positions, every role you find is swamped with 200+ applicants, and you hear crickets after sending your resume on LinkedIn or Indeed.
 
 I felt that frustration a few months ago, until I switched to a three-step playbook that got me a couple more interviews in just two weeks: first, stop applying everywhere and laser-focus on the few entry-level roles that actually match your skills—whether that’s JavaScript frameworks or basic SQL etc... I like to use revers search google method:
@@ -879,7 +879,7 @@ Just change the job title to whatever you're looking for. Then on Google, click 
 
 I highly recommend taking an additional step further and finding out the recruiter or ""talent acquisition specialist"" of each job listing on linkedIN and reaching out to them via email or cold dm'. I use the tool getprospect for that.
 
-This is a lot of extra steps just to get your application seen but that's the job market now and that's what you gotta do. I got tired of doing this and built a system that automates a lot of it, let me know if that works.",1,software
+This is a lot of extra steps just to get your application seen but that's the job market now and that's what you gotta do. I got tired of doing this and built a system that automates a lot of it, let me know if that works.",1,1,0
 Advice for a new IT manager?,"Hello all,
 
 I recently accepted a position as an IT Manager and will start in a few weeks. From what I understand I will be in charge of a desired direction for tech modernization. I will be engaged in development, procurement, system administration and networking and manage a small team.
@@ -888,7 +888,7 @@ I am coming from a background of Software Engineering, primarily backend with so
 
 I am looking for advice and resources, any thing you would recommend me to read, any thoughts you might put in my head to think over.
 
-I appreciate you all, thank you!",0,-
+I appreciate you all, thank you!",1,0,0
 FIRST BUILD!!! Good part list?? Dos and donts???,"Hey everyone! 
 This is going to be my first build and 
 Wanna know what you guys think.
@@ -927,7 +927,7 @@ Graphics card: 3060
 
 
 
-",0,-
+",1,0,0
 I need some advice/insight BSCS,"Hi there, thank you for taking the time to read this and all advice is appreciated. a little background about me, I am 23 I work full time but I still find time to do my course (Stealing work time lol), I have ZERO background in tech I recently got interested in coding. I plan to start at WGU hopefully October but so far it's looking like November. I would like to transfer as much credit I can through Sophia learning and SDC. I have taken 3 courses(intro to java and python, and calculus 1) so far at Sophia (first month), I still have 3 more courses to take plan to be done by June 14 or before; don't judge me I see everyone else taking 10 courses on a month membership but as for me with no background in tech I choose to actually take my time and study to understand not to pass. So the main reason im writing this is for advice with SDC I need to take 8 classes there and the membership fee  was hefty ($265) a month what does it include exactly? I plan to take 2 classes on SDC which classes would be ""easier"" to take before my trip(July18-August20) then come back and try to finish before the end of October so I have enough time to transfer the credit before the 5th of November. I have an associate in health care foundation so I have already taken all the general education courses. also I was trying to get an internship with my state I hear WGU doesn't do GPA how would that work? any advice on how to get better at coding? study tips for SDC and WGU? please advice me on anything you think I would need to know(literally like I was born yesterday). thank you in advance.
 
 classes I need at SDC
@@ -960,7 +960,7 @@ classes I still need to take at Sophia
     
     Network and Security - Foundations
     
-    Data Management - Foundations",0,-
+    Data Management - Foundations",1,0,0
 Cursor's ban of Indian students have wide reaching consequences,"What’s happening with the Cursor ban isn’t just about one app—it’s a reflection of a deeper, more uncomfortable truth that’s starting to catch up with us. We love calling ourselves a tech superpower, we keep saying India is leading the charge in AI and software, but actions like this quietly tell a different story. When a promising AI tool like Cursor, used by developers and students worldwide, suddenly starts blocking Indian users—especially students—without any explanation, it hits differently. It chips away at something bigger than just access. It chips away at belief. At competitiveness. At our future.
 
 Because while we’re being locked out, students in other parts of the world—some barely in high school—are already integrating these tools into their learning. They’re writing better code, faster. They’re building AI-native workflows, experimenting, launching side projects, and becoming future-ready. And on the other side, you have Indian students—just as talented, just as hungry—forced to scavenge for offline alternatives or patchy workarounds because Cursor now sees an Indian IP as a risk, not a contributor. The tragic part? It’s not because of a lack of talent. It’s not even about infrastructure. It’s about trust. And that trust is something we, as a community, have slowly eroded.
@@ -973,19 +973,19 @@ This isn’t just about Cursor. It’s about our identity in the global tech wor
 
 Because if we don’t fix this, we’ll keep waking up to more silent bans, more locked features, and a world that keeps moving forward—without us.
 
-",1,unknown
+",1,0,0
 Soon MHA graduate feeling unqualified....,"I’ve been at Children’s Hospital Colorado for 12 years and I’m working on transitioning into healthcare administration. I’ll be finishing my MHA this December. Lately, I’ve started looking at job postings that interest me, but it’s been tough to find something I’m qualified for without taking a big pay cut.
 
 Over the years at Children’s, I’ve worked as an ophthalmic technician and was promoted three years ago to an ophthalmic educator. In that role, I handle onboarding, training, interviewing, policy alignment, and performance management—though I don’t technically have direct reports. I’ve also done clinical scheduling and a lot of hands-on patient care, but I’m ready to move away from anything patient-facing.
 
-I’m really interested in roles related to project management, operations, or data analytics, but I don’t have certifications or experience in those areas. I’d love to get into that kind of work, but I'm feeling unqualified without any experience or knowledge of specific data/project software. I think I could get a clinical management position but this isn't what I'm looking for. Ayn recommendations on roles I should look for? Are there any easier project/data certifications that would help me break into the hospital administration field? ",1,not_applicable
+I’m really interested in roles related to project management, operations, or data analytics, but I don’t have certifications or experience in those areas. I’d love to get into that kind of work, but I'm feeling unqualified without any experience or knowledge of specific data/project software. I think I could get a clinical management position but this isn't what I'm looking for. Ayn recommendations on roles I should look for? Are there any easier project/data certifications that would help me break into the hospital administration field? ",1,0,0
 "Opportunity in sales, how much would it change future opportunities?","Hello Everyone,
 
 I have been on this sub a little while but decided to make a throwaway account to ask for some advice on an opportunity that was recently presented to me.
 
 I graduated college exactly 1 year ago and have worked as a consultant for a software company since then. I’ve realized I am not overly thrilled about this type of work/industry but feel as if I am compensated greatly and have low stress overall which I am grateful for. I have had reservations for a while now as I had to relocate far from family/friends, move to a city I don’t like all that much, and have a feeling of existential dread when reflecting on life in the corporate world. However, I see those around me being given great opportunities when they move on from a role like mine. Top MBA/Masters programs, lucrative roles at startups, and more traditional roles in tech. As a result my working plan was to spend the next 5-6 years in my current company or consulting/tech generally (not sales) and then shoot for a top MBA program. If accepted, I’d like to take my chances as a professional/semi-professional poker player before and while in school as this is one of my passions. This additional education would come with the hopes of working in Management Consulting post-grad and or other more traditional post-MBA routes.
 
-Recently an opportunity that interests me has come up but has also made me second guess my plans. A fully remote Account Representative role for a software company. The base pay is about $17k lower than my current role but with estimated commission of $30k-$50k. I have never done anything sales related and am concerned that I may have trouble leaving the sales world if I ever choose to do so. Do people end up siloed in this line of work or are there opportunities to pivot elsewhere if it doesn’t work out? My main concern is that while this immediately might be an improvement compensation and lifestyle wise, it could be a hinderance to opportunities in the future. Just looking for some advice on the world of sales and exits if I hate it? Also, does the lifestyle feel vastly different than say a data analyst at a large company or another business function that is typically 9-5?",1,not_applicable
+Recently an opportunity that interests me has come up but has also made me second guess my plans. A fully remote Account Representative role for a software company. The base pay is about $17k lower than my current role but with estimated commission of $30k-$50k. I have never done anything sales related and am concerned that I may have trouble leaving the sales world if I ever choose to do so. Do people end up siloed in this line of work or are there opportunities to pivot elsewhere if it doesn’t work out? My main concern is that while this immediately might be an improvement compensation and lifestyle wise, it could be a hinderance to opportunities in the future. Just looking for some advice on the world of sales and exits if I hate it? Also, does the lifestyle feel vastly different than say a data analyst at a large company or another business function that is typically 9-5?",1,0,0
 Bangalore vs Berlin: Evaluating a tough choice between two solid offers 🇮🇳🇩🇪,"Hey everyone,
 
 I’m a software engineer with approx 2.5 YOE trying to decide between two strong offers, but I’m struggling to evaluate them holistically — factoring in compensation, location, family life, and long-term growth. Would love your thoughts!
@@ -1012,7 +1012,7 @@ On the other hand, the Bangalore startup offer is aggressive in comp, offers me 
 
 What would you prioritize in this case? Should I go for the international exposure and better WLB, or stick to the higher PPP-adjusted package in India with family stability?
 
-Appreciate any honest feedback from those who’ve faced similar crossroads",1,not_applicable
+Appreciate any honest feedback from those who’ve faced similar crossroads",1,0,0
 "Have experience in software engineering and equipment validation, what roles can I apply to?","Hello,
 
 I have a little over 2 years of experience as a fullstack software engineer as well as \~5 years of experience working as a validation specialist/engineer for medical device / biotech companies, specializing in equipment validation. 
@@ -1023,7 +1023,7 @@ After some time thinking, it might be best for me to move on from continuing to 
 
 I wanted to ask for some advice on what roles I can look into that could use both of my experiences here? From roles I've researched, a lot of them require years of experience where I don't think i have much relevant experience. 
 
-Appreciate anyone's advice, thank you",1,not_applicable
+Appreciate anyone's advice, thank you",1,0,0
 Problem with Plustek scanner (or my lack of knowledge),"I wanted to dust off my hobby of film photography and went ahead to scan my first roll of film in a while. I have a Plustek 7200i scanner with the original SilverFast SE software for Windows.
 
 A while ago, when I did my first scans, I would scan the film as negative and use the SilverFast software to do inversion for me and some preprocessing before editing the image in GIMP, but I was always a bit disappointed with the results.
@@ -1040,7 +1040,7 @@ https://preview.redd.it/a90vg3161t0f1.png?width=576&format=png&auto=webp&s=e8f87
 
 https://preview.redd.it/o5m9nz321t0f1.png?width=882&format=png&auto=webp&s=6838cdf4229117fed7f0643d53177944094af5f6
 
-",1,software
+",1,1,0
 Bangalore vs Berlin: Evaluating a tough choice between two solid offers 🇮🇳🇩🇪,"Hey everyone,
 
 I’m a software engineer with approx 2.5 YOE trying to decide between two strong offers, but I’m struggling to evaluate them holistically — factoring in compensation, location, family life, and long-term growth. Would love your thoughts!
@@ -1067,7 +1067,7 @@ On the other hand, the Bangalore startup offer is aggressive in comp, offers me 
 
 What would you prioritize in this case? Should I go for the international exposure and better WLB, or stick to the higher PPP-adjusted package in India with family stability?
 
-Appreciate any honest feedback from those who’ve faced similar crossroads 🙏",1,not_applicable
+Appreciate any honest feedback from those who’ve faced similar crossroads 🙏",1,0,0
 Does leaving High paying job in India and moving to Germany worth it?,"Hey folks,
 
 I’m currently working in India, earning around 22 LPA with 4 years of experience. My fiancée is also working and earning 30 LPA. We've been thinking about moving to Germany for a Master's in AI/ML Engineering, Computer science or Data Science, and we’d likely go together.
@@ -1082,7 +1082,7 @@ my_qualifications and his: Btech in Computer science with 4 years of work experi
 
 I can learn German more in 2 years I have A1 right now.
 
-Thanks in advance!",0,-
+Thanks in advance!",0,0,0
 "Men of Reddit, what do you think is the best way to control your short temper and be wise?","Hey everyone. I request that all of you advise me on my situation and this would really change my life and I am really loojing to get better. I’m eager to make some positive changes and hope to hear your thoughts on navigating my current situation.
 
 Allow me to introduce myself. I'm a 35M and I've spent the past 12 years as a software developer. I’m fortunate to be in a field that not only offers me a comfortable income but also allows me to channel my passion for technology and I WFH. My wife who works in a similar role within our industry also earns a good salary which contributes to our stable financial situation and she WFH too. Together we’re raising our energetic 3 year old son who brings joy and laughter to our lives every day.
@@ -1097,7 +1097,7 @@ To clarify what I have done so far. I have visited a therapist several times and
 
 I am not sure what should I do? Help your brother here and I am willing to try everything I can. 
 
-How can I be a person who is anger free and wise?",1,not_applicable
+How can I be a person who is anger free and wise?",1,0,0
 I Built CatDoes: Your Words to Native Apps,"# What is CatDoes?
 
 [https://catdoes.com](https://catdoes.com) is a no-code AI app builder that transforms conversations into fully functional **native** mobile apps. You simply describe your app idea, and AI agents handle everything else from understanding the app's requirements to releasing on the app stores.
@@ -1131,7 +1131,7 @@ We have easy-to-use checkpoints called ""instances."" They're your conversation 
 
 We're still refining our product and would love to hear your thoughts. What app would you build if coding wasn't an issue? Any features you'd want to see? I'm around to answer questions and would love your honest thoughts! Feel free to ask questions in the comments or DM me directly!
 
-P.S. If you know anyone who's been sitting on an app idea, maybe tag them? I'd love to help more people build their ideas!",0,-
+P.S. If you know anyone who's been sitting on an app idea, maybe tag them? I'd love to help more people build their ideas!",0,0,0
 "Ajazz AK992 (no leds v.) works via bluetooth, wired but not via 2.4ghz","I have a Ajazz AK992 no lights version and it' currently working via bluetooth and wired, but not via dongle.  
 Some time ago I was using my keyboard via 2.4 ghz and all of a sudden the 2.4ghz mode light started blinking and even if I resetted the keyboard on factory default (fn+spacebar for 3 secs) or resetted the 2.4ghz connection (fn+r for 5 seconds to make it blink faster and enter on pairing mode) the keyboard doesn't connect on the dongle 2.4.  
   
@@ -1139,7 +1139,7 @@ Other thing that looks strange is that it repairs well on another notebook I hav
   
 I don't know how to fix the issue since the software for this specific version of ajazz's keyboard is sh\*\*, the manuals on the internet covers so little for the version with no lights or it brings wrong infos.  
 
-Just for a reminder, on my pc I have a wireless mouse, wireless headset, and wireless controller (it's turned off), and I use wi-fi as internet source. Maybe interference? Idk...",1,software
+Just for a reminder, on my pc I have a wireless mouse, wireless headset, and wireless controller (it's turned off), and I use wi-fi as internet source. Maybe interference? Idk...",1,0,0
 Potential Match for Woodbury John Doe,"I have already submitted the match to the doe network, however I was curious to see what other people thought while I wait for further updates from them. 
 
 Woodbury Doe
@@ -1152,7 +1152,7 @@ Woodbury Doe was found in New York in 1998, but was estimated to have died betwe
 
 I also noticed that one eye on the Doe’s reconstruction looks very slightly higher than the other. When looking back at William’s photo I believe he also may have one eye very slightly higher in the other, which looks especially apparent in his age progression. The difference in the eyes may just be my perception though, which was another reason I wanted to hear what others thought.
 
-I haven’t posted here before so if I need to provide anything additional like links to other websites or additional reconstructions let me know and I can add those here or in the comments. ",0,-
+I haven’t posted here before so if I need to provide anything additional like links to other websites or additional reconstructions let me know and I can add those here or in the comments. ",0,0,0
 Show by Rock!! 10th Anniversary Rewatch - Mashumairesh!! Episode 5 Discussion,"# ***Mashumairesh!! Episode 5: Parallelism Crown***
 
 [← Previous Episode](https://www.reddit.com/r/anime/comments/1klvrnr/show_by_rock_10th_anniversary_rewatch/) | [Index](https://www.reddit.com/r/anime/comments/1jnl2dm/show_by_rock_10th_anniversary_rewatch/) | [Next Episode →](https://i.imgur.com/M3M23vH.jpeg)
@@ -1218,8 +1218,8 @@ REIJINGSIGNAL - [Dazzling](https://www.youtube.com/watch?v=De0m_V_ynVI) | Rarari
 
 ## Tomorrow's Questions of the Day
 
-[Q] >!Do you have a special place you go to think heavy thoughts?!<",0,-
-What's a good software to start off with?,"I want to start to get into architecture, but i'm looking for a good software to start because i don't have much space to draw on, does anyone know any good softwares that are cheap/free?",0,-
+[Q] >!Do you have a special place you go to think heavy thoughts?!<",0,0,0
+What's a good software to start off with?,"I want to start to get into architecture, but i'm looking for a good software to start because i don't have much space to draw on, does anyone know any good softwares that are cheap/free?",0,0,0
 Deciding between a Sovol SV06 ACE or a Bambu A1 mini (I think...),"Hi everyone, I'm hoping to be a new 3D print user. I'm 100% in to functional prints for DIY. Realistically, I'll probably do less than a handful of prints a week, and maybe small batches of freecad designs once a month
 
   
@@ -1239,7 +1239,7 @@ Is the price difference between the two deserved? My budget is below/about £200
 
 Then, I see ANYCUBIC Kobra 3 @ £199 (https://www.amazon.co.uk/ANYCUBIC-Multicolor-Printing-Printers-Auto-Leveling/dp/B0D3QG5QC9) with a larger print bed of 250x250x260mm
 
-Many thanks for your thoughts, honestly appreciate your time",1,not_applicable
+Many thanks for your thoughts, honestly appreciate your time",1,0,0
 Best website/app/tool for scheduling lessons?,"Hi all,  
 As the school year is wrapping up next month, I'm looking ahead to the fall.
 
@@ -1257,7 +1257,7 @@ It looks like my current best option is When2Meet, even though its purpose, like
 
 Thoughts?  I suppose I could just make a Google Doc with a bunch of check boxes for time slots and just have parents send it back to me with the boxes checked off, but maybe there's something I haven't yet tried
 
-Edit: I would prefer a free resource at this point.  I may decide to invest into software like MyMusicStaff at a later time.",1,software
+Edit: I would prefer a free resource at this point.  I may decide to invest into software like MyMusicStaff at a later time.",1,1,0
 Dashcam alternative to Gear Guard,"So far we are really enjoying the two Rivian’s we’re using, but we have been seeing some small foibles pop-up. That happens, no dealbreakers, but one thing that is really disappointing (and coming from Tesla) is how Gear Guard just doesn’t work.
 
 Consistently, and between both the R1T and R1S, we are met with storage device issues with brand new Samsung T1 drives connected to the USB-C. Moreover, times when it could have used it (like an impact from a bird on the windshield last week or some close calls) result in nothing being captured.
@@ -1266,7 +1266,7 @@ Really though, the bug with the storage device making Gear Guard useless makes t
 
 So…I’m looking for dashcam alternatives that people are happy to use. I hate the fact that I have to buy and install more wired crap on the car given these vehicles have a dozen cams, and will wait for the inevitable software update (Tesla’s system was bad until it was suddenly very good, but that was around 2019-2020), but in the meantime does anyone have any good suggestions for a dashcam?
 
-Thanks!",1,external
+Thanks!",1,0,0
 My Top 3 Tools for Ditching 90% of My Typing (And Staying Sane),"Hey everyone,  
 I’ve been grinding on my SaaS product for the last few months, and honestly, my wrists were starting to scream. I'm a fast typer, but coding, writing documentation, responding to emails, it adds up. I was looking for a way to reduce the amount of typing I do on a daily basis.
 
@@ -1280,7 +1280,7 @@ I tried a couple of different options. I think Google has one. I even heard abou
 
 Anyway, just wanted to share what's been working for me to minimize typing. What are your favorite productivity hacks for getting more done with less manual labor? I'm always looking for new ideas!
 
-Cheers,",0,-
+Cheers,",0,0,0
 "Ajazz AK992 (no leds v.) works via bluetooth, wired but not via 2.4ghz","I have a Ajazz AK992 no lights version and it' currently working via bluetooth and wired, but not via dongle.  
 Some time ago I was using my keyboard via 2.4 ghz and all of a sudden the 2.4ghz mode light started blinking and even if I resetted the keyboard on factory default (fn+spacebar for 3 secs) or resetted the 2.4ghz connection (fn+r for 5 seconds to make it blink faster and enter on pairing mode) the keyboard doesn't connect on the dongle 2.4.  
   
@@ -1288,7 +1288,7 @@ Other thing that looks strange is that it repairs well on another notebook I hav
   
 I don't know how to fix the issue since the software for this specific version of ajazz's keyboard is sh\*\*, the manuals on the internet covers so little for the version with no lights or it brings wrong infos.  
 
-Just for a reminder, on my pc I have a wireless mouse, wireless headset, and wireless controller (it's turned off), and I use wi-fi as internet source. Maybe interference? Idk...",1,software_external
+Just for a reminder, on my pc I have a wireless mouse, wireless headset, and wireless controller (it's turned off), and I use wi-fi as internet source. Maybe interference? Idk...",1,0,0
 ORB/TicTacs Racing to Assist Air Force 747 Frozen in Time and Space,"Time: *2025-04-23, 14:25 AZT*
 
 Location: *Tucson, AZ*
@@ -1307,7 +1307,7 @@ The frozen, time-locked appearance of the aircraft—and its oddly tiny scale—
 📍 Location: Tucson, AZ | Davis-Monthan AFB | AT&T SWUF  
 👽 [\#UFO](https://www.youtube.com/hashtag/ufo) [\#TicTacUFO](https://www.youtube.com/hashtag/tictacufo) [\#UAP](https://www.youtube.com/hashtag/uap) [\#AirForce747](https://www.youtube.com/hashtag/airforce747) [\#FrozenInTime](https://www.youtube.com/hashtag/frozenintime) [\#DavisMonthan](https://www.youtube.com/hashtag/davismonthan)
 
-[https://youtu.be/TdKaBceS7iw?si=DXLwMH-S7fojtcDm](https://youtu.be/TdKaBceS7iw?si=DXLwMH-S7fojtcDm)",0,-
+[https://youtu.be/TdKaBceS7iw?si=DXLwMH-S7fojtcDm](https://youtu.be/TdKaBceS7iw?si=DXLwMH-S7fojtcDm)",0,0,0
 Question about png export (graininess),"Hello everyone! 
 
 Months ago I had the chance to try the Atelier app on the Nomad. I loved how the drawing looked on the device (especially the pencil), but when I tried exporting the png it was very grainy, and made of black-and-white dots rather than grayscale.
@@ -1316,7 +1316,7 @@ Is this a limitation of e-ink technology in general, or is it something that can
 
 I really enjoyed the drawing feel of the Supernote compared to an iPad, and I’m thinking that even if the dithering is unavoidable on e-ink I might still get one just for the joy of sketching. 
 
-Appreciate your thoughts/experiences! ",1,software
+Appreciate your thoughts/experiences! ",1,1,0
 Exclusive 35% Off on Parallels Software,"For those looking to enhance their productivity with powerful software, Parallels is offering an exclusive deal that you won't want to miss. From May 8 to May 31, 2025, customers can enjoy a fantastic 35% discount on various editions of Parallels Desktop. This global offer is perfect for anyone needing to run Windows on their Mac or wanting to improve their workflow with virtualization.
 
 **The following [Parallels offers are available](https://www.dailybargains.com/out/parallelsevergreen?cid=parallelsdesktopdeal25_rddt)**
@@ -1335,7 +1335,7 @@ Exclusive 35% Off on Parallels Software,"For those looking to enhance their prod
   * **Versatile Features:** Whether you need to run Windows applications, test software, or create virtual machines, Parallels provides a comprehensive set of features to meet your needs.
   * **Regular Updates:** Parallels continuously improves its software, ensuring that users have the latest features and security updates.
 
-This limited-time offer is a great opportunity for anyone looking to optimize their computing experience with Parallels Desktop. Don't miss out on the chance to save while upgrading your productivity tools!",0,-
+This limited-time offer is a great opportunity for anyone looking to optimize their computing experience with Parallels Desktop. Don't miss out on the chance to save while upgrading your productivity tools!",0,0,0
 Exclusive Offer: 10% Off CorelDRAW for Graphic Design Enthusiasts!,"Attention all graphic design aficionados! There’s an incredible opportunity to snag a 10% discount on CorelDRAW, a leading graphic design software that caters to both professionals and hobbyists alike. This offer is exclusively available to those who act quickly, with the coupon code **DRAW10**, valid from May 5 to May 18, 2025.
 
 **The following [Corel Corporation offers are available](https://www.dailybargains.com/out/corelcorporationevergreen?cid=coreldrawoffer25_rddt)**
@@ -1356,14 +1356,14 @@ Exclusive Offer: 10% Off CorelDRAW for Graphic Design Enthusiasts!,"Attention al
   * Corel Corporation has a long-standing history in the software industry, consistently delivering high-quality products that meet the evolving needs of creative professionals.
   * Regular updates ensure that users have access to the latest tools and features, enhancing productivity and creativity.
 
-Don't miss out on this limited-time offer to enhance your graphic design toolkit with CorelDRAW. With its extensive features and user-friendly interface, it’s the perfect choice for anyone looking to elevate their design projects!",0,-
+Don't miss out on this limited-time offer to enhance your graphic design toolkit with CorelDRAW. With its extensive features and user-friendly interface, it’s the perfect choice for anyone looking to elevate their design projects!",0,0,0
 Nothing phone 3a vs OnePlus 13R which phone should I go with?,"Hi I am planning to buy a new phone as my current phone is on the verge of giving out. My phone usage is moderate-heavy. I want to preferably be able to use this phone for next 3-4 years. Basically the things that I am looking for in a phone include:
 - great screen cause I am a bit picky when it comes to screen colours and accuracy also it's sharpness.
 - good cameras that can take decent photos as I like to travel.
 - Great battery back up.
 - decent speakers so that I don't have to always have to search for my headphones.
 - prefer a good haptic motor feedback.
-Also wanted to know what you all think about Oxygen os and Nothing os and what would you suggest would be better for a better overall software experience in daily use case scenarios.",0,-
+Also wanted to know what you all think about Oxygen os and Nothing os and what would you suggest would be better for a better overall software experience in daily use case scenarios.",0,0,0
 "YSK: YSK: When you need to download software, go to the Wikipedia page for that software and click on the official website link to avoid fake websites and malicious apps.","Why YSK:
 
 These links tend to be accurate, especially for popular or widely-used apps, because:
@@ -1382,7 +1382,7 @@ This is how I usually do it:
 
 4. Trust, but verify. After downloading the software, upload it to a website that scans for malicious software and if it has no flags, you're good. If it has one or two, it's probably a false alarm.
 
-Alternatively, you could just use the Microsoft Store (Windows), App Store (Mac), or your Linux package manager. But if you can't find the software through that method, or it's outdated, then I recommend my method for manually downloading software and keeping your machine safe.",0,-
+Alternatively, you could just use the Microsoft Store (Windows), App Store (Mac), or your Linux package manager. But if you can't find the software through that method, or it's outdated, then I recommend my method for manually downloading software and keeping your machine safe.",0,0,0
 ORB/TicTacs Racing to Assist Air Force 747 Frozen in Time and Space,"Time: *2025-04-23, 14:25 AZT*
 
 Location: *Tucson, AZ*
@@ -1401,7 +1401,7 @@ The frozen, time-locked appearance of the aircraft—and its oddly tiny scale—
 📍 Location: Tucson, AZ | Davis-Monthan AFB | AT&T SWUF  
 👽 [\#UFO](https://www.youtube.com/hashtag/ufo) [\#TicTacUFO](https://www.youtube.com/hashtag/tictacufo) [\#UAP](https://www.youtube.com/hashtag/uap) [\#AirForce747](https://www.youtube.com/hashtag/airforce747) [\#FrozenInTime](https://www.youtube.com/hashtag/frozenintime) [\#DavisMonthan](https://www.youtube.com/hashtag/davismonthan)
 
-[https://youtu.be/TdKaBceS7iw?si=DXLwMH-S7fojtcDm](https://youtu.be/TdKaBceS7iw?si=DXLwMH-S7fojtcDm)",0,-
+[https://youtu.be/TdKaBceS7iw?si=DXLwMH-S7fojtcDm](https://youtu.be/TdKaBceS7iw?si=DXLwMH-S7fojtcDm)",0,0,0
 GoXLR Mini starting to fail :(,"My GoXLRMini has started playing up for no reason, its been fine for years and now sometimes it will crash and i will loose control over my audio volume. I can still mute and use the bleep button, but i loose ALL volume control entireley. I know when its freaking out cos the lights on it start turning on and off alot, a simple unplug and replug the USB cable seems to fix it but its already getting annoying as frick., and happened during a twitch stream just last week. Nothing broke, i still had audio, but I had NO control over volume of anything.  
 
 So, i guess im in the market for a new device! As i understand it the GoXLR team were fired again not long ago so now its unsupported?......So i think im done with the GoXLR for good now. Its going to die forever one day anyway if theres no dev team so whats the point, its already going wrong for me. 
@@ -1422,7 +1422,7 @@ I currently have an Audio-technica AT2020 XLR microphone, and dont have plans to
 
 Thoughts? Advice? Reccomendations? 
 
-",1,not_applicable
+",1,0,0
 Midrange Controller comparison - reviewed on docked Steam Deck,"[The Lineup](https://preview.redd.it/hfwnseaxss0f1.jpg?width=1876&format=pjpg&auto=webp&s=07b98f47146191af0b178cd0147f81c15976745f)
 
 I guess this is half reviews, half controller collection. Mods, if I've got the flair wrong please advise. 
@@ -1496,7 +1496,7 @@ I have trouble not justifying this controller. You have fairly heavy sticks if y
 
 I kind of avoid using the 8BitDo: as much as I like the feel of the claw buttons, I don’t like scrunching my elbows in. The Beitong…yeah, I should have done a little more research. It’s going in a drawer somewhere: I wish I could use it but I can’t even upgrade the firmware if they fix it. The EasySMX D10…it’s a good controller but doesn’t fit my needs or preferences. It’ll be good to keep around for guest players, like the 8BitDo. That leaves the Gamesir Cyclone 2 and the ThundeRobot G80. I like them both but in different ways. 
 
-I like the stick caps on the Cyclone 2 better, and the cross D-pad feels a little better under my thumb, but I love the claw buttons on the G80 and it’s disc-shaped D-pads are just as accurate. The G80 also has a separate button mostly for programming turbo, which helps quite a bit. The triggers have a little more travel on the Cyclone 2, but have the rumble option in the G80 and are easier to switch to hair trigger mode. The face buttons on the G80 are a little quieter also (plus), and have a bit less travel (sometimes a minus?). Both devices feel equally smooth in gameplay There’s so many things that are similar or the same on both, though the G80 lets you put in lighter effort sticks while with the Cyclone 2 you’re stuck with their high tension ones. But since I like high tension sticks, that’s a tie for me. I’m always switching from one to the other and I’m glad I have both. For all I know, it could be down to the convex stick caps on the Cyclone 2 versus the concave ones on the G80. Oh, the sticks are swappable on the G80 also, though I haven’t found a place to get replacements. ",0,-
+I like the stick caps on the Cyclone 2 better, and the cross D-pad feels a little better under my thumb, but I love the claw buttons on the G80 and it’s disc-shaped D-pads are just as accurate. The G80 also has a separate button mostly for programming turbo, which helps quite a bit. The triggers have a little more travel on the Cyclone 2, but have the rumble option in the G80 and are easier to switch to hair trigger mode. The face buttons on the G80 are a little quieter also (plus), and have a bit less travel (sometimes a minus?). Both devices feel equally smooth in gameplay There’s so many things that are similar or the same on both, though the G80 lets you put in lighter effort sticks while with the Cyclone 2 you’re stuck with their high tension ones. But since I like high tension sticks, that’s a tie for me. I’m always switching from one to the other and I’m glad I have both. For all I know, it could be down to the convex stick caps on the Cyclone 2 versus the concave ones on the G80. Oh, the sticks are swappable on the G80 also, though I haven’t found a place to get replacements. ",0,0,0
 Bender - Skill,"#Skill:
 
 **Intelligence:**
@@ -1649,7 +1649,7 @@ Bender - Skill,"#Skill:
 
 - [Makes balloons and doves appear from his eyes and turns his antennae into flowers.](https://v.redd.it/l2lnqe4330ra1)^S4E7 
 
-- [Swaps a fake bottle of liquor with a real one while Fry briefly looks away.](https://v.redd.it/7a9hlox4etqa1)^S6E17-A",0,-
+- [Swaps a fake bottle of liquor with a real one while Fry briefly looks away.](https://v.redd.it/7a9hlox4etqa1)^S6E17-A",0,0,0
 2025 Short CS Admissions Profile for Class of 2026,"While applying this year, one of the most helpful resources I found on this subreddit was the 2023 Ultimate CS Guide by ScrubbyArtist and the 2024 CS Guide by WinterJacob. So, I thought it would be appropriate for me to try and provide the same kind of help for next year's applicants. 
 
 This guide will be CS-focused.
@@ -1761,7 +1761,7 @@ Closing Thoughts
 
 Good Luck Class of 2026 hope yall CS admission goes well.
 
-",0,-
+",0,0,0
 Bender - Robot Body,"#Robot Body:
 
 **Extendable Limbs:**
@@ -2122,7 +2122,7 @@ Bender - Robot Body,"#Robot Body:
 
 - **[Weakness:]** [Has an off switch.](https://v.redd.it/c4m2pdexjtqa1)^BwaBB 
 
-- **[Weakness:]** [Like all robots, food colouring is deadly to Bender.](https://v.redd.it/ng12ducyjtqa1)^S7E4-A",0,-
+- **[Weakness:]** [Like all robots, food colouring is deadly to Bender.](https://v.redd.it/ng12ducyjtqa1)^S7E4-A",0,0,0
 [HIRING} Reddit Client Acquisition Strategist,"**High paying** looking for smart people with smm 
 
 About the company:
@@ -2194,7 +2194,7 @@ Flexible, self-determined; remote work available.
 Looking for smart people who want to grow this side of our agency out. We want to hear from everyone listen to your ideas and hire a couple people.
 
 If your ready to work with us, fill out this and book a meeting  
-[https://app.intelliscreen.io/invite/3749d14e-f19b-4965-8ed9-4af97eff048e](https://app.intelliscreen.io/invite/3749d14e-f19b-4965-8ed9-4af97eff048e)",0,-
+[https://app.intelliscreen.io/invite/3749d14e-f19b-4965-8ed9-4af97eff048e](https://app.intelliscreen.io/invite/3749d14e-f19b-4965-8ed9-4af97eff048e)",0,0,0
 Software for umbrella group of companies,"Hi all, looking for software to help me streamline 4 companies (currently, could grow) 1 company, multiple DBAs.
 
 1 is pest control, so tracking materials purchased and used. So I could  comply with government regulations. Others are power washing, things like that.
@@ -2207,7 +2207,7 @@ I'm sure there's much more - but that's not of the to of my head.
 
 GirillaDesk is what I'm leaning towards if familiar with that. But that's designed with pest control  in mind first and foremost. I do other things - so I thought I would reach out here for an all-in-one solution before I jump into GorillaDesk, only to realize I need something more all encompassing 
 
-Tia",1,software_external
+Tia",1,1,0
 Looking for some reading on Design Patterns? These articles should help cover a variety of topics that you might be interested in then: https:...,"Looking for some reading on Design Patterns?
 
 
@@ -2257,7 +2257,7 @@ Visitor:
 📨 Sign up for my email newsletter!
 🗣️ Share with your network!
 
-#softwareengineering #softwareengineer #softwareengineers #designpatterns",0,-
+#softwareengineering #softwareengineer #softwareengineers #designpatterns",0,0,0
 Laptop recommendations!,"Hey everyone,
 
 I’m looking to buy a laptop that can comfortably run design software like Adobe Photoshop, Illustrator, InDesign, Rhino, Revit, and some rendering tools (like V-Ray or Enscape). I’m not gaming (I have a ps5 already) this is mainly for architecture and creative work.
@@ -2266,7 +2266,7 @@ My budget is around $1,500–$2,000. I’d love something that’s powerful but 
 
 Would appreciate any recs on specific models or specs I should be aiming for!
 
-Thanks!",0,-
+Thanks!",0,0,0
 Laptop recommendations,"Hey everyone,
 
 I’m looking to buy a laptop that can comfortably run design software like Adobe Photoshop, Illustrator, InDesign, Rhino, Revit, and some rendering tools (like V-Ray or Enscape). I’m not gaming (I have a ps5 already) this is mainly for architecture and creative work.
@@ -2275,7 +2275,7 @@ My budget is around $1,500–$2,000. I’d love something that’s powerful but 
 
 Would appreciate any recs on specific models or specs I should be aiming for!
 
-Thanks!",0,-
+Thanks!",0,0,0
 "Like it or not, you have to respect ID Software for trying to do something different with the DOOM games instead of sticking with the same fomat.","So as you may have known, **DOOM: The Dark Ages** recently hit the stores, and opinions are flying all over the place. Some like it, some don’t, but in the end it’s a very good and fun game (according to the reviews I’ve read).
 
 That being said, one sentiment I noticed while browsing through subreddits, reviews, forums, etc., is the opinion on how ""different"" TDA is compared to Eternal — at least from a gameplay standpoint.
@@ -2304,7 +2304,7 @@ Of course i may be right or wrong. Feel free to correct me if I got something wr
 
 I love the DOOM games, and I’m excited to buy and play The Dark Ages.
 
-TL;DR: Respect the devs for trying something new even if you don’t like it.",0,-
+TL;DR: Respect the devs for trying something new even if you don’t like it.",0,0,0
 Which job should I pursue?,"Currently working as a Software Development Engineer in Test or QA for 3 years in Indonesia since I(M25) finished my bachelor degree in computer science. Right now I'm contemplating which options should I go for:
 
 1. Continue my career as an SDET and improve my skills by getting a certification like ISTQB, maybe I could land a remote job with better salary
@@ -2312,11 +2312,11 @@ Which job should I pursue?,"Currently working as a Software Development Engineer
 
 For option 2, I've been thinking about getting a master degree in either Europe/Australia in hope that I can move to live/work in a better country. But the problem is I don't know what degree/job that I want to get yet. I'm looking for high paying jobs, high demand, and not easily replaced by AI. Some people recommended me cyber security, devops engineer, and cloud engineer. Would also love to hear your suggestion on this. I don't mind learning something new, and I'm confident that I can learn it no matter how hard it is.
 
-Which options should I go for?",1,not_applicable
+Which options should I go for?",1,0,0
 Is there a way to roll the latest software update back?,"Hi. I'm trying to help out an elderly relative here. They have a Samsung galaxy, one of the older models from a few years ago, and as expected it's difficult as is for them to figure it out. I guess there was a software update several days ago and it's been a total nightmare for them navigating it. Seems like it changed the overall look and feel of the phone and now my relative is perpetually frustrated since they were finally getting used to a smartphone. The most difficult change for them is the fact that you have to scroll down on either the top left or right part of the screen in order to see your notifications. It's made it more challenging for them just to use the phone since they have bad eyesight + arthritis in their hands. 
 
 
-Is there any way to roll it back to the previous update? It would really help my relative be able to still use their phone. Thanks.",1,software
+Is there any way to roll it back to the previous update? It would really help my relative be able to still use their phone. Thanks.",1,0,0
 Pi/Python programmer needed,"I need a python programmer to assist me with a simple open source project.  I'm trying to learn Pis and Python and can't find any community college classes locally, or anything decent online at reasonable cost.
 
 I’m a hardware/systems guy.  I can spec software functionality, flowchart it, etc, but I’m simply no good at writing it.  Heck, one of my programmer friends used Chat GTP to write this code and I still can’t get it to work as I have no experience with the practicalities of getting it loaded, debugged, and running.  Having to learn FORTRAN on punch cards and Basic on an emulator running time-share on a PDP-11/70 just sucked what little fun there might have been in it back when I had to learn programming.
@@ -2331,7 +2331,7 @@ So my project is to create a wireless 4-scale system based on Raspberry Pis and 
 
 I’ll provide the Pis and scales, guidance, testing, breadboards, and whatever else you might need.  I’m in Tehachapi and I also have power supplies, breadboards, a bunch of meters, etc.  I can drag all of that to your location.  I’ll 3d print housings for the parts.  If you would prefer Arduino, we can talk about that - looking for whatever makes sense.
 
-I look at this as giving back to the community I love. I’ll post the prints to Thingiverse,  Code would be posted to a site under a similar common-use license to the one Thingiverse uses.  I’ll have to do some research on that.  ",1,software_external
+I look at this as giving back to the community I love. I’ll post the prints to Thingiverse,  Code would be posted to a site under a similar common-use license to the one Thingiverse uses.  I’ll have to do some research on that.  ",1,1,1
 I tested Lottery Defeater Software for a month and here’s what actually happened,"I’ve always been curious about the lottery. Not because I think I’ll win millions, but because I like the *what if*. That little moment of possibility when you’re holding your ticket before the numbers drop. Still, I knew deep down that playing randomly or picking birthdays wasn’t doing me any favors.
 
 That’s why I started looking into different tools and strategies. Somewhere in that search, I came across something called **Lottery Defeater Software**. The name sounded a little bold, but the concept wasn’t about “beating the system” it was more about making smarter picks.
@@ -2383,7 +2383,7 @@ It doesn’t promise to win the lottery for you. But it does promise to help you
 
 So if you’re the kind of person who plays regularly and likes the idea of having a strategy, this might be something worth trying. It added structure to a game that’s usually all luck, and for me, that made it more interesting.
 
-Has anyone else tried using tools like this? Would be great to hear different experiences.",0,-
+Has anyone else tried using tools like this? Would be great to hear different experiences.",0,0,0
 Pi/Python programmer needed,"I need a python programmer to assist me with a simple open source project.  I'm trying to learn Pis and Python and can't find any community college classes locally, or anything decent online at reasonable cost.
 
 I’m a hardware/systems guy.  I can spec software functionality, flowchart it, etc, but I’m simply no good at writing it.  Heck, one of my programmer friends used Chat GTP to write this code and I still can’t get it to work as I have no experience with the practicalities of getting it loaded, debugged, and running.  Having to learn FORTRAN on punch cards and Basic on an emulator running time-share on a PDP-11/70 just sucked what little fun there might have been in it back when I had to learn programming.
@@ -2398,12 +2398,12 @@ So my project is to create a wireless 4-scale system based on Raspberry Pis and 
 
 I’ll provide the Pis and scales, guidance, testing, breadboards, and whatever else you might need.  I’m in Tehachapi and I also have power supplies, breadboards, a bunch of meters, etc.  I can drag all of that to your location.  I’ll 3d print housings for the parts.  If you would prefer Arduino, we can talk about that - looking for whatever makes sense.
 
-I look at this as giving back to the community I love. I’ll post the prints to Thingiverse,  Code would be posted to a site under a similar common-use license to the one Thingiverse uses.  I’ll have to do some research on that.  ",1,software_external
+I look at this as giving back to the community I love. I’ll post the prints to Thingiverse,  Code would be posted to a site under a similar common-use license to the one Thingiverse uses.  I’ll have to do some research on that.  ",1,1,1
 "[15 YOE] Manager moving back to IC after 2 years, not getting responses on multiple resume versions","[Version 1](https://preview.redd.it/1dusj36kjs0f1.png?width=5100&format=png&auto=webp&s=6444f6176607d8715a0165e244dcbc3b303df8ad)
 
 [Version 2](https://preview.redd.it/8ksxw46kjs0f1.png?width=5100&format=png&auto=webp&s=b544f9d06ed6bc413dd73fccacf1dfe1057d3866)
 
-I've been a software manager for the last 2 years and still filling the senior engineer role for the first few months of that. I'm looking to move back into an IC role, applying to senior, staff, and principal level roles, pretty agnostic to industry. I care more about the people and team fit than the company name. In California, applying to local (not many) and remote positions only, not willing to relocate at this stage of the search. I was a student developer (year round, part time intern) from 2008 to 2010 and have been working professionally full time since then. I've been A/B testing these two resume templates, but so far no real bites on either. First off, which format should I keep developing, and what can I do to make it more appealing? Second, With 15 years full-time experience, is it really worth going to another half page or so? I've been pretty stringent on keeping 1 page so far.",1,not_applicable
+I've been a software manager for the last 2 years and still filling the senior engineer role for the first few months of that. I'm looking to move back into an IC role, applying to senior, staff, and principal level roles, pretty agnostic to industry. I care more about the people and team fit than the company name. In California, applying to local (not many) and remote positions only, not willing to relocate at this stage of the search. I was a student developer (year round, part time intern) from 2008 to 2010 and have been working professionally full time since then. I've been A/B testing these two resume templates, but so far no real bites on either. First off, which format should I keep developing, and what can I do to make it more appealing? Second, With 15 years full-time experience, is it really worth going to another half page or so? I've been pretty stringent on keeping 1 page so far.",1,0,0
 "Short term contracts in the Cincinnati, oh","Have a friend who works at Teksystems as a recruiter and is looking to fill 2 junior roles.
 
 Im currently on a long term contract with GE Aerospace so Im not interested. She said she didn't mind if I make them as visible as possible and I know there are people on this sub in need. 
@@ -2520,20 +2520,20 @@ ____________________________________________
 If youre interested and live around Cincinnati, OH just shoot an email to my friend at swhited@Teksystems.com. 
 
 Her name is Sheri and shes wonderful and will bend over backwards to help you land anything she can. 
-",0,-
+",0,0,0
 Looking to learn  Logic Pro,"I know that using LP helps me learn it, but I feel I’m really inefficient, I am looking to find a course and/or tutor that could help me be more systematic about it.
 
 I write mostly “Western classical” music.  I use notation software for the most part but have been playing around in LP as well.  And though this is just for hobby purposes, I want to do more than just “play around” with it. 
 
-Has anyone had much success with a course and/or a tutor?  This is outside of my professional area, so I don’t even know what is available for this kind of learning.  ",1,external
+Has anyone had much success with a course and/or a tutor?  This is outside of my professional area, so I don’t even know what is available for this kind of learning.  ",1,0,0
 "As expected, some fans are canceling their preorders for Doom the Dark Ages.","As expected, some fans are canceling their preorders for Doom the Dark Ages, which shouldn't be a big shock, at this point. I feel bad for id Software because they obviously put a lot of hard work and effort into the game. Honestly, it looks like it's a lot of fun. However, sales numbers are probably going to take a bit of a substantial dip, but it's Microsoft's fault when it's all said and done. It's been a constant uphill battle for consumers when it comes to physical media, especially as of late. It keeps getting worse with every passing day. Nintendo has been the biggest culprit, as well as the least consumer-friendly company that's out there. 
 
 That's not to say that Microsoft is any better. If anything, they're just as bad, if not worse than Nintendo. Phil Spencer could care less about preserving physical media. As far as Microsoft is concerned, this has been an issue ever since Halo Infinite came out back in 2021. The entire game had to be downloaded from the Internet. The same goes for Starfield and a bunch of other Xbox titles as well. Obsidian Entertainment is owned by Xbox, which means that The Outer Worlds 2 will also require an Internet connection. I made an exception with Indiana Jones and the Great Circle because of how great the game is. However, I just can't see myself doing the same thing with other releases moving forward, unless a game gets a huge discount, and even then, I'm still unsure, to be honest. If I'm going to spend $70 on a game, then the entire game's data needs to be available on the disc or cartridge. Not everyone has access to a fast reliable Internet speed. Even if that was the case, you can lose the digital download or downloads at the company's discretion.
 
 I was talking to a friend of mine yesterday and we had a lengthy discussion regarding future consoles and physical media. He thinks that video game consoles will eventually become obsolete, which I don't think is going to happen. There's going to be more diversity when it comes to gaming options such as, PC gaming, cloud gaming, and mobile gaming, but consoles will always be there. Playstation, Xbox, and Nintendo account for around 47% of the gaming market, not including PC's and mobile devices. That's a huge chunk of the gaming industry. I don't think that consoles will ever go the way of the dodo, so to speak.
 
-Instead, what will end up happening, is that consoles will be strictly digital only. There won't even be an option to purchase a separate disc drive like you could with the PS5 Pro. It's unfortunate that the gaming industry is in the state that it's currently in. Look at the Nintendo Switch 2 as an example. From what I've heard, all Nintendo first party releases will only come with Game-Key Cards to download the games. On the other hand, third party titles will be available on physical cartridges. When  it comes to physical media, there's Strictly Limited Games, Fangamer, and Limited Run Games (which people have had issues with, me included). It's unfortunate that video game preservation has taken a back seat to questionable business decisions and corporate greed. What are your thoughts and opinions?",1,not_applicable
-30M software engineer. Looking for F25+ for genuine conversations and shared interests.,"30M software engineer here—fun-loving and passionate about traveling. Looking to connect with F25+ for genuine conversations and shared interests. I enjoy deep chats, exploring new places, and a bit of humor along the way. Feel free to DM if that sounds like your vibe!",0,-
+Instead, what will end up happening, is that consoles will be strictly digital only. There won't even be an option to purchase a separate disc drive like you could with the PS5 Pro. It's unfortunate that the gaming industry is in the state that it's currently in. Look at the Nintendo Switch 2 as an example. From what I've heard, all Nintendo first party releases will only come with Game-Key Cards to download the games. On the other hand, third party titles will be available on physical cartridges. When  it comes to physical media, there's Strictly Limited Games, Fangamer, and Limited Run Games (which people have had issues with, me included). It's unfortunate that video game preservation has taken a back seat to questionable business decisions and corporate greed. What are your thoughts and opinions?",1,0,0
+30M software engineer. Looking for F25+ for genuine conversations and shared interests.,"30M software engineer here—fun-loving and passionate about traveling. Looking to connect with F25+ for genuine conversations and shared interests. I enjoy deep chats, exploring new places, and a bit of humor along the way. Feel free to DM if that sounds like your vibe!",0,0,0
 Tired finding people building stuff,"I'm just tired finding people that are building businesses, enterprises, working on interesting projects, etc
 
 Most people I connect with are strolling on an idea and have never even reached out to a potential users to pursue that. They literally have no clue what they want to do, but just have this idea because it's cool nowadays to run a business or call themselves and entrepreneur.
@@ -2544,7 +2544,7 @@ For context, I'm trying to build enterprise software for service based SMEs and 
 
 I have a knack of building projects and with cool people. So, here I am posting with no expectations asking - if anyone's actually building something and don't just have an idea, please reach out. I'd love to help y'all(in my capacity), we can chat things, brainstorm different solutions(I'm good with sales and can help y'all get more customers), maybe even collaborate on projects.
 
-And please don't reach out if y'all don't have anything up and running. Cheers!",1,not_applicable
+And please don't reach out if y'all don't have anything up and running. Cheers!",1,0,0
 10 Best Gaming Laptops,"Gaming laptops in 2025 have evolved to offer desktop-level performance in sleek, portable designs. Whether you're a casual gamer or a professional content creator, there's a machine tailored to your needs.
 
 # Key Considerations When Choosing a Gaming Laptop
@@ -2823,7 +2823,7 @@ The **MSI Katana A15 AI** is a **powerful mid-range gaming laptop** designed for
 
 # Verdict:
 
-The **MSI Katana A15 AI** is an excellent choice for gamers and content creators looking for **mid-range performance** in a well-rounded package. It delivers on power, visuals, and storage, making it suitable for both gaming and work. However, its **battery life** and **weight** might be drawbacks for those needing portability or long-lasting use without a power source. If you’re looking for a **gaming laptop** that offers great value for the price, the Katana A15 AI is a solid option.",0,-
+The **MSI Katana A15 AI** is an excellent choice for gamers and content creators looking for **mid-range performance** in a well-rounded package. It delivers on power, visuals, and storage, making it suitable for both gaming and work. However, its **battery life** and **weight** might be drawbacks for those needing portability or long-lasting use without a power source. If you’re looking for a **gaming laptop** that offers great value for the price, the Katana A15 AI is a solid option.",0,0,0
 "B1/B2 Approved - Hyderabad, India - Sharing My Experience and What I Think Helped!","Hi everyone!
 
 Just wanted to share that my B1/B2 visa was approved in Hyderabad today! I’m so relieved. The wait times were making me super anxious, and I wanted to share my experience and some things I think helped me get through it.
@@ -2852,7 +2852,7 @@ Also, a friend of mine mentioned how she used Atlys to help fill out her forms s
 
 Huge thanks to this subreddit! Reading through other people's experiences really helped me prepare and know what to expect. Good luck to everyone else going through the process! I know it can be tough, but hang in there!
 
-Any questions, feel free to ask!",0,-
+Any questions, feel free to ask!",0,0,0
 Crafting Animated Videos: Is Krikey AI the Modern Alternative to Vyond?,"If you're in the business of creating animated videos, you've likely heard of Vyond. It's been a go-to for teams for a while now. But, as technology evolves, so do our options. Enter Krikey AI, positioning itself as [a strong contender](https://www.krikey.ai/compare/vyond-alternatives), notably as a free animation software that's shaking up the scene. Let's dive into what sets these two apart and see if Krikey AI is the upgrade you've been looking for.
 
 Right off the bat, one of the most attractive points for Krikey AI is the price tag – or lack thereof on their free plan. Stepping in as a free Vyond alternative is a big deal, especially when you're managing project budgets. [Krikey's paid plan is only $15 per month](https://www.krikey.ai/pricing) or $10 per user if you have a team of 3 or more. 
@@ -2863,8 +2863,8 @@ Team projects often hit snags with collaboration, but Krikey AI seems designed w
 
 And when your masterpiece is ready to share, Krikey AI doesn't box you in. They provide a solid range of export options: standard MP4s, FBX for 3D needs, [GIFs for quick shares](https://www.krikey.ai/create/gif-download-3d-gifmaker), and images (with or without transparent backgrounds). Need it for social media? They have optimized formats ready for [Instagram, YouTube, LinkedIn, and Facebook](https://www.krikey.ai/case-studies/digital-marketing-agency-near-me), making it easy to get your content where it needs to be.
 
-Ultimately, while Vyond has a strong history, Krikey AI offers a compelling package. Being free, combined with its enhanced creative control, focus on collaboration, and versatile export options, makes it a significant contender in the animated video space. If you're aiming for impact with your animated content and want a platform that feels current and flexible, exploring [Krikey AI as a Vyond alternative](https://www.krikey.ai/3d-animation-editor) is definitely a smart move.",0,-
-Out of their MINDS !! How much has everyone else been quoted?,An estimate for replacing the notorious bubbles on the screen issue. $3000!? ,1,unknown
+Ultimately, while Vyond has a strong history, Krikey AI offers a compelling package. Being free, combined with its enhanced creative control, focus on collaboration, and versatile export options, makes it a significant contender in the animated video space. If you're aiming for impact with your animated content and want a platform that feels current and flexible, exploring [Krikey AI as a Vyond alternative](https://www.krikey.ai/3d-animation-editor) is definitely a smart move.",0,0,0
+Out of their MINDS !! How much has everyone else been quoted?,An estimate for replacing the notorious bubbles on the screen issue. $3000!? ,1,0,1
 La méthode qui m'a permis de vaincre mon addiction aux écrans et à internet.,"Hello, everyone. I just created a Reddit account because I wanted to share with you what has helped me overcome my addiction to screens and the internet over the past six months. In the following, I will describe my journey and my method through different stages.  
 
 
@@ -2964,7 +2964,7 @@ Personally, for the first few days, I was going round in circles and going compl
 But I think the biggest change for me is my ability to concentrate. I can now focus on a lesson for hours and learn entire pages fairly quickly without thinking about anything else. I almost feel like a superhero, when in reality I've just become a normal human being who has regained all their abilities.  
 
 
-I hope this testimonial will help some of you.",0,-
+I hope this testimonial will help some of you.",0,0,0
 How can I break the ice with my college friend.,"I (23 yo M) live in a foreign city for job. I have completed my graduation in 2021 and started job rigjt after as a software developer.  Then I took admission in PG course in 2022. There I jave only 4 friends (2M and 2F). 
 After I completed the PG in 2024 I moved to another city. We used to talk a lot in GC but was unable to meet. The two female friends always used to say that we should meet or should go on a trip.
 One of them looks beautiful I'll call her Anna and other one is not that attractive Emily. 
@@ -2979,7 +2979,7 @@ But then I again put my hand on her shoulder and we slept.
 After we woke up I cam see some changes in her behavior,  she is not saying anything. I asked Emily if she's okay but she said that it's just her morning mood nothing to worry.
 Then I got them cab and drop them safely. After then she called me to ask some money in urgent. I sent her the money. She returned the money next day and then immediately blocked me. I tried to mesaage and call her but started ignoring me.
 At last I asked Emily to find what's wrong with Anna. She told me that she's hurt with that incident.  
-I just don't had any intention to get physical with her but I just don't know how to talk to her now. Emily suggested me that Anna needs some time and everything will be okay. But now it's almost 6 months and we haven't talked. I just don't know what to do now. I really feel bad for loosing a good friend. ",1,not_applicable
+I just don't had any intention to get physical with her but I just don't know how to talk to her now. Emily suggested me that Anna needs some time and everything will be okay. But now it's almost 6 months and we haven't talked. I just don't know what to do now. I really feel bad for loosing a good friend. ",1,0,0
 My SSD keeps randomly(?) disappearing,"A while back I got a 500gb M.2 drive installed on my computer.  The goal was to just install windows on there and use my older SSD as my drive for everything (i used to have everything on it).  figured some extra space and less demand on the drive might be a good thing
 
 Everything seemed to be working fine until one day my D drive (the ssd) decided to stop functioning.  It could no longer be detected by anything on the computer.  i thought it was dead but after disconnecting and giving it a look over it appeared again and worked just fine after reconnecting it.  a few weeks later it did it again.  Just to be safe i bought a new SATA cable and connected it to another port.  Same deal a few weeks later
@@ -2994,14 +2994,14 @@ yesterday i was actually talking to a friend about it when it crashed again mid 
 
 anybody have any idea what the heck could be causing this?
 
-does this sound like the drive? motherboard? power issue?",1,unknown
+does this sound like the drive? motherboard? power issue?",1,0,0
 Direction,"Howdy all!
 
 I'll start with some background for context: My current job title is Systems Administrator. My employer moved everything out of their datacenters into azure, aws and oracle. The cloud infra side is mostly production software systems. Our windows infrastructure is being phased out pieces at a time with the eventual goal of hosting no more windows servers. The implications here is that my team's sole responsibility will be the 365 side. We manage our endpoints with intune, and manage the 365 tenant. I have a handful of CompTia certs, and I'm considering getting the md-102 and ms-102, but I would also like to eventually get into cloud security.
 
-When looking at some of the exam topics for 365 and azure certs, i noticed some overlaps between 365 and azure for security. Do people usually specialize in securing one environment or the other do they work in both platforms? While it makes sense for me to continue down the m365 path given my current position, I don't care too much that a lot of the infra and other it fundamental stuff is abstracted away in 365 environments. I don't mind working in 365, and I feel like after working in it for about a year and a half that I am proficient in the platform, but it also can feel boring and building. maintaining and automating secure systems sounds more exciting than the SaaS world. Is this ""the grass looks greener on the other side?"" Should I stick with what know, and learn how to secure 365 environments exclusively, learn both platforms and how to secure them, or try moving over to azure and get the az-104 and az-500, opting to learn how to secure azure environments exclusively?",1,not_applicable
-$2 more than my city's minimum wage,,0,-
-I am tired of being civil with these people,,1,not_applicable
+When looking at some of the exam topics for 365 and azure certs, i noticed some overlaps between 365 and azure for security. Do people usually specialize in securing one environment or the other do they work in both platforms? While it makes sense for me to continue down the m365 path given my current position, I don't care too much that a lot of the infra and other it fundamental stuff is abstracted away in 365 environments. I don't mind working in 365, and I feel like after working in it for about a year and a half that I am proficient in the platform, but it also can feel boring and building. maintaining and automating secure systems sounds more exciting than the SaaS world. Is this ""the grass looks greener on the other side?"" Should I stick with what know, and learn how to secure 365 environments exclusively, learn both platforms and how to secure them, or try moving over to azure and get the az-104 and az-500, opting to learn how to secure azure environments exclusively?",1,0,0
+$2 more than my city's minimum wage,,0,0,0
+I am tired of being civil with these people,,1,0,0
 "Burnt Out, and Losing Hope. Is This Struggle Even Worth It?","I’m 23 and every day feels like a mental and emotional battle just to get out of bed. I feel numb. Nothing excites me anymore. I have no motivation — just a little discipline keeping me barely afloat.
 
 * I never got into the university I really wanted.
@@ -3020,5 +3020,5 @@ I look around and wonder — are my 20s supposed to feel like this?
   
 I thought this was supposed to be the “building years,” not “barely functioning years.”  
   
-Am I wasting my youth chasing a career that may never reward me — mentally, emotionally, or financially?",1,unknown
-What would I use to make textures for a mod?,"I'm looking for software or a website that I can use to make textures. I am not looking to make a texture pack, but I need to create textures for a mod, preferably in the 16x16 format Minecraft uses to make it fit in. ",0,-
+Am I wasting my youth chasing a career that may never reward me — mentally, emotionally, or financially?",1,0,0
+What would I use to make textures for a mod?,"I'm looking for software or a website that I can use to make textures. I am not looking to make a texture pack, but I need to create textures for a mod, preferably in the 16x16 format Minecraft uses to make it fit in. ",0,0,0
