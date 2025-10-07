@@ -51,16 +51,16 @@ Post:
 SOLUTION_PROMPT = """
 You are a classifier that categorizes the likely type of solution needed for the following post.
 
+**Important:** 
+- If the post is not describing a problem or does not fit any category, you MUST return `not_applicable`.
+- `not_applicable` should be your default answer if none of the others clearly apply.
+
 Definitions:
 - not_applicable: The post is not a real problem, pain point, or unmet need. 
-- software_only: The problem can be solved purely with software — apps, websites, APIs, algorithms, or automation — without new physical infrastructure.
-- software_plus_external: The solution is primarily software but requires coordination of or interaction with existing external systems (e.g., humans, vehicles, logistics, physical services).
-- software_plus_hardware: The solution requires new or specialized hardware in addition to software (e.g., IoT devices, robotics, sensors).
-- hardware_primary: The solution is primarily physical or mechanical and cannot be solved by software alone.
-
-**Important:** 
-- If the post is not describing a problem or does not fit any category above, you MUST return `not_applicable`.
-- `not_applicable` should be your default answer if none of the others clearly apply.
+- software: The problem can be solved purely with software — apps, websites, APIs, algorithms, or automation — without new physical infrastructure.
+- software_external: The solution is primarily software but requires coordination of or interaction with existing external systems (e.g., humans, vehicles, logistics, physical services).
+- software_hardware: The solution requires new or specialized hardware in addition to software (e.g., IoT devices, robotics, sensors).
+- hardware: The solution is primarily physical or mechanical and cannot be solved by software alone.
 
 Post:
 {post_text}
