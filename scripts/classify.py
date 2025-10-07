@@ -83,7 +83,7 @@ def _call_with_retry(prompt: str, *, max_attempts: int = 3, initial_delay: float
     for attempt in range(1, max_attempts + 1):
         try:
             response = client.responses.create(
-                model="gpt-5-pro",
+                model="gpt-4o",
                 input=prompt
             )
             return response.output_text.strip()
