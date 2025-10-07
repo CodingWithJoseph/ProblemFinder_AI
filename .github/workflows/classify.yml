@@ -6,6 +6,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   classify:
     runs-on: ubuntu-latest
@@ -34,4 +37,16 @@ jobs:
           fi
 
       - name: Run classifier script
-        run: python miner/classify.py
+        run: python miner/classify_sample.py
+
+      - name: Commit labeled sample data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git status --porcelain data/labeled_sample.csv | grep "." > /dev/null; then
+            git add data/labeled_sample.csv
+            git commit -m "Add labeled sample data"
+            git push
+          else
+            echo "No changes to commit."
+          fi
