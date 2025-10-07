@@ -5,13 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="03399f76-4bb2-43c9-8570-5bad8704ce6c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/documents/phase_3.md" beforeDir="false" afterPath="$PROJECT_DIR$/documents/phase_3.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mappings.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/phase_1.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/phase_1.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/phase_2.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/phase_2.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notebooks/phase_3.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/notebooks/phase_3.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/classify.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/classify.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miner/classify.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/classify.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miner/classify_sample.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/classify_sample.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/miner/fetch.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/fetch.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,5 +134,6 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/RedditProblemFinder$main.coverage" NAME="main Coverage Results" MODIFIED="1747265963541" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/RedditProblemFinder$classify.coverage" NAME="classify Coverage Results" MODIFIED="1759788015140" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/miner" />
   </component>
 </project>

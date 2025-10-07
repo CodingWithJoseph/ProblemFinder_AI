@@ -1,4 +1,4 @@
-# miner/classify.py
+# scripts/classify.py
 
 from dotenv import load_dotenv
 import os
@@ -61,7 +61,7 @@ for idx, row in df.iterrows():
     # --- Stage 1: Problem classification ---
     try:
         problem_response = client.chat.completions.create(
-            model="gpt-4o-mini",  # or gpt-4o if you have access
+            model="gpt-4.1",  # or gpt-4o if you have access
             messages=[{"role": "user", "content": PROBLEM_PROMPT.format(post_text=post_text)}]
         )
         is_problem = problem_response.choices[0].message.content.strip()

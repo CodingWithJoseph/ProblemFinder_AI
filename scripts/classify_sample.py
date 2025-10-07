@@ -74,7 +74,7 @@ def _call_with_retry(prompt: str, *, max_attempts: int = 3, initial_delay: float
     for attempt in range(1, max_attempts + 1):
         try:
             response = client.chat.completions.create(
-                model="gpt-4o-mini",
+                model="gpt-4.1",
                 messages=[{"role": "user", "content": prompt}],
             )
             return response.choices[0].message.content.strip()

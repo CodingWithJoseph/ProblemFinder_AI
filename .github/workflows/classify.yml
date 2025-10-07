@@ -37,7 +37,7 @@ jobs:
           fi
 
       - name: Run classifier script
-        run: python miner/classify_sample.py
+        run: python scripts/classify_sample.py
 
       - name: Commit labeled sample data
         run: |
