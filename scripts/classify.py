@@ -55,23 +55,24 @@ Classify based only on the content of the post and its implied solution type.
 Definitions:
 - not_applicable: The post is not a real problem, pain point, or unmet need.
 - software: The problem can be solved entirely with software — apps, websites, APIs, algorithms, or automation — without requiring new physical infrastructure or external coordination.
-- software_external: The solution is primarily software but must coordinate with or interact with existing external systems such as humans, vehicles, logistics networks, or third-party services.
-- software_hardware: The solution requires new or specialized hardware in addition to software (e.g., IoT devices, robotics, sensors, smart devices).
-- hardware: The solution is primarily a new physical or mechanical invention. Software alone cannot solve it.
-- external: The solution is mainly about deploying, organizing, or coordinating existing physical resources, infrastructure, people, or logistics — and does not fundamentally require new software or hardware to be built.
+- software_external: The solution is primarily software but must coordinate with or interact with existing external systems such as people-as-service, employees, vehicles, logistics networks, or third-party services.
+- external: The solution is mainly about deploying, organizing, or coordinating existing physical resources, infrastructure, people-as-service, employees, or logistics. Does not fundamentally require new software or hardware to be built.
 - unknown: Use this **only as a last resort** if the post clearly describes a problem but you cannot confidently assign it to any of the above solution types.
 
 Instructions:
 1. If the post is NOT a problem, return `not_applicable`.
-2. If the post IS a problem, you must choose one of the five solution categories: `software`, `software_external`, `software_hardware`, `hardware`, or `external`.
-3. Only use `unknown` if the post clearly describes a problem but there is insufficient context or ambiguity that prevents a confident classification.
-4. Never return `not_applicable` for a problem post.
+2. Never return `not_applicable` for a problem post.
+4. If the post IS a problem, you must choose one of the solution categories: `software`, `software_external`, 'unknown', or `external`.
+5. Only use `unknown` if the post clearly describes a problem but there is insufficient context or ambiguity that prevents a confident classification.
+6. If the solution involves people **only as end-users, customers, or participants** of a software product, classify it as `software` (not `software_external`).
+7. Only classify as `software_external` if the solution requires **active human involvement or coordination** (e.g., delivery personnel, gig workers, logistics, service providers) to function. people-as-service, employees, vehicles, logistics networks, third-party services.
+
 
 Post:
 {post_text}
 
 Return ONLY one of:
-not_applicable, software, software_external, software_hardware, hardware, external, unknown
+not_applicable, software, software_external, external, unknown
 """
 
 
