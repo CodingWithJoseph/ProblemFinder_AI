@@ -1,3 +1,5 @@
+import json
+
 """
 Classify a sample of Reddit posts using OpenAI prompts.
 
@@ -67,7 +69,8 @@ SOFTWARE_SOLVABLE_PROMPT = """You are a classifier that determines if a problem 
 
 "Software-solvable" means:
 - The core solution could be built as software (apps, websites, APIs, automation, algorithms).
-- People may be users, customers, or participants, but do not need to be actively coordinated as a service for the solution to function.
+- People may be users, customers, or participants
+- People do not need to be actively coordinated as a service for the solution to function.
 
 Return ONLY one of:
 - 1  (if primarily solvable by software)
@@ -77,19 +80,37 @@ Post (this post IS a problem):
 {post_text}
 """
 
-EXTERNAL_REQUIRED_PROMPT = """You are a classifier that determines if solving a problem requires coordinating external, physical-world resources.
+EXTERNAL_REQUIRED_PROMPT = """
+You are a classifier that determines if solving a problem requires action or coordination beyond the individual user's direct control.
 
 "External" means:
-- Requires active involvement of people-as-service (e.g., delivery, technicians, support staff), or
-- Logistics networks, vehicles, or physical infrastructure, or
-- Hardware/IoT deployment beyond standard end-user devices.
+- The solution depends on resources, people, or systems *outside* the user's immediate ability to change, such as:
+  - Manufacturer or company intervention (e.g., warranty, firmware patch, customer service)
+  - Physical-world coordination (technicians, logistics, infrastructure, hardware deployment)
+  - Institutional or organizational processes (government, insurance, regulations)
+- "Not external" means the user can solve it alone through personal action, settings, or software.
 
 Return ONLY one of:
-- 1  (if external resources/coordination are required)
-- 0  (if not required)
+- 1  (if external action or coordination is required to solve)
+- 0  (if the user can fully resolve it themselves)
 
 Post (this post IS a problem):
 {post_text}
+"""
+
+FULL_REASON_PROMPT = """
+You are a precise classifier for Reddit posts. 
+Your task is to assign three binary labels and a short reason (one sentence each) explaining the decision for each label.
+
+Label definitions:
+1. is_problem: 1 if the post describes or implies a problem, difficulty, or question seeking a solution. Otherwise 0.
+2. is_software_solvable: 1 if the main problem can be solved primarily through software, code, configuration, or digital settings. Only 1 if is_problem == 1.
+3. is_external: 1 if solving the problem requires action or coordination beyond the user's control (e.g., manufacturer, company, government, or physical service). Only 1 if is_problem == 1.
+
+Rules:
+- If is_problem = 0, both is_software_solvable and is_external must be 0.
+- Base decisions on how the problem can be solved, not who caused it.
+- Give one short, factual s
 """
 
 # -----------------------------
@@ -97,9 +118,11 @@ Post (this post IS a problem):
 # -----------------------------
 Label = Literal["0", "1", "error"]
 
+
 # -----------------------------
 # OpenAI Client Initialization
 # -----------------------------
+
 def init_client() -> OpenAI:
     """Initialize and return an OpenAI client using environment variables."""
     load_dotenv()
@@ -108,6 +131,7 @@ def init_client() -> OpenAI:
         logger.error("OPENAI_API_KEY not found in environment.")
         raise RuntimeError("OPENAI_API_KEY not found in environment.")
     return OpenAI(api_key=api_key)
+
 
 # -----------------------------
 # Data IO
@@ -123,10 +147,12 @@ def load_data(path: str = "data/raw_data.csv", sample_size: int = 100) -> pd.Dat
         logger.info("Loaded %d rows.", len(sample_df))
     return sample_df
 
+
 def save_results(df: pd.DataFrame, path: str = "data/labeled_sample.csv") -> None:
     """Save labeled DataFrame to CSV."""
     df.to_csv(path, index=False)
     logger.info("Classification complete. Results saved to %s", path)
+
 
 def format_post(row: pd.Series) -> str:
     """Build structured post text for prompting."""
@@ -139,16 +165,17 @@ def format_post(row: pd.Series) -> str:
 {body}
 """.strip()
 
+
 # -----------------------------
 # OpenAI Call with Retry
 # -----------------------------
 def _call_with_retry(
-    client: OpenAI,
-    prompt: str,
-    *,
-    model: str = "gpt-4o",
-    max_attempts: int = 3,
-    initial_delay: float = 1.0,
+        client: OpenAI,
+        prompt: str,
+        *,
+        model: str = "gpt-4o",
+        max_attempts: int = 3,
+        initial_delay: float = 1.0,
 ) -> Optional[str]:
     """Call the OpenAI Responses API with retry logic; return text or None."""
     delay = initial_delay
@@ -164,6 +191,7 @@ def _call_with_retry(
             time.sleep(delay)
             delay *= 2
     return None
+
 
 # -----------------------------
 # Parsing / Validation
@@ -187,6 +215,14 @@ def _normalize_binary_token(raw: Optional[str]) -> Label:
     logger.warning("Unparsable binary output: %r -> 'error'", raw)
     return "error"
 
+
+def _decode_raw_json(raw: str) -> dict:
+    try:
+        return json.loads(raw)
+    except json.decoder.JSONDecodeError:
+        return {'error': raw}
+
+
 # -----------------------------
 # Classifiers
 # -----------------------------
@@ -195,15 +231,24 @@ def classify_is_problem(client: OpenAI, post_text: str) -> Label:
     raw = _call_with_retry(client, PROBLEM_PROMPT.format(post_text=post_text))
     return _normalize_binary_token(raw)
 
+
 def classify_is_software_solvable(client: OpenAI, post_text: str) -> Label:
     """Return '1' if primarily solvable by software, '0' if not, 'error' on failure."""
     raw = _call_with_retry(client, SOFTWARE_SOLVABLE_PROMPT.format(post_text=post_text))
     return _normalize_binary_token(raw)
 
+
 def classify_is_external(client: OpenAI, post_text: str) -> Label:
     """Return '1' if external coordination/resources required, '0' if not, 'error' on failure."""
     raw = _call_with_retry(client, EXTERNAL_REQUIRED_PROMPT.format(post_text=post_text))
     return _normalize_binary_token(raw)
+
+
+def describe_rationale(client: OpenAI, post_text: str) -> dict[str, str]:
+    """Return '1' if external coordination/resources required, '0' if not, 'error' on failure."""
+    raw = _call_with_retry(client, FULL_REASON_PROMPT.format(post_text=post_text))
+    return _decode_raw_json(raw)
+
 
 # -----------------------------
 # Processing
@@ -233,12 +278,15 @@ def process_posts(client: OpenAI, df: pd.DataFrame, sleep_seconds: float = 0.5) 
         if is_problem == "1":
             is_software = classify_is_software_solvable(client, post_text)
             is_external = classify_is_external(client, post_text)
+            rationale = describe_rationale(client, post_text)
         elif is_problem == "0":
             is_software = "0"
             is_external = "0"
+            rationale = "None"
         else:  # "error"
             is_software = "error"
             is_external = "error"
+            rationale = "None"
 
         results.append(
             {
@@ -247,6 +295,7 @@ def process_posts(client: OpenAI, df: pd.DataFrame, sleep_seconds: float = 0.5) 
                 "is_problem": is_problem,
                 "is_software_solvable": is_software,
                 "is_external": is_external,
+                'rationale': rationale
             }
         )
 
@@ -254,9 +303,10 @@ def process_posts(client: OpenAI, df: pd.DataFrame, sleep_seconds: float = 0.5) 
 
     # Ensure desired column order
     out_df = pd.DataFrame(results)[
-        ["title", "body", "is_problem", "is_software_solvable", "is_external"]
+        ["title", "body", "is_problem", "is_software_solvable", "is_external", "rationale"]
     ]
     return out_df
+
 
 # -----------------------------
 # Main
@@ -270,6 +320,7 @@ def main() -> None:
         return
     labeled_df = process_posts(client, sample_df, sleep_seconds=0.5)
     save_results(labeled_df, "data/labeled_sample.csv")
+
 
 if __name__ == "__main__":
     main()
