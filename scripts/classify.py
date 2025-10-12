@@ -1,4 +1,15 @@
+from __future__ import annotations
+
 import json
+
+import logging
+import os
+import time
+from typing import Literal, Optional
+
+import pandas as pd
+from dotenv import load_dotenv
+from openai import OpenAI
 
 """
 Classify a sample of Reddit posts using OpenAI prompts.
@@ -22,17 +33,6 @@ Key features
 - Clean, structured prompt formatting for better model performance
 """
 
-from __future__ import annotations
-
-import logging
-import os
-import time
-from typing import Literal, Optional
-
-import pandas as pd
-from dotenv import load_dotenv
-from openai import OpenAI
-
 # -----------------------------
 # Logging Configuration
 # -----------------------------
@@ -43,7 +43,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # -----------------------------
-# Prompt Templates
+# Enhanced Prompt Templates with Examples and Decision Rules
 # -----------------------------
 PROBLEM_PROMPT = """You are a classifier that determines if a Reddit post describes a problem.
 
@@ -52,10 +52,25 @@ A "problem" means:
 - They ask for a better solution, or
 - They mention something that doesn't work well, is missing, or could be improved.
 
-A post is NOT a problem if it is:
-- Just sharing an opinion or fact,
-- Promoting or showcasing something,
-- Asking a neutral question without frustration or a need.
+DECISION RULES:
+- If a post shares advice/workflow but references a real problem others face → PROBLEM (1)
+- If a post only describes a past problem that is already resolved → NOT PROBLEM (0)
+- If a post has no problem context at all (pure showcase, news, opinion) → NOT PROBLEM (0)
+
+EXAMPLES:
+✅ PROBLEM (1):
+- "Why is the job market so terrible for entry-level developers? Here's my advice..."
+- "Looking for affordable architecture software since I don't have space to draw"
+- "My Samsung phone became harder to use after the latest update"
+
+❌ NOT PROBLEM (0):
+- "Just got a random package in the mail, turns out it was from a friend!"
+- "Check out this cool project I built" (pure showcase)
+- "Latest industry news about AI developments" (pure news)
+
+⚠️ EDGE CASES:
+- Posts combining problems + solutions: Focus on whether they reference genuine frustrations
+- Resolved problems: Only label as problem if seeking ongoing solutions
 
 Return ONLY one of:
 - 1  (if it clearly describes a problem, pain point, or unmet need)
@@ -65,12 +80,34 @@ Post:
 {post_text}
 """
 
-SOFTWARE_SOLVABLE_PROMPT = """You are a classifier that determines if a problem described in a Reddit post could be solved primarily with software.
+SOFTWARE_SOLVABLE_PROMPT = """You are a classifier that determines if a problem could be solved primarily with software.
 
 "Software-solvable" means:
-- The core solution could be built as software (apps, websites, APIs, automation, algorithms).
-- People may be users, customers, or participants
-- People do not need to be actively coordinated as a service for the solution to function.
+- The core solution could be built as software (apps, websites, APIs, automation, algorithms)
+- Does NOT require physical coordination, manufacturing, or institutional processes
+- Does NOT include learning/knowledge problems that need guidance rather than tools
+
+DECISION RULES:
+- Hardware symptoms with software causes → SOFTWARE SOLVABLE (1)
+- Information/learning needs → NOT SOFTWARE SOLVABLE (0)
+- Guidance-seeking without technical malfunction → NOT SOFTWARE SOLVABLE (0)
+- Existing tool requests without describing software gaps → NOT SOFTWARE SOLVABLE (0)
+
+EXAMPLES:
+✅ SOFTWARE SOLVABLE (1):
+- "My display is blurry after driver update" (software cause)
+- "Need automation for repetitive data entry tasks"
+- "App crashes when I try to export files"
+
+❌ NOT SOFTWARE SOLVABLE (0):
+- "How do I learn to make waterfall charts?" (learning problem)
+- "Need guidance on career direction" (advice needed)
+- "Looking for existing tools to solve X" (market solution)
+
+⚠️ EDGE CASES:
+- Hardware problems: Check if root cause is software-related
+- Tutorial requests: These are learning problems, not software problems
+- Rants about software: Only solvable if describing specific malfunctions
 
 Return ONLY one of:
 - 1  (if primarily solvable by software)
@@ -80,15 +117,41 @@ Post (this post IS a problem):
 {post_text}
 """
 
-EXTERNAL_REQUIRED_PROMPT = """
-You are a classifier that determines if solving a problem requires action or coordination beyond the individual user's direct control.
+EXTERNAL_REQUIRED_PROMPT = """You are a classifier that determines if solving a problem requires external action beyond the user's control.
 
-"External" means:
-- The solution depends on resources, people, or systems *outside* the user's immediate ability to change, such as:
-  - Manufacturer or company intervention (e.g., warranty, firmware patch, customer service)
-  - Physical-world coordination (technicians, logistics, infrastructure, hardware deployment)
-  - Institutional or organizational processes (government, insurance, regulations)
-- "Not external" means the user can solve it alone through personal action, settings, or software.
+"External" means the solution depends on:
+- Manufacturer/company intervention (warranty, firmware, customer service)
+- Physical-world coordination (technicians, logistics, hardware deployment)
+- Institutional processes (government, insurance, regulations)
+- Purchasing existing market products/services
+
+"Not external" means the user can solve it through:
+- Personal settings/configuration changes
+- Software they can install or develop themselves
+- Individual learning or practice
+
+DECISION RULES:
+- Seeking existing products/alternatives → EXTERNAL (1)
+- Hardware failures needing replacement → EXTERNAL (1)
+- Career/education guidance → EXTERNAL (1)
+- Manufacturer-specific firmware issues → EXTERNAL (1)
+- Problems solvable by user configuration → NOT EXTERNAL (0)
+
+EXAMPLES:
+✅ EXTERNAL (1):
+- "Which 3D printer should I buy?" (market product)
+- "My GoXLR is broken, need alternatives" (replacement needed)
+- "Should I stay in SDET or switch careers?" (external opportunities)
+
+❌ NOT EXTERNAL (0):
+- "How do I configure my development environment?"
+- "Need to automate my personal workflow"
+- "Looking for programming help with my project"
+
+⚠️ EDGE CASES:
+- Hardware + software problems: If solution involves buying hardware → EXTERNAL
+- Prototype projects: If requires manufacturing/deployment → EXTERNAL
+- Learning needs: If requires structured education → EXTERNAL
 
 Return ONLY one of:
 - 1  (if external action or coordination is required to solve)
@@ -98,9 +161,9 @@ Post (this post IS a problem):
 {post_text}
 """
 
-FULL_REASON_PROMPT = """
-You are a precise classifier for Reddit posts. 
-Your task is to assign three binary labels and a short reason (one sentence each) explaining the decision for each label.
+# Enhanced reasoning prompt with structured output
+FULL_REASON_PROMPT = """You are a precise classifier for Reddit posts. 
+Your task is to assign three binary labels and provide brief reasoning for each decision.
 
 Label definitions:
 1. is_problem: 1 if the post describes or implies a problem, difficulty, or question seeking a solution. Otherwise 0.
@@ -110,13 +173,43 @@ Label definitions:
 Rules:
 - If is_problem = 0, both is_software_solvable and is_external must be 0.
 - Base decisions on how the problem can be solved, not who caused it.
-- Give one short, factual s
+- Consider the primary intent: seeking help vs. sharing advice vs. showcasing
+
+Return your response as valid JSON in this exact format:
+{
+  "is_problem": "0 or 1",
+  "is_software_solvable": "0 or 1", 
+  "is_external": "0 or 1",
+  "problem_reason": "Brief explanation for is_problem decision",
+  "software_reason": "Brief explanation for is_software_solvable decision",
+  "external_reason": "Brief explanation for is_external decision"
+}
+
+Post:
+{post_text}
+"""
+
+# Post intent classifier to handle edge cases
+POST_INTENT_PROMPT = """Classify the PRIMARY intent of this Reddit post:
+
+1 - SEEKING_HELP: User is asking for help, solutions, or recommendations
+2 - SHARING_ADVICE: User is sharing their own solution, workflow, or advice 
+3 - SHOWCASING: User is demonstrating/promoting something they built
+4 - DISCUSSING: User is sharing opinions, news, or general discussion
+
+Focus on the main purpose, not secondary elements.
+
+Return ONLY the number (1, 2, 3, or 4).
+
+Post:
+{post_text}
 """
 
 # -----------------------------
 # Types
 # -----------------------------
 Label = Literal["0", "1", "error"]
+PostIntent = Literal["1", "2", "3", "4", "error"]
 
 
 # -----------------------------
@@ -177,12 +270,17 @@ def _call_with_retry(
         max_attempts: int = 3,
         initial_delay: float = 1.0,
 ) -> Optional[str]:
-    """Call the OpenAI Responses API with retry logic; return text or None."""
+    """Call the OpenAI API with retry logic; return text or None."""
     delay = initial_delay
     for attempt in range(1, max_attempts + 1):
         try:
-            response = client.responses.create(model=model, input=prompt)
-            text = response.output_text if hasattr(response, "output_text") else str(response)
+            response = client.chat.completions.create(
+                model=model,
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.0,
+                max_tokens=1000
+            )
+            text = response.choices[0].message.content
             return (text or "").strip()
         except Exception as exc:  # pylint: disable=broad-except
             logger.error("Attempt %d failed: %s", attempt, exc)
@@ -216,20 +314,49 @@ def _normalize_binary_token(raw: Optional[str]) -> Label:
     return "error"
 
 
-def _decode_raw_json(raw: str) -> dict:
+def _normalize_intent_token(raw: Optional[str]) -> PostIntent:
+    """Normalize intent classification output."""
+    if raw is None:
+        return "error"
+    token = (raw or "").strip().splitlines()[0].strip().split()[0].strip(".,:;\"'`")
+    if token in {"1", "2", "3", "4"}:
+        return token  # type: ignore[return-value]
+    logger.warning("Unparsable intent output: %r -> 'error'", raw)
+    return "error"
+
+
+def _decode_raw_json(raw: Optional[str]) -> dict:
+    """Parse JSON response with error handling."""
+    if raw is None:
+        return {'error': 'No response received'}
     try:
         return json.loads(raw)
-    except json.decoder.JSONDecodeError:
+    except json.JSONDecodeError:
+        logger.warning("Failed to parse JSON response: %r", raw)
         return {'error': raw}
 
 
 # -----------------------------
-# Classifiers
+# Enhanced Classifiers with Intent Detection
 # -----------------------------
-def classify_is_problem(client: OpenAI, post_text: str) -> Label:
+def classify_post_intent(client: OpenAI, post_text: str) -> PostIntent:
+    """Classify the primary intent of the post."""
+    raw = _call_with_retry(client, POST_INTENT_PROMPT.format(post_text=post_text))
+    return _normalize_intent_token(raw)
+
+
+def classify_is_problem(client: OpenAI, post_text: str, intent: PostIntent = None) -> Label:
     """Return '1' if post is a problem, '0' if not, 'error' on failure."""
     raw = _call_with_retry(client, PROBLEM_PROMPT.format(post_text=post_text))
-    return _normalize_binary_token(raw)
+    result = _normalize_binary_token(raw)
+
+    # Apply intent-based validation
+    if intent == "3":  # SHOWCASING - rarely problems unless seeking feedback
+        if result == "1":
+            logger.info("Intent override: Showcase post marked as non-problem")
+            return "0"
+
+    return result
 
 
 def classify_is_software_solvable(client: OpenAI, post_text: str) -> Label:
@@ -245,36 +372,88 @@ def classify_is_external(client: OpenAI, post_text: str) -> Label:
 
 
 def describe_rationale(client: OpenAI, post_text: str) -> dict[str, str]:
-    """Return '1' if external coordination/resources required, '0' if not, 'error' on failure."""
+    """Get comprehensive classification with reasoning."""
     raw = _call_with_retry(client, FULL_REASON_PROMPT.format(post_text=post_text))
-    return _decode_raw_json(raw)
+    result = _decode_raw_json(raw)
+
+    # Ensure all required keys exist
+    required_keys = ["is_problem", "is_software_solvable", "is_external",
+                     "problem_reason", "software_reason", "external_reason"]
+    for key in required_keys:
+        if key not in result:
+            result[key] = "error"
+
+    return result
 
 
 # -----------------------------
-# Processing
+# Validation Functions
+# -----------------------------
+def validate_labels(is_problem: Label, is_software: Label, is_external: Label) -> tuple[Label, Label, Label]:
+    """Validate and correct label combinations according to rules."""
+    if is_problem == "0":
+        return is_problem, "0", "0"
+    elif is_problem == "error":
+        return is_problem, "error", "error"
+    else:
+        return is_problem, is_software, is_external
+
+
+def detect_edge_cases(post_text: str, labels: tuple[Label, Label, Label]) -> dict:
+    """Detect potential edge cases based on content patterns."""
+    text_lower = post_text.lower()
+    edge_cases = []
+
+    # Common edge case patterns
+    if "here's my advice" in text_lower or "here's what i learned" in text_lower:
+        edge_cases.append("advice_sharing")
+
+    if "randomly got" in text_lower or "turns out it was" in text_lower:
+        edge_cases.append("resolved_problem")
+
+    if "looking for" in text_lower and ("software" in text_lower or "tool" in text_lower):
+        edge_cases.append("seeking_existing_solution")
+
+    if "how do i" in text_lower or "how to" in text_lower:
+        edge_cases.append("learning_question")
+
+    return {
+        "detected_patterns": edge_cases,
+        "confidence": "high" if not edge_cases else "medium"
+    }
+
+
+# -----------------------------
+# Enhanced Processing
 # -----------------------------
 def process_posts(client: OpenAI, df: pd.DataFrame, sleep_seconds: float = 0.5) -> pd.DataFrame:
     """
-    Iterate through posts, classify each, and return a labeled DataFrame with columns:
-    title, body, is_problem, is_software_solvable, is_external.
+    Enhanced processing pipeline with intent detection and validation.
 
     Pipeline:
-    - First run is_problem.
-    - If "1", run both is_software_solvable and is_external.
-    - If "0", set both to "0".
-    - If "error", set both to "error".
+    1. Classify post intent
+    2. Run is_problem classification with intent context
+    3. If problem, classify software_solvable and external
+    4. Validate label combinations
+    5. Detect edge cases for quality control
     """
     results: list[dict[str, str]] = []
     total = len(df)
-    logger.info("Processing %d posts…", total)
+    logger.info("Processing %d posts with enhanced pipeline…", total)
 
     for idx, row in df.iterrows():
         position = len(results) + 1
         logger.info("Processing post %d/%d (index %s)…", position, total, idx)
 
         post_text = format_post(row)
-        is_problem = classify_is_problem(client, post_text)
 
+        # Step 1: Classify intent
+        intent = classify_post_intent(client, post_text)
+
+        # Step 2: Classify problem with intent context
+        is_problem = classify_is_problem(client, post_text, intent)
+
+        # Step 3: Conditional classification
         if is_problem == "1":
             is_software = classify_is_software_solvable(client, post_text)
             is_external = classify_is_external(client, post_text)
@@ -282,20 +461,29 @@ def process_posts(client: OpenAI, df: pd.DataFrame, sleep_seconds: float = 0.5) 
         elif is_problem == "0":
             is_software = "0"
             is_external = "0"
-            rationale = "None"
+            rationale = {"reasoning": "Not a problem - no further classification needed"}
         else:  # "error"
             is_software = "error"
             is_external = "error"
-            rationale = "None"
+            rationale = {"error": "Classification failed"}
+
+        # Step 4: Validate label combinations
+        is_problem, is_software, is_external = validate_labels(is_problem, is_software, is_external)
+
+        # Step 5: Edge case detection
+        edge_case_info = detect_edge_cases(post_text, (is_problem, is_software, is_external))
 
         results.append(
             {
                 "title": (row.get("title", "") or ""),
                 "body": (row.get("body", "") or ""),
+                "intent": intent,
                 "is_problem": is_problem,
                 "is_software_solvable": is_software,
                 "is_external": is_external,
-                'rationale': rationale
+                "rationale": json.dumps(rationale) if isinstance(rationale, dict) else str(rationale),
+                "edge_cases": json.dumps(edge_case_info),
+                "confidence": edge_case_info.get("confidence", "medium")
             }
         )
 
@@ -303,7 +491,8 @@ def process_posts(client: OpenAI, df: pd.DataFrame, sleep_seconds: float = 0.5) 
 
     # Ensure desired column order
     out_df = pd.DataFrame(results)[
-        ["title", "body", "is_problem", "is_software_solvable", "is_external", "rationale"]
+        ["title", "body", "intent", "is_problem", "is_software_solvable",
+         "is_external", "rationale", "edge_cases", "confidence"]
     ]
     return out_df
 
