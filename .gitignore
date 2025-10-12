@@ -15,6 +15,7 @@ venv/
 env/
 ENV/
 .env
+.venv
 
 # Jupyter Notebook
 .ipynb_checkpoints
@@ -47,19 +48,6 @@ ENV/
 # Vim swap files
 *.swp
 *.swo
-
-# Project-specific
-#*.log
-#data/*.csv
-#data/*.json
-#data/*.xlsx
-#!data/sample_data.csv
-
-# Environments
-.env
-.venv
-env/
-venv/
 
 # Testing
 .pytest_cache/
