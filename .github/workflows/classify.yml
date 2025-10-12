@@ -5,9 +5,9 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "scripts/classify.py"
-      - "scripts/fetch.py"
+#    paths:
+#      - "scripts/classify.py"
+#      - "scripts/fetch.py"
 
 permissions:
   contents: write
