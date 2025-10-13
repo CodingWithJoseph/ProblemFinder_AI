@@ -1,0 +1,21 @@
+model: "gpt-4o"
+temperature: 0.0
+seed: 42
+ensemble:
+  enabled: false
+  members: ["direct", "reasoning", "rules"]
+  disagreement_threshold: 0.3
+cache:
+  enabled: true
+  ttl_hours: 24
+  path: "data/.cache/responses.json"
+parallel:
+  max_workers: 4
+  rate_limit: 30
+  chunk_size: 50
+evaluation:
+  enabled: false
+  gold_set_path: "data/gold_set.csv"
+  metrics: ["accuracy", "macro_f1", "confusion_matrix"]
+report:
+  path: "data/reports/latest_summary.json"

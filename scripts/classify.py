@@ -21,6 +21,7 @@ control deduplication behaviour and output destinations.
 from __future__ import annotations
 
 import argparse
+import contextlib
 import csv
 import dataclasses
 import html
@@ -28,15 +29,46 @@ import json
 import logging
 import math
 import os
+import queue
 import random
 import re
+import signal
+import threading
+import time
 import unicodedata
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, Iterable, Iterator, List, Optional, Sequence, Tuple
+from typing import Any, Dict, Iterable, Iterator, List, Mapping, MutableMapping, Optional, Sequence, Tuple
+from urllib.parse import urlparse
 
 import pandas as pd
+import yaml
+from jsonschema import ValidationError, validate
+
+try:  # pragma: no cover - import flexibility for script execution
+    from scripts.cache import CacheConfig, ResponseCache, cached_api_call
+    from scripts.ensemble import (
+        PROMPT_VERSION,
+        EnsembleConfig,
+        EnsembleMemberResult,
+        ensemble_classify,
+        summarise_member_agreement,
+    )
+    from scripts.evaluation import EvaluationConfig, compare_against_history, evaluate_against_gold
+    from scripts.report import ReportConfig, generate_summary_report
+except ModuleNotFoundError:  # pragma: no cover - fallback when running as package
+    from cache import CacheConfig, ResponseCache, cached_api_call
+    from ensemble import (
+        PROMPT_VERSION,
+        EnsembleConfig,
+        EnsembleMemberResult,
+        ensemble_classify,
+        summarise_member_agreement,
+    )
+    from evaluation import EvaluationConfig, compare_against_history, evaluate_against_gold
+    from report import ReportConfig, generate_summary_report
 
 
 logger = logging.getLogger(__name__)
@@ -55,6 +87,8 @@ class DedupeConfig:
     similarity_threshold: float = 0.5
     canonical_policy: str = "earliest"
     report_path: Optional[Path] = None
+    soft_similarity_threshold: float = 0.35
+    cross_subreddit: bool = True
 
 
 @dataclass
@@ -65,6 +99,274 @@ class SplitConfig:
     val_ratio: float = 0.1
     test_ratio: float = 0.1
     enabled: bool = True
+
+
+@dataclass
+class ModelConfig:
+    name: str = "gpt-4o"
+    temperature: float = 0.0
+    seed: int = 42
+
+
+@dataclass
+class ParallelConfig:
+    max_workers: int = 4
+    rate_limit: int = 30
+    chunk_size: int = 50
+
+
+@dataclass
+class ResumeConfig:
+    enabled: bool = False
+    checkpoint_path: Optional[Path] = None
+
+
+@dataclass
+class RunConfig:
+    model: ModelConfig
+    ensemble: EnsembleConfig
+    cache: CacheConfig
+    parallel: ParallelConfig
+    evaluation: EvaluationConfig
+    report: ReportConfig
+    dedupe: DedupeConfig
+    split: SplitConfig
+    resume: ResumeConfig
+
+
+class RateLimiter:
+    """Simple rate limiter expressed in requests per minute."""
+
+    def __init__(self, rate_limit: int) -> None:
+        self._rate_limit = max(rate_limit, 0)
+        self._lock = threading.Lock()
+        self._interval = 60.0 / self._rate_limit if self._rate_limit else 0.0
+        self._next_allowed = time.time()
+
+    def acquire(self) -> None:
+        if self._interval <= 0:
+            return
+        with self._lock:
+            now = time.time()
+            wait_time = max(0.0, self._next_allowed - now)
+            self._next_allowed = max(self._next_allowed, now) + self._interval
+        if wait_time:
+            time.sleep(wait_time)
+
+    @contextlib.contextmanager
+    def slot(self) -> Iterator[None]:
+        self.acquire()
+        yield
+
+
+def _load_yaml_config(path: Optional[Path]) -> Dict[str, Any]:
+    if path and path.exists():
+        with path.open("r", encoding="utf-8") as handle:
+            payload = yaml.safe_load(handle) or {}
+        if not isinstance(payload, dict):
+            raise ValueError(f"Invalid YAML config structure at {path}")
+        return payload
+    return {}
+
+
+def build_run_config(args: argparse.Namespace) -> RunConfig:
+    config_path = Path(args.config) if getattr(args, "config", None) else None
+    yaml_payload = _load_yaml_config(config_path)
+
+    model_cfg = ModelConfig(
+        name=str(getattr(args, "model", yaml_payload.get("model", "gpt-4o"))),
+        temperature=float(yaml_payload.get("temperature", 0.0)),
+        seed=int(yaml_payload.get("seed", 42)),
+    )
+    if getattr(args, "temperature", None) is not None:
+        model_cfg.temperature = float(args.temperature)
+    if getattr(args, "seed", None) is not None:
+        model_cfg.seed = int(args.seed)
+
+    ensemble_section = yaml_payload.get("ensemble", {}) if isinstance(yaml_payload, dict) else {}
+    ensemble_cfg = EnsembleConfig(
+        enabled=bool(ensemble_section.get("enabled", False)),
+        members=ensemble_section.get("members", ["direct", "reasoning", "rules"]),
+        disagreement_threshold=float(ensemble_section.get("disagreement_threshold", 0.3)),
+    )
+    if getattr(args, "ensemble", None) is not None:
+        ensemble_cfg.enabled = args.ensemble == "on"
+    if getattr(args, "ensemble_members", None):
+        ensemble_cfg.members = [member.strip() for member in args.ensemble_members.split(",") if member.strip()]
+    if getattr(args, "ensemble_disagreement_threshold", None) is not None:
+        ensemble_cfg.disagreement_threshold = float(args.ensemble_disagreement_threshold)
+
+    cache_section = yaml_payload.get("cache", {}) if isinstance(yaml_payload, dict) else {}
+    cache_cfg = CacheConfig(
+        enabled=bool(cache_section.get("enabled", False)),
+        path=Path(cache_section.get("path", "data/.cache/responses.json")),
+        ttl_hours=int(cache_section.get("ttl_hours", 24)),
+    )
+    if getattr(args, "cache", None) is not None:
+        cache_cfg.enabled = args.cache == "on"
+    if getattr(args, "cache_ttl", None) is not None:
+        cache_cfg.ttl_hours = int(args.cache_ttl)
+    if getattr(args, "cache_path", None):
+        cache_cfg.path = Path(args.cache_path)
+
+    parallel_section = yaml_payload.get("parallel", {}) if isinstance(yaml_payload, dict) else {}
+    parallel_cfg = ParallelConfig(
+        max_workers=int(parallel_section.get("max_workers", 4)),
+        rate_limit=int(parallel_section.get("rate_limit", 30)),
+        chunk_size=int(parallel_section.get("chunk_size", 50)),
+    )
+    if getattr(args, "max_workers", None) is not None:
+        parallel_cfg.max_workers = max(1, int(args.max_workers))
+    if getattr(args, "rate_limit", None) is not None:
+        parallel_cfg.rate_limit = max(0, int(args.rate_limit))
+    if getattr(args, "chunk_size", None) is not None:
+        parallel_cfg.chunk_size = max(1, int(args.chunk_size))
+
+    evaluation_section = yaml_payload.get("evaluation", {}) if isinstance(yaml_payload, dict) else {}
+    evaluation_cfg = EvaluationConfig(
+        enabled=bool(evaluation_section.get("enabled", False)),
+        gold_set_path=Path(evaluation_section.get("gold_set_path")) if evaluation_section.get("gold_set_path") else None,
+        metrics=evaluation_section.get("metrics", ["accuracy", "macro_f1", "confusion_matrix"]),
+    )
+    if getattr(args, "evaluation", None) is not None:
+        evaluation_cfg.enabled = args.evaluation == "on"
+    if getattr(args, "evaluation_gold_set", None):
+        evaluation_cfg.gold_set_path = Path(args.evaluation_gold_set)
+
+    report_section = yaml_payload.get("report", {}) if isinstance(yaml_payload, dict) else {}
+    report_cfg = ReportConfig(path=Path(report_section.get("path")) if report_section.get("path") else None)
+    if getattr(args, "report_path", None):
+        report_cfg.path = Path(args.report_path)
+
+    cross_subreddit_setting = yaml_payload.get("cross_subreddit", True)
+    if getattr(args, "cross_subreddit_dedupe", False):
+        cross_subreddit_setting = True
+
+    dedupe_cfg = DedupeConfig(
+        enabled=(args.dedupe == "on"),
+        similarity_threshold=float(args.similarity_threshold),
+        canonical_policy=args.canonical_policy,
+        report_path=args.dedupe_report,
+        soft_similarity_threshold=float(
+            getattr(args, "soft_similarity_threshold", yaml_payload.get("soft_similarity_threshold", 0.35))
+        ),
+        cross_subreddit=bool(cross_subreddit_setting),
+    )
+    if isinstance(dedupe_cfg.report_path, str):
+        dedupe_cfg.report_path = Path(dedupe_cfg.report_path)
+
+    split_cfg = SplitConfig(
+        enabled=not args.no_split,
+        train_ratio=float(args.train_ratio),
+        val_ratio=float(args.val_ratio),
+        test_ratio=float(args.test_ratio),
+    )
+
+    resume_cfg = ResumeConfig(
+        enabled=bool(getattr(args, "resume", False)),
+        checkpoint_path=Path(args.resume_from) if getattr(args, "resume_from", None) else None,
+    )
+
+    return RunConfig(
+        model=model_cfg,
+        ensemble=ensemble_cfg,
+        cache=cache_cfg,
+        parallel=parallel_cfg,
+        evaluation=evaluation_cfg,
+        report=report_cfg,
+        dedupe=dedupe_cfg,
+        split=split_cfg,
+        resume=resume_cfg,
+    )
+
+
+def _create_member_callables(
+    *,
+    engine: "Version2RuleEngine",
+    cache: ResponseCache,
+    cache_stats: MutableMapping[str, int],
+    rate_limiter: RateLimiter,
+    model_cfg: ModelConfig,
+) -> Dict[str, Any]:
+    def _llm_member(member_name: str) -> Any:
+        def _call(text: str) -> EnsembleMemberResult:
+            prompt_version = f"{PROMPT_VERSION}:{member_name}"
+
+            def _fetch() -> Dict[str, Any]:
+                with rate_limiter.slot():
+                    classification = engine.classify(text)
+                    payload = {field: getattr(classification, field) for field in classification.__dataclass_fields__}
+                    rationale = payload.get("problem_reason") or payload.get("software_reason") or payload.get("external_reason")
+                    return {"payload": payload, "confidence": 1.0, "rationale": rationale}
+
+            response = cached_api_call(
+                model=model_cfg.name,
+                prompt_version=prompt_version,
+                text=text,
+                cache=cache,
+                fetch_fn=_fetch,
+                cache_stats=cache_stats,
+            )
+            payload = response.get("payload", {})
+            confidence = float(response.get("confidence", 1.0))
+            rationale = response.get("rationale", "")
+            return EnsembleMemberResult(member=member_name, payload=payload, confidence=confidence, rationale=rationale)
+
+        return _call
+
+    members: Dict[str, Any] = {"rules": lambda text: None}
+    members["direct"] = _llm_member("direct")
+    members["reasoning"] = _llm_member("reasoning")
+    return members
+
+
+PII_PATTERNS = [
+    (re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+"), "[redacted_email]"),
+    (re.compile(r"\b\d{3}-\d{2}-\d{4}\b"), "[redacted_ssn]"),
+    (re.compile(r"\b\d{10}\b"), "[redacted_phone]"),
+]
+
+
+def redact_pii(text: str) -> str:
+    redacted = text
+    for pattern, replacement in PII_PATTERNS:
+        redacted = pattern.sub(replacement, redacted)
+    return redacted
+
+
+def structured_log(level: int, **payload: Any) -> None:
+    logger.log(level, json.dumps(payload, ensure_ascii=False, sort_keys=True))
+
+
+def parallel_process_batch(
+    tasks: Sequence[Tuple[int, pd.Series]],
+    worker_fn,
+    *,
+    parallel_cfg: ParallelConfig,
+) -> List[Any]:
+    """Run ``worker_fn`` over ``tasks`` in parallel while preserving order."""
+
+    results: List[Any] = [None] * len(tasks)
+    with ThreadPoolExecutor(max_workers=parallel_cfg.max_workers) as executor:
+        future_items: List[Tuple[int, Any]] = []
+        for position, (index, row) in enumerate(tasks):
+            future_items.append((position, executor.submit(worker_fn, index, row)))
+        for position, future in future_items:
+            try:
+                results[position] = future.result()
+            except Exception as exc:  # pragma: no cover - defensive
+                results[position] = exc
+    return results
+
+
+def _normalise_config(payload: Any) -> Any:
+    if isinstance(payload, dict):
+        return {key: _normalise_config(value) for key, value in payload.items()}
+    if isinstance(payload, list):
+        return [_normalise_config(item) for item in payload]
+    if isinstance(payload, Path):
+        return str(payload)
+    return payload
 
 
 def _normalise_whitespace(text: str) -> str:
@@ -242,12 +544,16 @@ def _iter_candidate_pairs(posts: Sequence[NormalisedPost]) -> Iterator[Tuple[int
 
     token_index: Dict[str, List[int]] = defaultdict(list)
     url_index: Dict[str, List[int]] = defaultdict(list)
+    domain_index: Dict[str, List[int]] = defaultdict(list)
     text_index: Dict[str, List[int]] = defaultdict(list)
 
     for idx, post in enumerate(posts):
         text_index[post.normalised_text].append(idx)
         for url in post.urls:
             url_index[url].append(idx)
+            domain = urlparse(url).netloc
+            if domain:
+                domain_index[domain].append(idx)
 
         tokens = _tokenise(post.normalised_text)
         unique_tokens = {tok for tok in tokens if len(tok) > 3}
@@ -263,6 +569,13 @@ def _iter_candidate_pairs(posts: Sequence[NormalisedPost]) -> Iterator[Tuple[int
 
     # Same URL duplicates
     for indices in url_index.values():
+        if len(indices) > 1:
+            for i in range(len(indices)):
+                for j in range(i + 1, len(indices)):
+                    yield indices[i], indices[j]
+
+    # Same domain duplicates (link aggregation)
+    for indices in domain_index.values():
         if len(indices) > 1:
             for i in range(len(indices)):
                 for j in range(i + 1, len(indices)):
@@ -296,7 +609,13 @@ def cluster_duplicates(posts: Sequence[NormalisedPost], config: DedupeConfig) ->
 
         similarity = _combined_similarity(post_a.normalised_text, post_b.normalised_text)
         shared_url = bool(set(post_a.urls) & set(post_b.urls))
-        if post_a.normalised_text == post_b.normalised_text or shared_url or similarity >= config.similarity_threshold:
+        soft_match = similarity >= config.soft_similarity_threshold and (post_a.subreddit != post_b.subreddit)
+        if (
+            post_a.normalised_text == post_b.normalised_text
+            or shared_url
+            or similarity >= config.similarity_threshold
+            or (config.cross_subreddit and soft_match)
+        ):
             uf.union(a_idx, b_idx)
 
     clusters: Dict[int, List[int]] = defaultdict(list)
@@ -421,6 +740,33 @@ class ClassificationResult:
     external_reason: str
     detected_patterns: str
     confidence: str
+
+
+CLASSIFICATION_SCHEMA: Dict[str, Any] = {
+    "type": "object",
+    "properties": {
+        "intent": {"type": "string"},
+        "is_problem": {"type": "string"},
+        "is_software_solvable": {"type": "string"},
+        "is_external": {"type": "string"},
+        "problem_reason": {"type": "string"},
+        "software_reason": {"type": "string"},
+        "external_reason": {"type": "string"},
+        "detected_patterns": {"type": "string"},
+        "confidence": {"type": "string"},
+    },
+    "required": [
+        "intent",
+        "is_problem",
+        "is_software_solvable",
+        "is_external",
+        "problem_reason",
+        "software_reason",
+        "external_reason",
+        "detected_patterns",
+        "confidence",
+    ],
+}
 
 
 INTENT_LABELS = {
@@ -715,33 +1061,215 @@ def assign_splits(df: pd.DataFrame, cluster_members: Dict[str, List[str]], confi
 # ---------------------------------------------------------------------------
 
 
-def classify_dataframe(df: pd.DataFrame, *, dedupe_config: DedupeConfig, split_config: SplitConfig) -> Tuple[pd.DataFrame, Dict[str, str], Dict[str, List[str]]]:
+def classify_dataframe(
+    df: pd.DataFrame,
+    *,
+    run_config: RunConfig,
+    cache: ResponseCache,
+    rate_limiter: RateLimiter,
+    historical_metrics: Optional[Sequence[Mapping[str, Any]]] = None,
+) -> Tuple[pd.DataFrame, Dict[str, str], Dict[str, List[str]], Dict[str, Any]]:
     """Run deduplication and classification on ``df``."""
 
-    logger.info("Starting deduplication (enabled=%s, threshold=%.2f)", dedupe_config.enabled, dedupe_config.similarity_threshold)
-    canonical_df, id_mapping, clusters = deduplicate_dataframe(df, dedupe_config)
-    logger.info("Deduplication complete: %d -> %d canonical posts (%d clusters)", len(df), len(canonical_df), len(clusters))
+    random.seed(run_config.model.seed)
+    structured_log(
+        logging.INFO,
+        event="dedupe_start",
+        enabled=run_config.dedupe.enabled,
+        similarity_threshold=run_config.dedupe.similarity_threshold,
+        soft_similarity_threshold=run_config.dedupe.soft_similarity_threshold,
+    )
+    dedupe_start = time.time()
+    canonical_df, id_mapping, clusters = deduplicate_dataframe(df, run_config.dedupe)
+    dedupe_elapsed = time.time() - dedupe_start
+    duplicates_removed = len(df) - len(canonical_df)
+    structured_log(
+        logging.INFO,
+        event="dedupe_complete",
+        total=len(df),
+        canonical=len(canonical_df),
+        clusters=len(clusters),
+        duplicates_removed=duplicates_removed,
+        elapsed_seconds=dedupe_elapsed,
+    )
 
-    if dedupe_config.report_path:
-        write_dedupe_report(dedupe_config.report_path, clusters, canonical_df)
-        logger.info("Dedupe report written to %s", dedupe_config.report_path)
+    if run_config.dedupe.report_path:
+        write_dedupe_report(run_config.dedupe.report_path, clusters, canonical_df)
+        logger.info("Dedupe report written to %s", run_config.dedupe.report_path)
+
+    for field in CLASSIFICATION_SCHEMA["properties"].keys():
+        if field not in canonical_df.columns:
+            canonical_df[field] = ""
+
+    processed_ids: set[str] = set()
+    if run_config.resume.enabled and run_config.resume.checkpoint_path and run_config.resume.checkpoint_path.exists():
+        resume_df = pd.read_csv(run_config.resume.checkpoint_path).fillna("")
+        if "canonical_post_id" in resume_df.columns:
+            processed_ids = set(resume_df["canonical_post_id"].astype(str))
+            for field in CLASSIFICATION_SCHEMA["properties"].keys():
+                if field in resume_df.columns:
+                    mapping = dict(zip(resume_df["canonical_post_id"].astype(str), resume_df[field].astype(str)))
+                    canonical_df[field] = canonical_df["canonical_post_id"].astype(str).map(mapping).fillna(canonical_df[field])
+            structured_log(
+                logging.INFO,
+                event="resume_loaded",
+                resume_path=str(run_config.resume.checkpoint_path),
+                recovered=len(processed_ids),
+            )
 
     classifier = Version2RuleEngine()
-    for idx, row in canonical_df.iterrows():
-        text = f"{row.get('title', '')}\n\n{row.get('body', '')}".strip()
-        classification = classifier.classify(text)
-        canonical_df.at[idx, "intent"] = classification.intent
-        canonical_df.at[idx, "is_problem"] = classification.is_problem
-        canonical_df.at[idx, "is_software_solvable"] = classification.is_software_solvable
-        canonical_df.at[idx, "is_external"] = classification.is_external
-        canonical_df.at[idx, "problem_reason"] = classification.problem_reason
-        canonical_df.at[idx, "software_reason"] = classification.software_reason
-        canonical_df.at[idx, "external_reason"] = classification.external_reason
-        canonical_df.at[idx, "detected_patterns"] = classification.detected_patterns
-        canonical_df.at[idx, "confidence"] = classification.confidence
+    cache_stats: Dict[str, int] = {"hits": 0, "misses": 0}
+    base_members = _create_member_callables(
+        engine=classifier,
+        cache=cache,
+        cache_stats=cache_stats,
+        rate_limiter=rate_limiter,
+        model_cfg=run_config.model,
+    )
 
-    canonical_df = assign_splits(canonical_df, clusters, split_config)
-    return canonical_df, id_mapping, clusters
+    def _active_member_callables() -> Dict[str, Any]:
+        if not run_config.ensemble.enabled:
+            return {"rules": base_members["rules"]}
+        enabled_set = set(run_config.ensemble.members) | {"rules"}
+        return {name: base_members[name] for name in enabled_set if name in base_members}
+
+    ensemble_members = _active_member_callables()
+
+    latencies: List[float] = []
+    metadata_records: List[Dict[str, Any]] = []
+    dead_letter_queue: List[Dict[str, Any]] = []
+    disagreement_buckets: Dict[str, int] = {"high": 0, "low": 0}
+
+    total = len(canonical_df)
+    processed = 0
+    start_time = time.time()
+
+    def worker(index: int, row: pd.Series) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+        canonical_id = str(row.get("canonical_post_id") or row.get("post_id") or f"row_{index}")
+        if canonical_id in processed_ids:
+            payload = {field: row.get(field, "") for field in CLASSIFICATION_SCHEMA["properties"].keys()}
+            metadata = {"post_id": canonical_id, "disagreement": 0.0, "latency": 0.0, "member_rationales": {}}
+            return payload, metadata
+
+        text = f"{row.get('title', '')}\n\n{row.get('body', '')}".strip()
+        attempts = 0
+        backoff = 1.0
+        while attempts < 3:
+            attempts += 1
+            start = time.time()
+            try:
+                payload, metadata = ensemble_classify(
+                    text=text,
+                    engine=classifier,
+                    config=run_config.ensemble,
+                    member_callables=ensemble_members,
+                    disagreement_stats=None,
+                )
+                latency = time.time() - start
+                metadata.setdefault("field_confidence", {})
+                payload = dict(payload)
+                payload.setdefault(
+                    "confidence",
+                    f"{metadata.get('field_confidence', {}).get('intent', 1.0):.2f}",
+                )
+                for field in CLASSIFICATION_SCHEMA["properties"].keys():
+                    payload.setdefault(field, "")
+                validate(CLASSIFICATION_SCHEMA, payload)
+                metadata.setdefault("member_rationales", {})
+                metadata["member_rationales"] = {
+                    key: redact_pii(value or "") for key, value in metadata["member_rationales"].items()
+                }
+                metadata["post_id"] = canonical_id
+                metadata["latency"] = latency
+                metadata.setdefault("disagreement", 0.0)
+                return payload, metadata
+            except ValidationError as exc:
+                logger.warning("Schema validation failed on attempt %d: %s", attempts, exc)
+                time.sleep(backoff)
+                backoff = min(backoff * 2, 8.0)
+            except Exception as exc:  # pragma: no cover - defensive
+                logger.exception("Classification attempt %d failed", attempts)
+                time.sleep(backoff)
+                backoff = min(backoff * 2, 8.0)
+        raise RuntimeError("classification_failed")
+
+    for start_idx in range(0, total, run_config.parallel.chunk_size):
+        end_idx = min(total, start_idx + run_config.parallel.chunk_size)
+        chunk = [(idx, canonical_df.iloc[idx].copy()) for idx in range(start_idx, end_idx)]
+        results = parallel_process_batch(chunk, worker, parallel_cfg=run_config.parallel)
+        for (idx, _row), result in zip(chunk, results):
+            if isinstance(result, Exception):
+                dead_letter_queue.append(
+                    {
+                        "canonical_post_id": canonical_df.at[idx, "canonical_post_id"],
+                        "error": str(result),
+                    }
+                )
+                continue
+            payload, metadata = result
+            for field, value in payload.items():
+                canonical_df.at[idx, field] = value
+            metadata_records.append(metadata)
+            latencies.append(metadata.get("latency", 0.0))
+            bucket = "high" if metadata.get("disagreement", 0.0) >= run_config.ensemble.disagreement_threshold else "low"
+            disagreement_buckets[bucket] = disagreement_buckets.get(bucket, 0) + 1
+        processed += len(chunk)
+        elapsed = time.time() - start_time
+        remaining = total - processed
+        eta = (elapsed / processed) * remaining if processed else 0.0
+        structured_log(
+            logging.INFO,
+            event="progress",
+            processed=processed,
+            total=total,
+            elapsed_seconds=elapsed,
+            eta_seconds=eta,
+        )
+
+    canonical_df = assign_splits(canonical_df, clusters, run_config.split)
+
+    evaluation_metrics = evaluate_against_gold(canonical_df, run_config.evaluation)
+    historical_drift = compare_against_history(evaluation_metrics, historical_metrics or []) if evaluation_metrics else {}
+
+    ensemble_summary = summarise_member_agreement(metadata_records)
+    high_disagreement_cases = [
+        record.get("post_id")
+        for record in metadata_records
+        if record.get("disagreement", 0.0) >= run_config.ensemble.disagreement_threshold
+    ]
+    ensemble_summary["high_disagreement_ids"] = high_disagreement_cases
+    ensemble_summary["buckets"] = disagreement_buckets
+
+    latencies_sorted = sorted(latencies)
+    p95_latency = 0.0
+    if latencies_sorted:
+        index = max(0, min(len(latencies_sorted) - 1, int(0.95 * len(latencies_sorted)) - 1))
+        p95_latency = latencies_sorted[index]
+
+    performance_stats: Dict[str, Any] = {
+        "total_rows": len(df),
+        "total_time_seconds": time.time() - start_time,
+        "avg_latency_seconds": float(sum(latencies) / len(latencies)) if latencies else 0.0,
+        "p95_latency_seconds": float(p95_latency),
+        "cache_enabled": run_config.cache.enabled,
+        "cache_hits": cache_stats.get("hits", 0),
+        "cache_misses": cache_stats.get("misses", 0),
+        "dead_letter_count": len(dead_letter_queue),
+    }
+
+    duplicate_stats = {"duplicates_removed": duplicates_removed, "clusters": len(clusters)}
+
+    summary_payload = {
+        "duplicate_stats": duplicate_stats,
+        "cache_stats": cache_stats,
+        "ensemble_summary": ensemble_summary,
+        "evaluation_metrics": evaluation_metrics,
+        "historical_drift": historical_drift,
+        "performance_stats": performance_stats,
+        "dead_letter_queue": dead_letter_queue,
+    }
+
+    return canonical_df, id_mapping, clusters, summary_payload
 
 
 def load_dataframe(path: Path) -> pd.DataFrame:
@@ -758,17 +1286,37 @@ def save_dataframe(df: pd.DataFrame, path: Path) -> None:
 
 
 def parse_args(args: Optional[Sequence[str]] = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run Version 2 classification pipeline with deduplication")
+    parser = argparse.ArgumentParser(description="Run Version 2 classification pipeline with deduplication and ensembles")
+    parser.add_argument("--config", type=Path, default=Path("config.yaml"), help="Path to configuration YAML")
     parser.add_argument("--input", type=Path, default=Path("data/raw_data.csv"), help="Path to the raw Reddit CSV file")
     parser.add_argument("--output", type=Path, default=Path("data/labeled_sample.csv"), help="Output path for labeled CSV")
     parser.add_argument("--dedupe", choices=["on", "off"], default="on", help="Enable or disable deduplication")
     parser.add_argument("--similarity-threshold", type=float, default=0.5, help="Duplicate similarity threshold")
+    parser.add_argument("--soft-similarity-threshold", type=float, default=0.35, help="Soft duplicate similarity threshold")
+    parser.add_argument("--cross-subreddit-dedupe", action="store_true", help="Enable cross-subreddit deduplication")
     parser.add_argument("--canonical-policy", choices=["earliest", "longest"], default="earliest", help="Canonical selection policy")
     parser.add_argument("--dedupe-report", type=Path, default=None, help="Optional CSV report for duplicate clusters")
     parser.add_argument("--no-split", action="store_true", help="Disable train/val/test splitting")
     parser.add_argument("--train-ratio", type=float, default=0.8)
     parser.add_argument("--val-ratio", type=float, default=0.1)
     parser.add_argument("--test-ratio", type=float, default=0.1)
+    parser.add_argument("--ensemble", choices=["on", "off"], default="off", help="Enable ensemble voting")
+    parser.add_argument("--ensemble-members", default="direct,reasoning,rules", help="Comma separated ensemble members")
+    parser.add_argument("--ensemble-disagreement-threshold", type=float, default=0.3, help="Threshold for high disagreement logging")
+    parser.add_argument("--model", choices=["gpt-4o", "gpt-4o-mini"], default="gpt-4o", help="Model selection")
+    parser.add_argument("--temperature", type=float, default=None, help="Override model temperature")
+    parser.add_argument("--seed", type=int, default=None, help="Random seed override")
+    parser.add_argument("--cache", choices=["on", "off"], default=None, help="Enable or disable response cache")
+    parser.add_argument("--cache-ttl", type=int, default=None, help="Cache TTL in hours")
+    parser.add_argument("--cache-path", type=Path, default=None, help="Path for cache persistence")
+    parser.add_argument("--max-workers", type=int, default=None, help="Number of worker threads")
+    parser.add_argument("--rate-limit", type=int, default=None, help="Rate limit in requests per minute")
+    parser.add_argument("--chunk-size", type=int, default=None, help="Chunk size for batch processing")
+    parser.add_argument("--evaluation", choices=["on", "off"], default=None, help="Enable evaluation mode")
+    parser.add_argument("--evaluation-gold-set", type=Path, default=None, help="Path to gold set CSV")
+    parser.add_argument("--report-path", type=Path, default=None, help="Path to summary report JSON")
+    parser.add_argument("--resume", action="store_true", help="Resume from existing labeled output")
+    parser.add_argument("--resume-from", type=Path, default=None, help="Path to existing labeled CSV for resume")
     parser.add_argument("--log-level", default=os.environ.get("LOG_LEVEL", "INFO"))
     return parser.parse_args(args)
 
@@ -779,25 +1327,82 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
 
     df = load_dataframe(args.input)
 
-    dedupe_config = DedupeConfig(
-        enabled=args.dedupe == "on",
-        similarity_threshold=args.similarity_threshold,
-        canonical_policy=args.canonical_policy,
-        report_path=args.dedupe_report,
+    run_config = build_run_config(args)
+    if run_config.resume.enabled and not run_config.resume.checkpoint_path:
+        run_config.resume.checkpoint_path = args.output
+
+    cache = ResponseCache(run_config.cache)
+    rate_limiter = RateLimiter(run_config.parallel.rate_limit)
+
+    historical_payloads: List[Mapping[str, Any]] = []
+    if run_config.report.path and run_config.report.path.exists():
+        try:
+            with run_config.report.path.open("r", encoding="utf-8") as handle:
+                historical_payloads.append(json.load(handle))
+        except Exception:  # pragma: no cover - defensive
+            logger.exception("Failed to load historical report %s", run_config.report.path)
+
+    canonical_df, id_mapping, clusters, summary_payload = classify_dataframe(
+        df,
+        run_config=run_config,
+        cache=cache,
+        rate_limiter=rate_limiter,
+        historical_metrics=[payload.get("evaluation", {}) for payload in historical_payloads],
     )
 
-    split_config = SplitConfig(
-        enabled=not args.no_split,
-        train_ratio=args.train_ratio,
-        val_ratio=args.val_ratio,
-        test_ratio=args.test_ratio,
-    )
-
-    canonical_df, id_mapping, clusters = classify_dataframe(df, dedupe_config=dedupe_config, split_config=split_config)
     save_dataframe(canonical_df, args.output)
 
+    config_payload = _normalise_config(dataclasses.asdict(run_config))
+
+    report_summary = generate_summary_report(
+        df=canonical_df,
+        duplicate_stats=summary_payload.get("duplicate_stats", {}),
+        cache_stats=summary_payload.get("cache_stats", {}),
+        ensemble_records=summary_payload.get("ensemble_summary", {}),
+        evaluation_metrics=summary_payload.get("evaluation_metrics", {}),
+        performance_stats=summary_payload.get("performance_stats", {}),
+        config_payload=config_payload,
+        report_config=run_config.report,
+    )
+
+    config_output_path = args.output.with_suffix(".config.json")
+    with config_output_path.open("w", encoding="utf-8") as handle:
+        json.dump(config_payload, handle, ensure_ascii=False, indent=2)
+
+    structured_log(
+        logging.INFO,
+        event="run_complete",
+        output=str(args.output),
+        canonical_rows=len(canonical_df),
+        clusters=len(clusters),
+        duplicates_removed=summary_payload.get("duplicate_stats", {}).get("duplicates_removed", 0),
+        report=str(run_config.report.path) if run_config.report.path else None,
+    )
+
+    if summary_payload.get("dead_letter_queue"):
+        structured_log(
+            logging.WARNING,
+            event="dead_letter_queue",
+            count=len(summary_payload["dead_letter_queue"]),
+        )
+
+    if summary_payload.get("historical_drift"):
+        structured_log(
+            logging.INFO,
+            event="prompt_drift",
+            payload=summary_payload["historical_drift"],
+        )
+
+    if summary_payload.get("evaluation_metrics"):
+        structured_log(
+            logging.INFO,
+            event="evaluation_metrics",
+            payload=summary_payload["evaluation_metrics"],
+        )
+
     logger.info("Saved labeled dataset to %s", args.output)
-    logger.info("Processed %d posts (canonical). Dedupe clusters: %d", len(canonical_df), len(clusters))
+    if run_config.report.path:
+        logger.info("Summary report available at %s", run_config.report.path)
 
     mapping_path = args.output.with_suffix(".mapping.json")
     mapping_path.write_text(json.dumps(id_mapping, indent=2), encoding="utf-8")
