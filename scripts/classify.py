@@ -846,6 +846,9 @@ class Version2RuleEngine:
     SOFTWARE_CUES = {
         "app",
         "software",
+        "application",
+        "program",
+        "tool",
         "code",
         "script",
         "automation",
@@ -862,6 +865,12 @@ class Version2RuleEngine:
 
     NON_SOFTWARE_CUES = {
         "hardware",
+        "firmware",
+        "motherboard",
+        "cpu",
+        "gpu",
+        "graphics card",
+        "power supply",
         "printer",
         "camera",
         "device",
@@ -997,8 +1006,15 @@ class Version2RuleEngine:
         software_hits = [cue for cue in self.SOFTWARE_CUES if cue in text]
         non_software_hits = [cue for cue in self.NON_SOFTWARE_CUES if cue in text]
 
-        if "looking for" in text and "software" in text and not any(word in text for word in {"build", "create", "develop"}):
-            return "0", "Requesting an existing software product (market search)."
+        if (
+            "looking for" in text
+            and any(
+                keyword in text
+                for keyword in {"software", "app", "application", "tool", "program"}
+            )
+            and not any(word in text for word in {"build", "create", "develop"})
+        ):
+            return "0", "User is searching for existing software (market solution)."
 
         if software_hits and not non_software_hits:
             return "1", f"Software signals present ({', '.join(sorted(set(software_hits))[:3])})."
