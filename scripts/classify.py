@@ -798,6 +798,34 @@ class Version2RuleEngine:
         "how do i",
         "how to",
         "should i",
+        "broken",
+        "glitch",
+        "fail",
+        "fails",
+        "failed",
+        "failing",
+        "failure",
+    }
+
+    NEGATED_PROBLEM_PATTERNS = {
+        "no problem": {"problem"},
+        "no problems": {"problem"},
+        "not a problem": {"problem"},
+        "not an issue": {"issue"},
+        "no issue": {"issue"},
+        "no issues": {"issue"},
+        "without issue": {"issue"},
+        "without issues": {"issue"},
+        "never an issue": {"issue"},
+        "not broken": {"broken"},
+        "no longer broken": {"broken"},
+        "no bug": {"bug"},
+        "no bugs": {"bug"},
+        "without fail": {"fail"},
+        "never failed": {"fail", "failed"},
+        "never fails": {"fail", "fails"},
+        "never failing": {"fail", "failing"},
+        "never failure": {"fail", "failure"},
     }
 
     RESOLVED_PATTERNS = {
@@ -936,17 +964,31 @@ class Version2RuleEngine:
             return "0", "Describes a resolved situation without an active pain point."
 
         cues_found = [pattern for pattern in self.PROBLEM_CUES if pattern in text]
+        filtered_cues = self._filter_negated_cues(text, cues_found)
         if intent == "showcasing" and not cues_found:
             return "0", "Showcase content without evidence of a pain point."
 
-        if cues_found:
-            reason = f"Detected problem cues: {', '.join(sorted(set(cues_found))[:3])}."
+        if filtered_cues:
+            reason = f"Detected problem cues: {', '.join(sorted(set(filtered_cues))[:3])}."
             return "1", reason
+
+        if cues_found and not filtered_cues:
+            return "0", "Problem-like phrases only appear in a negated context."
 
         if intent == "sharing_advice":
             return "1", "Advice-sharing anchored in a real frustration (Version 2 guidance)."
 
         return "0", "No unresolved pain point, request, or frustration detected."
+
+    def _filter_negated_cues(self, text: str, cues: List[str]) -> List[str]:
+        """Remove cues that only appear as part of negated phrases."""
+
+        negated_cues = set()
+        for phrase, blocked in self.NEGATED_PROBLEM_PATTERNS.items():
+            if phrase in text:
+                negated_cues.update(blocked)
+
+        return [cue for cue in cues if cue not in negated_cues]
 
     def _classify_software(self, text: str, is_problem: str) -> Tuple[str, str]:
         if is_problem != "1":
