@@ -1,10 +1,9 @@
-"""Integration test covering dedupe, splits, and classification."""
-
 import json
 
 import pandas as pd
 
-from scripts.classify import DedupeConfig, SplitConfig, classify_dataframe
+from problemfinder.core.config import DedupeConfig, SplitConfig
+from problemfinder.core.pipeline import classify_dataframe
 
 
 def test_pipeline_dedupes_and_assigns_splits_consistently():
@@ -43,7 +42,9 @@ def test_pipeline_dedupes_and_assigns_splits_consistently():
     dedupe_config = DedupeConfig(enabled=True, similarity_threshold=0.5, canonical_policy="earliest")
     split_config = SplitConfig(train_ratio=0.5, val_ratio=0.25, test_ratio=0.25, enabled=True)
 
-    canonical_df, mapping, clusters = classify_dataframe(df, dedupe_config=dedupe_config, split_config=split_config)
+    canonical_df, mapping, clusters, _ = classify_dataframe(
+        df, dedupe_config=dedupe_config, split_config=split_config
+    )
 
     assert len(canonical_df) == 3
     assert len(clusters) == 3
@@ -51,14 +52,12 @@ def test_pipeline_dedupes_and_assigns_splits_consistently():
     mapping_values = set(mapping.values())
     assert len(mapping_values) == 3
 
-    # Ensure duplicates share the same split
     duplicate_canonical = mapping["https://reddit.com/p1"]
     duplicate_split = canonical_df.loc[canonical_df["canonical_post_id"] == duplicate_canonical, "split"].iat[0]
     other_split = canonical_df.loc[canonical_df["canonical_post_id"] == mapping["https://reddit.com/p3"], "split"].iat[0]
     assert duplicate_split in {"train", "val", "test"}
     assert other_split in {"train", "val", "test"}
 
-    # Labels propagate according to Version 2 rules
     projector_row = canonical_df.loc[canonical_df["canonical_post_id"] == duplicate_canonical].iloc[0]
     assert projector_row["is_problem"] == "1"
     assert projector_row["is_external"] == "1"
@@ -66,6 +65,5 @@ def test_pipeline_dedupes_and_assigns_splits_consistently():
     prototype_row = canonical_df.loc[canonical_df["canonical_post_id"] == mapping["https://reddit.com/p4"]].iloc[0]
     assert prototype_row["is_external"] == "1"
 
-    # Aggregated subreddit metadata stored as JSON arrays
     subreddits = json.loads(projector_row["duplicate_subreddits"])
     assert sorted(subreddits) == ["gadgets", "hometheater"]

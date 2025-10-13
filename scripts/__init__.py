@@ -1,3 +1,1 @@
-"""Helper to allow importing the classification pipeline in tests."""
-
-__all__ = []
+"""Legacy package retaining backwards-compatible imports."""

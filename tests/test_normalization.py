@@ -1,8 +1,6 @@
-"""Tests for text normalisation utilities used in deduplication."""
-
 import pandas as pd
 
-from scripts.classify import normalise_post
+from problemfinder.core.dedupe import normalise_post
 
 
 def test_normalise_post_removes_urls_markdown_and_mentions():

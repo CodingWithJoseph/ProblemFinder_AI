@@ -1,6 +1,4 @@
-"""Tests for Version 2 rule-based classifier."""
-
-from scripts.classify import Version2RuleEngine
+from problemfinder.classification.rules import Version2RuleEngine
 
 
 def classify(text: str):

@@ -1,10 +1,9 @@
-"""Tests for deduplication logic."""
-
 import json
 
 import pandas as pd
 
-from scripts.classify import DedupeConfig, deduplicate_dataframe
+from problemfinder.core.config import DedupeConfig
+from problemfinder.core.dedupe import deduplicate_dataframe
 
 
 def _make_df() -> pd.DataFrame:
