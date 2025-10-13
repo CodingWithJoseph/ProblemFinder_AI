@@ -44,3 +44,27 @@ def test_printer_purchase_external():
     assert result.is_problem == "1"
     assert result.is_software_solvable == "0"
     assert result.is_external == "1"
+
+
+def test_buy_new_laptop_external():
+    text = "Need help deciding if I should buy a new laptop from Dell or Apple."
+    result = classify(text)
+    assert result.is_problem == "1"
+    assert result.is_software_solvable == "0"
+    assert result.is_external == "1"
+
+
+def test_vendor_selection_external():
+    text = "We need recommendations for a vendor that can supply replacement sensors."
+    result = classify(text)
+    assert result.is_problem == "1"
+    assert result.is_software_solvable == "0"
+    assert result.is_external == "1"
+
+
+def test_college_advice_not_external():
+    text = "Looking for advice on which college program to choose next year."
+    result = classify(text)
+    assert result.is_problem == "1"
+    assert result.is_software_solvable == "0"
+    assert result.is_external == "0"
