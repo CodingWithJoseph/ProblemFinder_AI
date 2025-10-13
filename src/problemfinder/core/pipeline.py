@@ -147,7 +147,7 @@ def classify_dataframe(
     duplicates_removed = len(df) - len(canonical_df)
     structured_log(
         logging.INFO,
-        event="dedupe_complete",
+        event="dedupe_summary",
         total=len(df),
         canonical=len(canonical_df),
         clusters=len(clusters),
@@ -210,6 +210,13 @@ def classify_dataframe(
     total = len(canonical_df)
     processed = 0
     start_time = time.time()
+
+    structured_log(
+        logging.INFO,
+        event="labeling_start",
+        total=total,
+        resumed=len(processed_ids),
+    )
 
     def worker(index: int, row: pd.Series) -> Tuple[Dict[str, Any], Dict[str, Any]]:
         canonical_id = str(row.get("canonical_post_id") or row.get("post_id") or f"row_{index}")
@@ -336,6 +343,15 @@ def classify_dataframe(
         "performance_stats": performance_stats,
         "dead_letter_queue": dead_letter_queue,
     }
+
+    structured_log(
+        logging.INFO,
+        event="classification_summary",
+        total=total,
+        labeled=len(metadata_records),
+        cached=cache_stats.get("hits", 0),
+        dead_letter_count=len(dead_letter_queue),
+    )
 
     return canonical_df, id_mapping, clusters, summary_payload
 

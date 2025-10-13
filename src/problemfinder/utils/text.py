@@ -74,9 +74,10 @@ def remove_urls(text: str) -> Tuple[str, List[str]]:
 
     def _collect(match: re.Match[str]) -> str:
         url = match.group(0)
-        parsed = safe_urlsplit(url)
+        cleaned = re.sub(r"[)\]\">'`]+$", "", url)
+        parsed = safe_urlsplit(cleaned)
         if parsed is not None:
-            urls.append(url)
+            urls.append(cleaned)
         else:
             logger.debug("Skipped malformed URL: %s", url[:50])
         return " "
