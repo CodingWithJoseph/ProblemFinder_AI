@@ -1,528 +1,809 @@
+"""Classification pipeline with Version 2 labeling rules and deduplication.
+
+This module implements a lightweight, fully-auditable classification pipeline for
+Reddit posts.  The pipeline follows the Version 2 guidance captured in
+``documentation/labeling_documentation.md`` and introduces an end-to-end
+deduplication stage focused on cross-subreddit reposts.
+
+Key features implemented here:
+
+* Canonical text normalisation (HTML/Markdown stripping, URL removal, etc.).
+* Duplicate clustering that combines exact-text, URL, and similarity signals.
+* Deterministic canonical selection with metadata aggregation and reporting.
+* Rule-based Version 2 label assignment with explicit reasoning strings.
+* Optional train/validation/test splitting that respects duplicate clusters.
+
+The module can be executed as a script (``python scripts/classify.py``) or
+imported from tests.  When run as a script it accepts several CLI flags to
+control deduplication behaviour and output destinations.
+"""
+
 from __future__ import annotations
 
+import argparse
+import csv
+import dataclasses
+import html
 import json
-
 import logging
+import math
 import os
-import time
-from typing import Literal, Optional
+import random
+import re
+import unicodedata
+from collections import defaultdict
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, Iterable, Iterator, List, Optional, Sequence, Tuple
 
 import pandas as pd
-from dotenv import load_dotenv
-from openai import OpenAI
 
-"""
-Classify a sample of Reddit posts using OpenAI prompts.
 
-This script loads the first 100 rows of the raw dataset, combines the title and
-body into a structured text block, and classifies each entry with three binary labels:
-- is_problem: "1" if the post describes a problem/pain point, else "0".
-- is_software_solvable: "1" if the problem could be solved primarily with software (apps, automation, algorithms).
-- is_external: "1" if solving the problem requires coordinating physical resources, people-as-service, logistics, or hardware.
-
-Notes
-- If is_problem == "0", both is_software_solvable and is_external are set to "0".
-- If is_problem == "error", both is_software_solvable and is_external are set to "error".
-- All three labels are in {"0", "1", "error"} for consistency.
-- Results overwrite ``data/labeled_sample.csv``.
-
-Key features
-- Modularized functions with type hints and docstrings
-- Strict parsing/validation to enforce clean outputs
-- Retry logic with exponential backoff
-- Clean, structured prompt formatting for better model performance
-"""
-
-# -----------------------------
-# Logging Configuration
-# -----------------------------
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-)
 logger = logging.getLogger(__name__)
 
-# -----------------------------
-# Enhanced Prompt Templates with Examples and Decision Rules
-# -----------------------------
-PROBLEM_PROMPT = """You are a classifier that determines if a Reddit post describes a problem.
 
-A "problem" means:
-- The author is frustrated by something, or
-- They ask for a better solution, or
-- They mention something that doesn't work well, is missing, or could be improved.
-
-DECISION RULES:
-- If a post shares advice/workflow but references a real problem others face → PROBLEM (1)
-- If a post only describes a past problem that is already resolved → NOT PROBLEM (0)
-- If a post has no problem context at all (pure showcase, news, opinion) → NOT PROBLEM (0)
-
-EXAMPLES:
-✅ PROBLEM (1):
-- "Why is the job market so terrible for entry-level developers? Here's my advice..."
-- "Looking for affordable architecture software since I don't have space to draw"
-- "My Samsung phone became harder to use after the latest update"
-
-❌ NOT PROBLEM (0):
-- "Just got a random package in the mail, turns out it was from a friend!"
-- "Check out this cool project I built" (pure showcase)
-- "Latest industry news about AI developments" (pure news)
-
-⚠️ EDGE CASES:
-- Posts combining problems + solutions: Focus on whether they reference genuine frustrations
-- Resolved problems: Only label as problem if seeking ongoing solutions
-
-Return ONLY one of:
-- 1  (if it clearly describes a problem, pain point, or unmet need)
-- 0  (if it does not)
-
-Post:
-{post_text}
-"""
-
-SOFTWARE_SOLVABLE_PROMPT = """You are a classifier that determines if a problem could be solved primarily with software.
-
-"Software-solvable" means:
-- The core solution could be built as software (apps, websites, APIs, automation, algorithms)
-- Does NOT require physical coordination, manufacturing, or institutional processes
-- Does NOT include learning/knowledge problems that need guidance rather than tools
-
-DECISION RULES:
-- Hardware symptoms with software causes → SOFTWARE SOLVABLE (1)
-- Information/learning needs → NOT SOFTWARE SOLVABLE (0)
-- Guidance-seeking without technical malfunction → NOT SOFTWARE SOLVABLE (0)
-- Existing tool requests without describing software gaps → NOT SOFTWARE SOLVABLE (0)
-
-EXAMPLES:
-✅ SOFTWARE SOLVABLE (1):
-- "My display is blurry after driver update" (software cause)
-- "Need automation for repetitive data entry tasks"
-- "App crashes when I try to export files"
-
-❌ NOT SOFTWARE SOLVABLE (0):
-- "How do I learn to make waterfall charts?" (learning problem)
-- "Need guidance on career direction" (advice needed)
-- "Looking for existing tools to solve X" (market solution)
-
-⚠️ EDGE CASES:
-- Hardware problems: Check if root cause is software-related
-- Tutorial requests: These are learning problems, not software problems
-- Rants about software: Only solvable if describing specific malfunctions
-
-Return ONLY one of:
-- 1  (if primarily solvable by software)
-- 0  (if not primarily solvable by software)
-
-Post (this post IS a problem):
-{post_text}
-"""
-
-EXTERNAL_REQUIRED_PROMPT = """You are a classifier that determines if solving a problem requires external action beyond the user's control.
-
-"External" means the solution depends on:
-- Manufacturer/company intervention (warranty, firmware, customer service)
-- Physical-world coordination (technicians, logistics, hardware deployment)
-- Institutional processes (government, insurance, regulations)
-- Purchasing existing market products/services
-
-"Not external" means the user can solve it through:
-- Personal settings/configuration changes
-- Software they can install or develop themselves
-- Individual learning or practice
-
-DECISION RULES:
-- Seeking existing products/alternatives → EXTERNAL (1)
-- Hardware failures needing replacement → EXTERNAL (1)
-- Career/education guidance → EXTERNAL (1)
-- Manufacturer-specific firmware issues → EXTERNAL (1)
-- Problems solvable by user configuration → NOT EXTERNAL (0)
-
-EXAMPLES:
-✅ EXTERNAL (1):
-- "Which 3D printer should I buy?" (market product)
-- "My GoXLR is broken, need alternatives" (replacement needed)
-- "Should I stay in SDET or switch careers?" (external opportunities)
-
-❌ NOT EXTERNAL (0):
-- "How do I configure my development environment?"
-- "Need to automate my personal workflow"
-- "Looking for programming help with my project"
-
-⚠️ EDGE CASES:
-- Hardware + software problems: If solution involves buying hardware → EXTERNAL
-- Prototype projects: If requires manufacturing/deployment → EXTERNAL
-- Learning needs: If requires structured education → EXTERNAL
-
-Return ONLY one of:
-- 1  (if external action or coordination is required to solve)
-- 0  (if the user can fully resolve it themselves)
-
-Post (this post IS a problem):
-{post_text}
-"""
-
-# Enhanced reasoning prompt with structured output
-FULL_REASON_PROMPT = """You are a precise classifier for Reddit posts. 
-Your task is to assign three binary labels and provide brief reasoning for each decision.
-
-Label definitions:
-1. is_problem: 1 if the post describes or implies a problem, difficulty, or question seeking a solution. Otherwise 0.
-2. is_software_solvable: 1 if the main problem can be solved primarily through software, code, configuration, or digital settings. Only 1 if is_problem == 1.
-3. is_external: 1 if solving the problem requires action or coordination beyond the user's control (e.g., manufacturer, company, government, or physical service). Only 1 if is_problem == 1.
-
-Rules:
-- If is_problem = 0, both is_software_solvable and is_external must be 0.
-- Base decisions on how the problem can be solved, not who caused it.
-- Consider the primary intent: seeking help vs. sharing advice vs. showcasing
-
-Return your response as valid JSON in this exact format:
-{{
-  "is_problem": "0 or 1",
-  "is_software_solvable": "0 or 1", 
-  "is_external": "0 or 1",
-  "problem_reason": "Brief explanation for is_problem decision",
-  "software_reason": "Brief explanation for is_software_solvable decision",
-  "external_reason": "Brief explanation for is_external decision"
-}}
-
-Post:
-{post_text}
-"""
-
-# Post intent classifier to handle edge cases
-POST_INTENT_PROMPT = """Classify the PRIMARY intent of this Reddit post:
-
-1 - SEEKING_HELP: User is asking for help, solutions, or recommendations
-2 - SHARING_ADVICE: User is sharing their own solution, workflow, or advice 
-3 - SHOWCASING: User is demonstrating/promoting something they built
-4 - DISCUSSING: User is sharing opinions, news, or general discussion
-
-Focus on the main purpose, not secondary elements.
-
-Return ONLY the number (1, 2, 3, or 4).
-
-Post:
-{post_text}
-"""
-
-# -----------------------------
-# Types
-# -----------------------------
-Label = Literal["0", "1", "error"]
-PostIntent = Literal["1", "2", "3", "4", "error"]
+# ---------------------------------------------------------------------------
+# Utility helpers
+# ---------------------------------------------------------------------------
 
 
-# -----------------------------
-# OpenAI Client Initialization
-# -----------------------------
+@dataclass
+class DedupeConfig:
+    """Configuration parameters for the deduplication stage."""
 
-def init_client() -> OpenAI:
-    """Initialize and return an OpenAI client using environment variables."""
-    load_dotenv()
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        logger.error("OPENAI_API_KEY not found in environment.")
-        raise RuntimeError("OPENAI_API_KEY not found in environment.")
-    return OpenAI(api_key=api_key)
+    enabled: bool = True
+    similarity_threshold: float = 0.5
+    canonical_policy: str = "earliest"
+    report_path: Optional[Path] = None
 
 
-# -----------------------------
-# Data IO
-# -----------------------------
-def load_data(path: str = "data/raw_data.csv", sample_size: int = 100) -> pd.DataFrame:
-    """Load raw CSV and return first `sample_size` rows (filled NaNs)."""
-    logger.info("Loading raw data from %s…", path)
-    df = pd.read_csv(path).fillna("")
-    sample_df = df.head(sample_size).copy()
-    if sample_df.empty:
-        logger.warning("No data found in raw dataset.")
-    else:
-        logger.info("Loaded %d rows.", len(sample_df))
-    return sample_df
+@dataclass
+class SplitConfig:
+    """Configuration for train/validation/test split ratios."""
+
+    train_ratio: float = 0.8
+    val_ratio: float = 0.1
+    test_ratio: float = 0.1
+    enabled: bool = True
 
 
-def save_results(df: pd.DataFrame, path: str = "data/labeled_sample.csv") -> None:
-    """Save labeled DataFrame to CSV."""
-    df.to_csv(path, index=False)
-    logger.info("Classification complete. Results saved to %s", path)
+def _normalise_whitespace(text: str) -> str:
+    return re.sub(r"\s+", " ", text).strip()
 
 
-def format_post(row: pd.Series) -> str:
-    """Build structured post text for prompting."""
-    title = (row.get("title", "") or "").strip()
-    body = (row.get("body", "") or "").strip()
-    return f"""### Title
-{title}
+def _strip_markdown(text: str) -> str:
+    """Remove common Markdown constructs from text."""
 
-### Body
-{body}
-""".strip()
+    # Remove code blocks and inline code
+    text = re.sub(r"```.*?```", " ", text, flags=re.DOTALL)
+    text = re.sub(r"`[^`]+`", " ", text)
 
+    # Remove images/links while keeping the anchor text if present
+    text = re.sub(r"!\[[^\]]*\]\([^)]*\)", " ", text)
+    text = re.sub(r"\[[^\]]*\]\([^)]*\)", lambda m: m.group(0).split("]")[0][1:], text)
 
-# -----------------------------
-# OpenAI Call with Retry
-# -----------------------------
-def _call_with_retry(
-        client: OpenAI,
-        prompt: str,
-        *,
-        model: str = "gpt-4o",
-        max_attempts: int = 5,
-        initial_delay: float = 2.0,
-) -> Optional[str]:
-    """Call the OpenAI API with retry logic; return text or None."""
-    delay = initial_delay
-    for attempt in range(1, max_attempts + 1):
-        try:
-            response = client.chat.completions.create(
-                model=model,
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0.0,
-                max_tokens=1000
-            )
-            text = response.choices[0].message.content
-            return (text or "").strip()
-        except Exception as exc:  # pylint: disable=broad-except
-            logger.error("Attempt %d failed: %s", attempt, exc)
-            if attempt == max_attempts:
-                return None
-            time.sleep(delay)
-            delay *= 2
-    return None
+    # Remove headings/blockquote markers/lists
+    text = re.sub(r"^>+\s?", " ", text, flags=re.MULTILINE)
+    text = re.sub(r"^#{1,6}\s*", " ", text, flags=re.MULTILINE)
+    text = re.sub(r"^(?:\s*[-*+]\s+|\d+\.\s+)", " ", text, flags=re.MULTILINE)
+    return text
 
 
-# -----------------------------
-# Parsing / Validation
-# -----------------------------
-def _normalize_binary_token(raw: Optional[str]) -> Label:
+def _strip_html(text: str) -> str:
+    text = re.sub(r"<[^>]+>", " ", text)
+    return html.unescape(text)
+
+
+def _remove_urls(text: str) -> Tuple[str, List[str]]:
+    """Remove URLs from ``text`` while collecting them."""
+
+    urls: List[str] = []
+
+    def _collect(match: re.Match[str]) -> str:
+        url = match.group(0)
+        urls.append(url)
+        return " "
+
+    cleaned = re.sub(r"https?://\S+", _collect, text)
+    return cleaned, urls
+
+
+def _remove_crosspost_boilerplate(text: str) -> str:
+    return re.sub(r"cross\s*post(ed)?\s+from\s+r/\w+", " ", text, flags=re.IGNORECASE)
+
+
+def _remove_mentions(text: str) -> str:
+    return re.sub(r"/?u/[A-Za-z0-9_-]+", " ", text)
+
+
+def _strip_emoji(text: str) -> str:
+    return "".join(ch for ch in text if unicodedata.category(ch) != "So")
+
+
+def _tokenise(text: str) -> List[str]:
+    return [tok for tok in re.split(r"[^a-z0-9]+", text) if tok]
+
+
+def _char_ngrams(text: str, n: int = 5) -> List[str]:
+    if len(text) < n:
+        return [text]
+    return [text[i : i + n] for i in range(len(text) - n + 1)]
+
+
+def _jaccard(a: Iterable[str], b: Iterable[str]) -> float:
+    set_a, set_b = set(a), set(b)
+    if not set_a and not set_b:
+        return 1.0
+    if not set_a or not set_b:
+        return 0.0
+    inter = len(set_a & set_b)
+    union = len(set_a | set_b)
+    return inter / union if union else 0.0
+
+
+def _combined_similarity(text_a: str, text_b: str) -> float:
+    tokens_a = _tokenise(text_a)
+    tokens_b = _tokenise(text_b)
+    token_score = _jaccard(tokens_a, tokens_b)
+
+    chars_a = _char_ngrams(text_a)
+    chars_b = _char_ngrams(text_b)
+    char_score = _jaccard(chars_a, chars_b)
+
+    # Weighted average gives stronger emphasis to token overlap while still
+    # rewarding similar phrasing.
+    return 0.7 * token_score + 0.3 * char_score
+
+
+@dataclass
+class NormalisedPost:
+    """Container for normalised text and metadata used during deduping."""
+
+    post_id: str
+    index: int
+    combined_text: str
+    normalised_text: str
+    urls: List[str]
+    subreddit: str
+    created_utc: float
+    body_length: int
+
+
+def normalise_post(row: pd.Series, *, post_id: str) -> NormalisedPost:
+    """Create a :class:`NormalisedPost` by applying canonical cleaning steps."""
+
+    title = (row.get("title", "") or "")
+    body = (row.get("body", "") or "")
+    combined = f"{title}\n\n{body}".strip()
+
+    lowered = combined.lower()
+    lowered = _remove_crosspost_boilerplate(lowered)
+    lowered = _remove_mentions(lowered)
+
+    no_html = _strip_html(lowered)
+    cleaned_urls_text, urls = _remove_urls(no_html)
+    no_markdown = _strip_markdown(cleaned_urls_text)
+    no_emoji = _strip_emoji(no_markdown)
+    no_symbols = re.sub(r"[^a-z0-9\s]", " ", no_emoji)
+
+    normalised = _normalise_whitespace(no_symbols)
+
+    subreddit = str(row.get("subreddit", "")).strip()
+    created_utc_raw = row.get("created_utc", math.inf)
+    created_utc = float(created_utc_raw) if pd.notna(created_utc_raw) else math.inf
+
+    cleaned_urls = [re.sub(r"[)\]\.,;:!?]+$", "", url.lower()) for url in urls]
+
+    return NormalisedPost(
+        post_id=post_id,
+        index=int(row.name),
+        combined_text=combined,
+        normalised_text=normalised,
+        urls=[_normalise_whitespace(url) for url in cleaned_urls],
+        subreddit=subreddit,
+        created_utc=created_utc,
+        body_length=len(body or ""),
+    )
+
+
+class UnionFind:
+    """Union-Find/Disjoint-set implementation for clustering duplicates."""
+
+    def __init__(self) -> None:
+        self.parent: Dict[int, int] = {}
+        self.rank: Dict[int, int] = {}
+
+    def find(self, item: int) -> int:
+        if self.parent.get(item, item) != item:
+            self.parent[item] = self.find(self.parent[item])
+        else:
+            self.parent.setdefault(item, item)
+            self.rank.setdefault(item, 0)
+        return self.parent[item]
+
+    def union(self, a: int, b: int) -> None:
+        root_a = self.find(a)
+        root_b = self.find(b)
+        if root_a == root_b:
+            return
+        rank_a = self.rank.get(root_a, 0)
+        rank_b = self.rank.get(root_b, 0)
+        if rank_a < rank_b:
+            self.parent[root_a] = root_b
+        elif rank_a > rank_b:
+            self.parent[root_b] = root_a
+        else:
+            self.parent[root_b] = root_a
+            self.rank[root_a] = rank_a + 1
+
+
+def _iter_candidate_pairs(posts: Sequence[NormalisedPost]) -> Iterator[Tuple[int, int]]:
+    """Yield pairs of indices that are likely duplicates using blocking heuristics."""
+
+    token_index: Dict[str, List[int]] = defaultdict(list)
+    url_index: Dict[str, List[int]] = defaultdict(list)
+    text_index: Dict[str, List[int]] = defaultdict(list)
+
+    for idx, post in enumerate(posts):
+        text_index[post.normalised_text].append(idx)
+        for url in post.urls:
+            url_index[url].append(idx)
+
+        tokens = _tokenise(post.normalised_text)
+        unique_tokens = {tok for tok in tokens if len(tok) > 3}
+        for token in unique_tokens:
+            token_index[token].append(idx)
+
+    # Exact text duplicates
+    for indices in text_index.values():
+        if len(indices) > 1:
+            for i in range(len(indices)):
+                for j in range(i + 1, len(indices)):
+                    yield indices[i], indices[j]
+
+    # Same URL duplicates
+    for indices in url_index.values():
+        if len(indices) > 1:
+            for i in range(len(indices)):
+                for j in range(i + 1, len(indices)):
+                    yield indices[i], indices[j]
+
+    # Candidate pairs based on shared tokens
+    seen_pairs: set[Tuple[int, int]] = set()
+    for indices in token_index.values():
+        if len(indices) < 2:
+            continue
+        for i in range(len(indices)):
+            for j in range(i + 1, len(indices)):
+                a, b = indices[i], indices[j]
+                pair = (min(a, b), max(a, b))
+                if pair not in seen_pairs:
+                    seen_pairs.add(pair)
+                    yield pair
+
+
+def cluster_duplicates(posts: Sequence[NormalisedPost], config: DedupeConfig) -> Dict[int, List[int]]:
+    """Cluster posts using similarity and URL signals."""
+
+    if not config.enabled or len(posts) <= 1:
+        return {idx: [idx] for idx in range(len(posts))}
+
+    uf = UnionFind()
+
+    for a_idx, b_idx in _iter_candidate_pairs(posts):
+        post_a = posts[a_idx]
+        post_b = posts[b_idx]
+
+        similarity = _combined_similarity(post_a.normalised_text, post_b.normalised_text)
+        shared_url = bool(set(post_a.urls) & set(post_b.urls))
+        if post_a.normalised_text == post_b.normalised_text or shared_url or similarity >= config.similarity_threshold:
+            uf.union(a_idx, b_idx)
+
+    clusters: Dict[int, List[int]] = defaultdict(list)
+    for idx in range(len(posts)):
+        root = uf.find(idx)
+        clusters[root].append(idx)
+
+    return dict(clusters)
+
+
+def _canonical_index(indices: List[int], posts: Sequence[NormalisedPost], policy: str) -> int:
+    """Select the canonical representative index for a cluster."""
+
+    candidates = [posts[i] for i in indices]
+
+    if policy == "longest":
+        candidates.sort(key=lambda p: (-p.body_length, p.created_utc, p.post_id))
+    else:  # default 'earliest'
+        candidates.sort(key=lambda p: (p.created_utc, -p.body_length, p.post_id))
+
+    return posts.index(candidates[0])
+
+
+def deduplicate_dataframe(df: pd.DataFrame, config: DedupeConfig) -> Tuple[pd.DataFrame, Dict[str, str], Dict[str, List[str]]]:
+    """Deduplicate dataframe rows and return canonical dataframe and mapping.
+
+    Returns
+    -------
+    canonical_df : pd.DataFrame
+        Dataframe containing only canonical rows.  Additional columns include
+        ``canonical_post_id`` (self-referential) and aggregated subreddit list.
+    id_mapping : Dict[str, str]
+        Mapping from original post_id -> canonical post_id.
+    cluster_members : Dict[str, List[str]]
+        Mapping from canonical post_id -> list of member post_ids.
     """
-    Normalize a model output to {"0","1","error"}.
-    - Take first line and first token
-    - Lowercase, strip surrounding punctuation
-    - Map 'yes'->'1', 'no'->'0'
-    """
-    if raw is None:
-        return "error"
-    token = (raw or "").strip().splitlines()[0].strip().split()[0].strip(".,:;\"'`").lower()
-    if token in {"0", "1"}:
-        return token  # type: ignore[return-value]
-    if token in {"yes", "y"}:
-        return "1"
-    if token in {"no", "n"}:
-        return "0"
-    logger.warning("Unparsable binary output: %r -> 'error'", raw)
-    return "error"
 
+    df = df.copy().reset_index(drop=True)
 
-def _normalize_intent_token(raw: Optional[str]) -> PostIntent:
-    """Normalize intent classification output."""
-    if raw is None:
-        return "error"
-    token = (raw or "").strip().splitlines()[0].strip().split()[0].strip(".,:;\"'`")
-    if token in {"1", "2", "3", "4"}:
-        return token  # type: ignore[return-value]
-    logger.warning("Unparsable intent output: %r -> 'error'", raw)
-    return "error"
-
-
-def _decode_raw_json(raw: Optional[str]) -> dict:
-    """Parse JSON response with error handling."""
-    if raw is None:
-        return {'error': 'No response received'}
-    try:
-        # Remove Markdown code fences if present
-        cleaned = raw.strip().strip("`")
-        if cleaned.startswith("json"):
-            cleaned = cleaned[4:].strip()
-        # Or more robust:
-        cleaned = cleaned.replace("```json", "").replace("```", "").strip()
-        return json.loads(cleaned)
-    except json.JSONDecodeError:
-        logger.warning("Failed to parse JSON response: %r", raw)
-        return {'error': raw}
-
-
-
-# -----------------------------
-# Enhanced Classifiers with Intent Detection
-# -----------------------------
-def classify_post_intent(client: OpenAI, post_text: str) -> PostIntent:
-    """Classify the primary intent of the post."""
-    raw = _call_with_retry(client, POST_INTENT_PROMPT.format(post_text=post_text))
-    return _normalize_intent_token(raw)
-
-
-def classify_is_problem(client: OpenAI, post_text: str, intent: PostIntent = None) -> Label:
-    """Return '1' if post is a problem, '0' if not, 'error' on failure."""
-    raw = _call_with_retry(client, PROBLEM_PROMPT.format(post_text=post_text))
-    result = _normalize_binary_token(raw)
-
-    # Apply intent-based validation
-    if intent == "3":  # SHOWCASING - rarely problems unless seeking feedback
-        if result == "1":
-            logger.info("Intent override: Showcase post marked as non-problem")
-            return "0"
-
-    return result
-
-
-def classify_is_software_solvable(client: OpenAI, post_text: str) -> Label:
-    """Return '1' if primarily solvable by software, '0' if not, 'error' on failure."""
-    raw = _call_with_retry(client, SOFTWARE_SOLVABLE_PROMPT.format(post_text=post_text))
-    return _normalize_binary_token(raw)
-
-
-def classify_is_external(client: OpenAI, post_text: str) -> Label:
-    """Return '1' if external coordination/resources required, '0' if not, 'error' on failure."""
-    raw = _call_with_retry(client, EXTERNAL_REQUIRED_PROMPT.format(post_text=post_text))
-    return _normalize_binary_token(raw)
-
-
-def describe_rationale(client: OpenAI, post_text: str) -> dict[str, str]:
-    """Get comprehensive classification with reasoning."""
-    print(FULL_REASON_PROMPT)
-    raw = _call_with_retry(client, FULL_REASON_PROMPT.format(post_text=post_text))
-    result = _decode_raw_json(raw)
-
-    # Ensure all required keys exist
-    required_keys = ["is_problem", "is_software_solvable", "is_external",
-                     "problem_reason", "software_reason", "external_reason"]
-    for key in required_keys:
-        if key not in result:
-            result[key] = "error"
-
-    return result
-
-
-# -----------------------------
-# Validation Functions
-# -----------------------------
-def validate_labels(is_problem: Label, is_software: Label, is_external: Label) -> tuple[Label, Label, Label]:
-    """Validate and correct label combinations according to rules."""
-    if is_problem == "0":
-        return is_problem, "0", "0"
-    elif is_problem == "error":
-        return is_problem, "error", "error"
+    if "post_id" in df.columns:
+        post_ids = df["post_id"].astype(str).tolist()
+    elif "url" in df.columns:
+        post_ids = df["url"].fillna("").astype(str).tolist()
     else:
-        return is_problem, is_software, is_external
+        post_ids = [f"row_{i}" for i in range(len(df))]
+
+    posts = [normalise_post(df.iloc[i], post_id=post_ids[i]) for i in range(len(df))]
+    clusters = cluster_duplicates(posts, config)
+
+    canonical_rows: List[pd.Series] = []
+    id_mapping: Dict[str, str] = {}
+    cluster_members: Dict[str, List[str]] = {}
+
+    for cluster in clusters.values():
+        if len(cluster) == 1:
+            idx = cluster[0]
+            post = posts[idx]
+            row = df.iloc[[idx]].copy()
+            row.loc[:, "canonical_post_id"] = post.post_id
+            row.loc[:, "duplicate_post_ids"] = json.dumps([post.post_id])
+            row.loc[:, "duplicate_subreddits"] = json.dumps(sorted({post.subreddit} if post.subreddit else []))
+            row.loc[:, "normalized_text"] = post.normalised_text
+            canonical_rows.append(row)
+            id_mapping[post.post_id] = post.post_id
+            cluster_members[post.post_id] = [post.post_id]
+            continue
+
+        canonical_idx = _canonical_index(cluster, posts, config.canonical_policy)
+        canonical_post = posts[canonical_idx]
+        canonical_row = df.iloc[[canonical_idx]].copy()
+
+        member_ids = [posts[i].post_id for i in cluster]
+        member_subreddits = sorted({posts[i].subreddit for i in cluster if posts[i].subreddit})
+
+        canonical_row.loc[:, "canonical_post_id"] = canonical_post.post_id
+        canonical_row.loc[:, "duplicate_post_ids"] = json.dumps(member_ids)
+        canonical_row.loc[:, "duplicate_subreddits"] = json.dumps(member_subreddits)
+        canonical_row.loc[:, "normalized_text"] = canonical_post.normalised_text
+
+        canonical_rows.append(canonical_row)
+
+        for member_id in member_ids:
+            id_mapping[member_id] = canonical_post.post_id
+
+        cluster_members[canonical_post.post_id] = member_ids
+
+    canonical_df = pd.concat(canonical_rows, ignore_index=True)
+
+    return canonical_df, id_mapping, cluster_members
 
 
-def detect_edge_cases(post_text: str, labels: tuple[Label, Label, Label]) -> dict:
-    """Detect potential edge cases based on content patterns."""
-    text_lower = post_text.lower()
-    edge_cases = []
+def write_dedupe_report(report_path: Path, clusters: Dict[str, List[str]], df: pd.DataFrame) -> None:
+    """Write a dedupe report to ``report_path`` in CSV format."""
 
-    # Common edge case patterns
-    if "here's my advice" in text_lower or "here's what i learned" in text_lower:
-        edge_cases.append("advice_sharing")
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    with report_path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(["canonical_post_id", "member_post_ids", "subreddits"])
+        for canonical_id, member_ids in sorted(clusters.items()):
+            mask = df["canonical_post_id"] == canonical_id
+            if mask.any():
+                subreddits_json = df.loc[mask, "duplicate_subreddits"].iat[0]
+                subreddit_list = sorted(json.loads(subreddits_json)) if subreddits_json else []
+            else:
+                subreddit_list = []
+            writer.writerow([canonical_id, "|".join(member_ids), "|".join(subreddit_list)])
 
-    if "randomly got" in text_lower or "turns out it was" in text_lower:
-        edge_cases.append("resolved_problem")
 
-    if "looking for" in text_lower and ("software" in text_lower or "tool" in text_lower):
-        edge_cases.append("seeking_existing_solution")
+# ---------------------------------------------------------------------------
+# Version 2 rule-based classifier
+# ---------------------------------------------------------------------------
 
-    if "how do i" in text_lower or "how to" in text_lower:
-        edge_cases.append("learning_question")
 
-    return {
-        "detected_patterns": edge_cases,
-        "confidence": "high" if not edge_cases else "medium"
+@dataclass
+class ClassificationResult:
+    intent: str
+    is_problem: str
+    is_software_solvable: str
+    is_external: str
+    problem_reason: str
+    software_reason: str
+    external_reason: str
+    detected_patterns: str
+    confidence: str
+
+
+INTENT_LABELS = {
+    "seeking_help": "1",
+    "sharing_advice": "2",
+    "showcasing": "3",
+    "discussing": "4",
+}
+
+
+class Version2RuleEngine:
+    """Rule-based classifier that codifies Version 2 guidance."""
+
+    PROBLEM_CUES = {
+        "problem",
+        "issue",
+        "bug",
+        "error",
+        "help",
+        "can't",
+        "cannot",
+        "stuck",
+        "frustrated",
+        "need",
+        "looking for",
+        "struggling",
+        "anyone else",
+        "recommend",
+        "how do i",
+        "how to",
+        "should i",
     }
 
+    RESOLVED_PATTERNS = {
+        "randomly got",
+        "turns out it was",
+        "finally solved",
+        "already fixed",
+    }
 
-# -----------------------------
-# Enhanced Processing
-# -----------------------------
-def process_posts(client: OpenAI, df: pd.DataFrame, sleep_seconds: float = 1.5) -> pd.DataFrame:
-    """
-    Enhanced processing pipeline with intent detection and validation.
+    ADVICE_PATTERNS = {
+        "here's my advice",
+        "i learned",
+        "guide",
+        "tips",
+        "workflow",
+    }
 
-    Pipeline:
-    1. Classify post intent
-    2. Run is_problem classification with intent context
-    3. If problem, classify software_solvable and external
-    4. Validate label combinations
-    5. Detect edge cases for quality control
-    """
-    results: list[dict[str, str]] = []
-    total = len(df)
-    logger.info("Processing %d posts with enhanced pipeline…", total)
+    SOFTWARE_CUES = {
+        "app",
+        "software",
+        "code",
+        "script",
+        "automation",
+        "api",
+        "driver",
+        "update",
+        "crash",
+        "bug",
+        "error",
+        "config",
+        "settings",
+        "install",
+    }
 
-    for idx, row in df.iterrows():
-        position = len(results) + 1
-        logger.info("Processing post %d/%d (index %s)…", position, total, idx)
+    NON_SOFTWARE_CUES = {
+        "hardware",
+        "printer",
+        "camera",
+        "device",
+        "replacement",
+        "warranty",
+        "career",
+        "job",
+        "education",
+        "course",
+        "class",
+        "buy",
+        "purchase",
+        "recommend a",
+        "looking for a",
+        "alternative",
+    }
 
-        post_text = format_post(row)
+    EXTERNAL_CUES = {
+        "warranty",
+        "manufacturer",
+        "support",
+        "customer service",
+        "rma",
+        "repair",
+        "buy",
+        "purchase",
+        "replacement",
+        "recommend a",
+        "recommend",
+        "alternative",
+        "which should i",
+        "career",
+        "job",
+        "school",
+        "college",
+        "printer",
+        "hardware",
+        "device",
+        "samsung",
+        "vevor",
+        "goxlr",
+    }
 
-        # Step 1: Classify intent
-        intent = classify_post_intent(client, post_text)
+    PROTOTYPE_PATTERNS = {
+        "prototype",
+        "sensor",
+        "manufacturing",
+        "deployment",
+    }
 
-        # Step 2: Classify problem with intent context
-        is_problem = classify_is_problem(client, post_text, intent)
+    UNCERTAINTY_WORDS = {
+        "maybe",
+        "not sure",
+        "probably",
+        "i think",
+        "i guess",
+        "perhaps",
+    }
 
-        # Step 3: Conditional classification
-        if is_problem == "1":
-            is_software = classify_is_software_solvable(client, post_text)
-            is_external = classify_is_external(client, post_text)
-            rationale = describe_rationale(client, post_text)
-        elif is_problem == "0":
-            is_software = "0"
-            is_external = "0"
-            rationale = {"reasoning": "Not a problem - no further classification needed"}
-        else:  # "error"
-            is_software = "error"
-            is_external = "error"
-            rationale = {"error": "Classification failed"}
+    def classify(self, text: str) -> ClassificationResult:
+        """Classify ``text`` and return labels with reasoning."""
 
-        # Step 4: Validate label combinations
-        is_problem, is_software, is_external = validate_labels(is_problem, is_software, is_external)
+        lowered = text.lower()
 
-        # Step 5: Edge case detection
-        rationale = rationale if isinstance(rationale, dict) else {}
+        intent = self._infer_intent(lowered)
+        intent_label = INTENT_LABELS[intent]
 
-        edge_case_info = detect_edge_cases(post_text, (is_problem, is_software, is_external))
-        edge_case_info = edge_case_info if isinstance(edge_case_info, dict) else {}
+        is_problem, problem_reason = self._classify_problem(lowered, intent)
+        is_software, software_reason = self._classify_software(lowered, is_problem)
+        is_external, external_reason = self._classify_external(lowered, is_problem)
 
-        results.append({
-            "title": (row.get("title", "") or ""),
-            "body": (row.get("body", "") or ""),
-            "intent": intent,
-            "is_problem": is_problem,
-            "is_software_solvable": is_software,
-            "is_external": is_external,
-            # 🧩 Extract reasons explicitly
-            "problem_reason": rationale.get("problem_reason", ""),
-            "software_reason": rationale.get("software_reason", ""),
-            "external_reason": rationale.get("external_reason", ""),
-            # 🧩 Keep detected patterns / confidence separate
-            "detected_patterns": ", ".join(edge_case_info.get("detected_patterns", [])),
-            "confidence": edge_case_info.get("confidence", "Unknown"),
-        })
+        detected_patterns = self._detect_edge_cases(lowered)
+        confidence = self._confidence(lowered, detected_patterns)
 
-        time.sleep(sleep_seconds)
+        return ClassificationResult(
+            intent=intent_label,
+            is_problem=is_problem,
+            is_software_solvable=is_software,
+            is_external=is_external,
+            problem_reason=problem_reason,
+            software_reason=software_reason,
+            external_reason=external_reason,
+            detected_patterns=", ".join(detected_patterns),
+            confidence=confidence,
+        )
 
-    # Ensure desired column order
-    out_df = pd.DataFrame(results)[
-        ["title", "body", "intent", "is_problem", "is_software_solvable",
-         "is_external", "problem_reason", "software_reason", "external_reason", "detected_patterns", "confidence"]
-    ]
-    return out_df
+    # --- private helpers -------------------------------------------------
+
+    def _infer_intent(self, text: str) -> str:
+        if any(pattern in text for pattern in self.PROBLEM_CUES):
+            return "seeking_help"
+        if any(pattern in text for pattern in self.ADVICE_PATTERNS):
+            return "sharing_advice"
+        if any(phrase in text for phrase in ["i built", "i made", "launch", "showcase"]):
+            return "showcasing"
+        return "discussing"
+
+    def _classify_problem(self, text: str, intent: str) -> Tuple[str, str]:
+        if any(pattern in text for pattern in self.RESOLVED_PATTERNS):
+            return "0", "Describes a resolved situation without an active pain point."
+
+        cues_found = [pattern for pattern in self.PROBLEM_CUES if pattern in text]
+        if intent == "showcasing" and not cues_found:
+            return "0", "Showcase content without evidence of a pain point."
+
+        if cues_found:
+            reason = f"Detected problem cues: {', '.join(sorted(set(cues_found))[:3])}."
+            return "1", reason
+
+        if intent == "sharing_advice":
+            return "1", "Advice-sharing anchored in a real frustration (Version 2 guidance)."
+
+        return "0", "No unresolved pain point, request, or frustration detected."
+
+    def _classify_software(self, text: str, is_problem: str) -> Tuple[str, str]:
+        if is_problem != "1":
+            return "0", "Not a problem, so downstream labels forced to 0."
+
+        software_hits = [cue for cue in self.SOFTWARE_CUES if cue in text]
+        non_software_hits = [cue for cue in self.NON_SOFTWARE_CUES if cue in text]
+
+        if "looking for" in text and "software" in text and not any(word in text for word in {"build", "create", "develop"}):
+            return "0", "Requesting an existing software product (market search)."
+
+        if software_hits and not non_software_hits:
+            return "1", f"Software signals present ({', '.join(sorted(set(software_hits))[:3])})."
+
+        if non_software_hits and not software_hits:
+            return "0", f"Looks like market/knowledge request ({', '.join(sorted(set(non_software_hits))[:3])})."
+
+        if "how do i" in text or "how to" in text:
+            return "0", "Learning/information-seeking question rather than malfunction."
+
+        if "driver" in software_hits or "update" in software_hits:
+            return "1", "Hardware symptom tied to software/driver cue."
+
+        if software_hits and non_software_hits:
+            return "0", "Mixed hardware/product request — not purely software solvable."
+
+        return "0", "No decisive software cues detected."
+
+    def _classify_external(self, text: str, is_problem: str) -> Tuple[str, str]:
+        if is_problem != "1":
+            return "0", "Not a problem, so downstream labels forced to 0."
+
+        external_hits = [cue for cue in self.EXTERNAL_CUES if cue in text]
+        prototype_hits = [cue for cue in self.PROTOTYPE_PATTERNS if cue in text]
+
+        if "which" in text and "should i" in text:
+            return "1", "Choosing between market options — requires external solution."
+
+        if "job" in text and "advice" in text:
+            return "0", "Career advice rant does not require external coordination."
+
+        if external_hits:
+            return "1", f"Requires external coordination ({', '.join(sorted(set(external_hits))[:3])})."
+
+        if prototype_hits:
+            return "1", "Prototype involves hardware/manufacturing components."
+
+        if "how do i" in text or "how to" in text:
+            return "0", "Knowledge gap solvable by the user with guidance."
+
+        return "0", "No evidence of external coordination required."
+
+    def _detect_edge_cases(self, text: str) -> List[str]:
+        patterns = []
+        if "how do i" in text or "how to" in text:
+            patterns.append("learning_question")
+        if "looking for" in text:
+            patterns.append("seeking_existing_solution")
+        if any(pattern in text for pattern in self.ADVICE_PATTERNS):
+            patterns.append("advice_sharing")
+        if any(pattern in text for pattern in self.RESOLVED_PATTERNS):
+            patterns.append("resolved_problem")
+        return patterns
+
+    def _confidence(self, text: str, patterns: List[str]) -> str:
+        if any(word in text for word in self.UNCERTAINTY_WORDS):
+            return "low"
+        if patterns:
+            return "medium"
+        return "high"
 
 
-# -----------------------------
-# Main
-# -----------------------------
-def main() -> None:
-    """Entry point: load data, classify, and save results."""
-    client = init_client()
-    sample_df = load_data("data/raw_data.csv", sample_size=30)
-    if sample_df.empty:
-        logger.warning("No data to process. Exiting.")
-        return
-    labeled_df = process_posts(client, sample_df, sleep_seconds=0.5)
-    save_results(labeled_df, "data/labeled_sample.csv")
+# ---------------------------------------------------------------------------
+# Dataset splitting
+# ---------------------------------------------------------------------------
 
 
-if __name__ == "__main__":
+def assign_splits(df: pd.DataFrame, cluster_members: Dict[str, List[str]], config: SplitConfig, seed: int = 42) -> pd.DataFrame:
+    """Assign train/val/test splits ensuring clusters remain together."""
+
+    if not config.enabled:
+        df["split"] = "unsplit"
+        return df
+
+    ratios = [config.train_ratio, config.val_ratio, config.test_ratio]
+    if not math.isclose(sum(ratios), 1.0, abs_tol=1e-6):
+        raise ValueError("Split ratios must sum to 1.0")
+
+    canonical_ids = list(cluster_members.keys())
+    random.Random(seed).shuffle(canonical_ids)
+
+    total = len(canonical_ids)
+    train_cut = int(total * config.train_ratio)
+    val_cut = train_cut + int(total * config.val_ratio)
+
+    assignments: Dict[str, str] = {}
+    for i, canonical_id in enumerate(canonical_ids):
+        if i < train_cut:
+            split = "train"
+        elif i < val_cut:
+            split = "val"
+        else:
+            split = "test"
+        assignments[canonical_id] = split
+
+    df["split"] = df["canonical_post_id"].map(assignments)
+    return df
+
+
+# ---------------------------------------------------------------------------
+# Pipeline orchestration
+# ---------------------------------------------------------------------------
+
+
+def classify_dataframe(df: pd.DataFrame, *, dedupe_config: DedupeConfig, split_config: SplitConfig) -> Tuple[pd.DataFrame, Dict[str, str], Dict[str, List[str]]]:
+    """Run deduplication and classification on ``df``."""
+
+    logger.info("Starting deduplication (enabled=%s, threshold=%.2f)", dedupe_config.enabled, dedupe_config.similarity_threshold)
+    canonical_df, id_mapping, clusters = deduplicate_dataframe(df, dedupe_config)
+    logger.info("Deduplication complete: %d -> %d canonical posts (%d clusters)", len(df), len(canonical_df), len(clusters))
+
+    if dedupe_config.report_path:
+        write_dedupe_report(dedupe_config.report_path, clusters, canonical_df)
+        logger.info("Dedupe report written to %s", dedupe_config.report_path)
+
+    classifier = Version2RuleEngine()
+    for idx, row in canonical_df.iterrows():
+        text = f"{row.get('title', '')}\n\n{row.get('body', '')}".strip()
+        classification = classifier.classify(text)
+        canonical_df.at[idx, "intent"] = classification.intent
+        canonical_df.at[idx, "is_problem"] = classification.is_problem
+        canonical_df.at[idx, "is_software_solvable"] = classification.is_software_solvable
+        canonical_df.at[idx, "is_external"] = classification.is_external
+        canonical_df.at[idx, "problem_reason"] = classification.problem_reason
+        canonical_df.at[idx, "software_reason"] = classification.software_reason
+        canonical_df.at[idx, "external_reason"] = classification.external_reason
+        canonical_df.at[idx, "detected_patterns"] = classification.detected_patterns
+        canonical_df.at[idx, "confidence"] = classification.confidence
+
+    canonical_df = assign_splits(canonical_df, clusters, split_config)
+    return canonical_df, id_mapping, clusters
+
+
+def load_dataframe(path: Path) -> pd.DataFrame:
+    if not path.exists():
+        raise FileNotFoundError(path)
+    df = pd.read_csv(path).fillna("")
+    df.reset_index(drop=True, inplace=True)
+    return df
+
+
+def save_dataframe(df: pd.DataFrame, path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(path, index=False)
+
+
+def parse_args(args: Optional[Sequence[str]] = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Run Version 2 classification pipeline with deduplication")
+    parser.add_argument("--input", type=Path, default=Path("data/raw_data.csv"), help="Path to the raw Reddit CSV file")
+    parser.add_argument("--output", type=Path, default=Path("data/labeled_sample.csv"), help="Output path for labeled CSV")
+    parser.add_argument("--dedupe", choices=["on", "off"], default="on", help="Enable or disable deduplication")
+    parser.add_argument("--similarity-threshold", type=float, default=0.5, help="Duplicate similarity threshold")
+    parser.add_argument("--canonical-policy", choices=["earliest", "longest"], default="earliest", help="Canonical selection policy")
+    parser.add_argument("--dedupe-report", type=Path, default=None, help="Optional CSV report for duplicate clusters")
+    parser.add_argument("--no-split", action="store_true", help="Disable train/val/test splitting")
+    parser.add_argument("--train-ratio", type=float, default=0.8)
+    parser.add_argument("--val-ratio", type=float, default=0.1)
+    parser.add_argument("--test-ratio", type=float, default=0.1)
+    parser.add_argument("--log-level", default=os.environ.get("LOG_LEVEL", "INFO"))
+    return parser.parse_args(args)
+
+
+def main(argv: Optional[Sequence[str]] = None) -> None:
+    args = parse_args(argv)
+    logging.basicConfig(level=getattr(logging, str(args.log_level).upper(), logging.INFO), format="%(asctime)s - %(levelname)s - %(message)s")
+
+    df = load_dataframe(args.input)
+
+    dedupe_config = DedupeConfig(
+        enabled=args.dedupe == "on",
+        similarity_threshold=args.similarity_threshold,
+        canonical_policy=args.canonical_policy,
+        report_path=args.dedupe_report,
+    )
+
+    split_config = SplitConfig(
+        enabled=not args.no_split,
+        train_ratio=args.train_ratio,
+        val_ratio=args.val_ratio,
+        test_ratio=args.test_ratio,
+    )
+
+    canonical_df, id_mapping, clusters = classify_dataframe(df, dedupe_config=dedupe_config, split_config=split_config)
+    save_dataframe(canonical_df, args.output)
+
+    logger.info("Saved labeled dataset to %s", args.output)
+    logger.info("Processed %d posts (canonical). Dedupe clusters: %d", len(canonical_df), len(clusters))
+
+    mapping_path = args.output.with_suffix(".mapping.json")
+    mapping_path.write_text(json.dumps(id_mapping, indent=2), encoding="utf-8")
+    logger.info("Wrote ID mapping to %s", mapping_path)
+
+
+if __name__ == "__main__":  # pragma: no cover - CLI entry point
     main()
+
