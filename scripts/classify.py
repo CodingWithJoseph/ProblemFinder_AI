@@ -41,7 +41,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Iterable, Iterator, List, Mapping, MutableMapping, Optional, Sequence, Tuple
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlsplit
 
 import pandas as pd
 import yaml
@@ -396,14 +396,53 @@ def _strip_html(text: str) -> str:
     return html.unescape(text)
 
 
+def is_valid_ipv6_url(url):
+    """Check if a URL contains a valid IPv6 address format."""
+    # IPv6 URLs should have the format: scheme://[IPv6]:port/path
+    ipv6_pattern = r'://\[([0-9a-fA-F:]+)\]'
+    return re.search(ipv6_pattern, url) is not None
+
+
+def safe_urlsplit(url):
+    """Safely split a URL with validation for IPv6 format."""
+    try:
+        # Basic validation - check if it looks like a valid URL
+        if not url or not isinstance(url, str):
+            return None
+
+        # Handle potential IPv6 URL issues
+        if '[' in url and ']' in url:
+            if not is_valid_ipv6_url(url):
+                logger.warning(f"Skipping invalid IPv6 URL: {url[:50]}...")
+                return None
+
+        return urlsplit(url)
+    except ValueError as e:
+        logger.warning(f"ValueError parsing URL: {e} for URL: {url[:50]}...")
+        return None
+    except Exception as e:
+        logger.warning(f"Unexpected error parsing URL: {e} for URL: {url[:50]}...")
+        return None
+
+
 def _remove_urls(text: str) -> Tuple[str, List[str]]:
-    """Remove URLs from ``text`` while collecting them."""
+    """Remove URLs from ``text`` while collecting them with robust error handling."""
 
     urls: List[str] = []
 
     def _collect(match: re.Match[str]) -> str:
         url = match.group(0)
-        urls.append(url)
+        # Validate URL before adding to collection
+        try:
+            parsed = safe_urlsplit(url)
+            if parsed is not None:
+                urls.append(url)
+            else:
+                # Log the problematic URL for debugging
+                logger.debug(f"Skipped malformed URL: {url[:50]}...")
+        except Exception as e:
+            logger.debug(f"Error processing URL {url[:50]}...: {e}")
+
         return " "
 
     cleaned = re.sub(r"https?://\S+", _collect, text)
