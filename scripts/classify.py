@@ -479,21 +479,26 @@ def process_posts(client: OpenAI, df: pd.DataFrame, sleep_seconds: float = 1.5) 
         is_problem, is_software, is_external = validate_labels(is_problem, is_software, is_external)
 
         # Step 5: Edge case detection
-        edge_case_info = detect_edge_cases(post_text, (is_problem, is_software, is_external))
+        rationale = rationale if isinstance(rationale, dict) else {}
 
-        results.append(
-            {
-                "title": (row.get("title", "") or ""),
-                "body": (row.get("body", "") or ""),
-                "intent": intent,
-                "is_problem": is_problem,
-                "is_software_solvable": is_software,
-                "is_external": is_external,
-                "rationale": json.dumps(rationale) if isinstance(rationale, dict) else str(rationale),
-                "edge_cases": json.dumps(edge_case_info),
-                "confidence": edge_case_info.get("confidence", "medium")
-            }
-        )
+        edge_case_info = detect_edge_cases(post_text, (is_problem, is_software, is_external))
+        edge_case_info = edge_case_info if isinstance(edge_case_info, dict) else {}
+
+        results.append({
+            "title": (row.get("title", "") or ""),
+            "body": (row.get("body", "") or ""),
+            "intent": intent,
+            "is_problem": is_problem,
+            "is_software_solvable": is_software,
+            "is_external": is_external,
+            # 🧩 Extract reasons explicitly
+            "problem_reason": rationale.get("problem_reason", ""),
+            "software_reason": rationale.get("software_reason", ""),
+            "external_reason": rationale.get("external_reason", ""),
+            # 🧩 Keep detected patterns / confidence separate
+            "detected_patterns": ", ".join(edge_case_info.get("detected_patterns", [])),
+            "confidence": edge_case_info.get("confidence", "Unknown"),
+        })
 
         time.sleep(sleep_seconds)
 
