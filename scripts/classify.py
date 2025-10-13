@@ -46,6 +46,7 @@ from urllib.parse import urlparse, urlsplit
 import pandas as pd
 import yaml
 from jsonschema import ValidationError, validate
+from openai import OpenAI
 
 try:  # pragma: no cover - import flexibility for script execution
     from scripts.cache import CacheConfig, ResponseCache, cached_api_call
@@ -72,6 +73,9 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running as packa
 
 
 logger = logging.getLogger(__name__)
+
+
+_OPENAI_CLIENT = OpenAI()
 
 
 # ---------------------------------------------------------------------------
@@ -288,16 +292,88 @@ def _create_member_callables(
     rate_limiter: RateLimiter,
     model_cfg: ModelConfig,
 ) -> Dict[str, Any]:
+    def _coerce_label(value: Any) -> str:
+        if isinstance(value, str):
+            stripped = value.strip()
+            if stripped in {"0", "1"}:
+                return stripped
+            if stripped.lower() in {"true", "false"}:
+                return "1" if stripped.lower() == "true" else "0"
+            if stripped.isdigit():
+                return "1" if int(stripped) >= 1 else "0"
+        if isinstance(value, bool):
+            return "1" if value else "0"
+        if isinstance(value, (int, float)):
+            return "1" if float(value) >= 0.5 else "0"
+        return ""
+
     def _llm_member(member_name: str) -> Any:
+        if member_name == "direct":
+            system_prompt = (
+                "You are a classifier for Reddit posts. "
+                "Decide whether the post describes a problem, if that problem is solvable with software alone, and whether external help is needed. "
+                "Respond ONLY with minified JSON in this form: {\"is_problem\": \"0 or 1\", \"is_software_solvable\": \"0 or 1\", "
+                "\"is_external\": \"0 or 1\", \"confidence\": number between 0 and 1, \"rationale\": short factual string}. "
+                "Keep the rationale concise and free of Markdown."
+            )
+            default_confidence = 0.8
+        else:
+            system_prompt = (
+                "You are a careful classifier for Reddit posts. Think step by step about whether the post describes a problem, "
+                "if software alone can solve it, and whether outside coordination is required. After reasoning internally, respond ONLY "
+                "with JSON matching {\"is_problem\": \"0 or 1\", \"is_software_solvable\": \"0 or 1\", \"is_external\": \"0 or 1\", "
+                "\"confidence\": number between 0 and 1, \"rationale\": short factual string}."
+            )
+            default_confidence = 0.9
+
         def _call(text: str) -> EnsembleMemberResult:
             prompt_version = f"{PROMPT_VERSION}:{member_name}"
 
             def _fetch() -> Dict[str, Any]:
                 with rate_limiter.slot():
-                    classification = engine.classify(text)
-                    payload = {field: getattr(classification, field) for field in classification.__dataclass_fields__}
-                    rationale = payload.get("problem_reason") or payload.get("software_reason") or payload.get("external_reason")
-                    return {"payload": payload, "confidence": 1.0, "rationale": rationale}
+                    response = _OPENAI_CLIENT.chat.completions.create(
+                        model=model_cfg.name,
+                        temperature=model_cfg.temperature,
+                        seed=model_cfg.seed,
+                        messages=[
+                            {"role": "system", "content": system_prompt},
+                            {"role": "user", "content": f"Post:\n{text.strip()}"},
+                        ],
+                    )
+                content = ""
+                if response.choices:
+                    content = response.choices[0].message.content or ""
+                cleaned = content.strip()
+                if cleaned.startswith("```"):
+                    cleaned = cleaned.strip("`")
+                    parts = cleaned.split("\n", 1)
+                    if parts and parts[0].lower().startswith("json"):
+                        cleaned = parts[1] if len(parts) > 1 else ""
+                try:
+                    parsed = json.loads(cleaned)
+                except json.JSONDecodeError as exc:  # pragma: no cover - defensive
+                    raise ValueError(f"Failed to parse JSON from LLM response: {cleaned}") from exc
+
+                rationale = str(parsed.get("rationale", "")).strip()
+                confidence_value = parsed.get("confidence", default_confidence)
+                try:
+                    confidence_float = float(confidence_value)
+                except (TypeError, ValueError):  # pragma: no cover - defensive
+                    confidence_float = default_confidence
+                confidence_float = max(0.0, min(1.0, confidence_float))
+
+                payload = {
+                    "intent": str(parsed.get("intent", "")) if parsed.get("intent") is not None else "",
+                    "is_problem": _coerce_label(parsed.get("is_problem")),
+                    "is_software_solvable": _coerce_label(parsed.get("is_software_solvable")),
+                    "is_external": _coerce_label(parsed.get("is_external")),
+                    "problem_reason": rationale,
+                    "software_reason": rationale,
+                    "external_reason": rationale,
+                    "detected_patterns": "",
+                    "confidence": confidence_float,
+                }
+                return {"payload": payload, "confidence": confidence_float, "rationale": rationale}
 
             response = cached_api_call(
                 model=model_cfg.name,
@@ -308,7 +384,11 @@ def _create_member_callables(
                 cache_stats=cache_stats,
             )
             payload = response.get("payload", {})
-            confidence = float(response.get("confidence", 1.0))
+            confidence = response.get("confidence", default_confidence)
+            try:
+                confidence = float(confidence)
+            except (TypeError, ValueError):  # pragma: no cover - defensive
+                confidence = default_confidence
             rationale = response.get("rationale", "")
             return EnsembleMemberResult(member=member_name, payload=payload, confidence=confidence, rationale=rationale)
 
@@ -778,7 +858,7 @@ class ClassificationResult:
     software_reason: str
     external_reason: str
     detected_patterns: str
-    confidence: str
+    confidence: float
 
 
 CLASSIFICATION_SCHEMA: Dict[str, Any] = {
@@ -792,7 +872,7 @@ CLASSIFICATION_SCHEMA: Dict[str, Any] = {
         "software_reason": {"type": "string"},
         "external_reason": {"type": "string"},
         "detected_patterns": {"type": "string"},
-        "confidence": {"type": "string"},
+        "confidence": {"type": "number"},
     },
     "required": [
         "intent",
@@ -868,17 +948,35 @@ class Version2RuleEngine:
     }
 
     RESOLVED_PATTERNS = {
-        "randomly got",
-        "turns out it was",
-        "finally solved",
         "already fixed",
+        "finally solved",
+        "fixed it by",
+        "fixed this by",
+        "i fixed it by",
+        "i fixed this by",
+        "issue was resolved when",
+        "it was resolved when",
+        "ended up fixing it by",
+        "randomly got",
+        "solved it by",
+        "solved this by",
+        "turns out it was",
+        "was able to fix it by",
     }
 
     ADVICE_PATTERNS = {
         "here's my advice",
+        "here's how i",
+        "here is how i",
         "i learned",
+        "lessons learned",
         "guide",
+        "how i",
+        "playbook",
         "tips",
+        "tips and tricks",
+        "tutorial",
+        "walkthrough",
         "workflow",
     }
 
@@ -1084,24 +1182,24 @@ class Version2RuleEngine:
 
     def _classify_problem(self, text: str, intent: str) -> Tuple[str, str]:
         if any(pattern in text for pattern in self.RESOLVED_PATTERNS):
-            return "0", "Describes a resolved situation without an active pain point."
+            return "0", "Story explains how the issue was already resolved."
 
         cues_found = [pattern for pattern in self.PROBLEM_CUES if pattern in text]
         filtered_cues = self._filter_negated_cues(text, cues_found)
         if intent == "showcasing" and not cues_found:
-            return "0", "Showcase content without evidence of a pain point."
+            return "0", "Showcase post without any unresolved frustration."
 
         if filtered_cues:
-            reason = f"Detected problem cues: {', '.join(sorted(set(filtered_cues))[:3])}."
+            reason = f"Found unresolved problem cues: {', '.join(sorted(set(filtered_cues))[:3])}."
             return "1", reason
 
         if cues_found and not filtered_cues:
-            return "0", "Problem-like phrases only appear in a negated context."
+            return "0", "Problem words only show up in negated phrases."
 
         if intent == "sharing_advice":
-            return "1", "Advice-sharing anchored in a real frustration (Version 2 guidance)."
+            return "1", "Post shares advice based on a real past problem."
 
-        return "0", "No unresolved pain point, request, or frustration detected."
+        return "0", "No unresolved pain point or help request detected."
 
     def _filter_negated_cues(self, text: str, cues: List[str]) -> List[str]:
         """Remove cues that only appear as part of negated phrases."""
@@ -1115,7 +1213,7 @@ class Version2RuleEngine:
 
     def _classify_software(self, text: str, is_problem: str) -> Tuple[str, str]:
         if is_problem != "1":
-            return "0", "Not a problem, so downstream labels forced to 0."
+            return "0", "No active problem, so this label stays at 0."
 
         software_hits = [cue for cue in self.SOFTWARE_CUES if cue in text]
         non_software_hits = [cue for cue in self.NON_SOFTWARE_CUES if cue in text]
@@ -1128,51 +1226,51 @@ class Version2RuleEngine:
             )
             and not any(word in text for word in {"build", "create", "develop"})
         ):
-            return "0", "User is searching for existing software (market solution)."
+            return "0", "Looking for an existing product rather than fixing software."
 
         if software_hits and not non_software_hits:
-            return "1", f"Software signals present ({', '.join(sorted(set(software_hits))[:3])})."
+            return "1", f"Clear software troubleshooting cues: {', '.join(sorted(set(software_hits))[:3])}."
 
         if non_software_hits and not software_hits:
-            return "0", f"Looks like market/knowledge request ({', '.join(sorted(set(non_software_hits))[:3])})."
+            return "0", f"Signals point to hardware or market research ({', '.join(sorted(set(non_software_hits))[:3])})."
 
         if "how do i" in text or "how to" in text:
-            return "0", "Learning/information-seeking question rather than malfunction."
+            return "0", "Question is about learning, not repairing software."
 
         if "driver" in software_hits or "update" in software_hits:
-            return "1", "Hardware symptom tied to software/driver cue."
+            return "1", "Mentions drivers or updates linking problem to software."
 
         if software_hits and non_software_hits:
-            return "0", "Mixed hardware/product request — not purely software solvable."
+            return "0", "Mix of hardware and product cues, so not purely software solvable."
 
-        return "0", "No decisive software cues detected."
+        return "0", "No strong software-related clues detected."
 
     def _classify_external(self, text: str, is_problem: str) -> Tuple[str, str]:
         if is_problem != "1":
-            return "0", "Not a problem, so downstream labels forced to 0."
+            return "0", "No active problem, so this label stays at 0."
 
         external_hits = [cue for cue in self.EXTERNAL_CUES if cue in text]
         prototype_hits = [cue for cue in self.PROTOTYPE_PATTERNS if cue in text]
 
         if "which" in text and "should i" in text:
-            return "1", "Choosing between market options — requires external solution."
+            return "1", "Choosing between outside options, so external help is needed."
 
         if "job" in text and "advice" in text:
-            return "0", "Career advice rant does not require external coordination."
+            return "0", "Career advice discussion can be handled individually."
 
         if any(word in text for word in {"career", "school", "college"}) and "advice" in text:
-            return "0", "Education or career advice does not need external coordination."
+            return "0", "Education or career advice does not need outside partners."
 
         if external_hits:
-            return "1", f"Requires external coordination ({', '.join(sorted(set(external_hits))[:3])})."
+            return "1", f"Needs outside support: {', '.join(sorted(set(external_hits))[:3])}."
 
         if prototype_hits:
-            return "1", "Prototype involves hardware/manufacturing components."
+            return "1", "Prototype work calls for external hardware or fabrication help."
 
         if "how do i" in text or "how to" in text:
-            return "0", "Knowledge gap solvable by the user with guidance."
+            return "0", "User can act alone with the right guidance."
 
-        return "0", "No evidence of external coordination required."
+        return "0", "No signs that external coordination is required."
 
     def _detect_edge_cases(self, text: str) -> List[str]:
         patterns = []
@@ -1186,12 +1284,12 @@ class Version2RuleEngine:
             patterns.append("resolved_problem")
         return patterns
 
-    def _confidence(self, text: str, patterns: List[str]) -> str:
+    def _confidence(self, text: str, patterns: List[str]) -> float:
         if any(word in text for word in self.UNCERTAINTY_WORDS):
-            return "low"
+            return 0.3
         if patterns:
-            return "medium"
-        return "high"
+            return 0.7
+        return 1.0
 
 
 # ---------------------------------------------------------------------------
@@ -1376,11 +1474,12 @@ def classify_dataframe(
                 payload = dict(payload)
                 payload.setdefault(
                     "confidence",
-                    f"{metadata.get('field_confidence', {}).get('intent', 1.0):.2f}",
+                    float(metadata.get("field_confidence", {}).get("intent", 1.0)),
                 )
-                for field in CLASSIFICATION_SCHEMA["properties"].keys():
-                    payload.setdefault(field, "")
-                validate(CLASSIFICATION_SCHEMA, payload)
+                for field, schema in CLASSIFICATION_SCHEMA["properties"].items():
+                    default_value = 0.0 if schema.get("type") == "number" else ""
+                    payload.setdefault(field, default_value)
+                validate(instance=payload, schema=CLASSIFICATION_SCHEMA)
                 metadata.setdefault("member_rationales", {})
                 metadata["member_rationales"] = {
                     key: redact_pii(value or "") for key, value in metadata["member_rationales"].items()
