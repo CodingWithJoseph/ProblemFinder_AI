@@ -896,12 +896,24 @@ class Version2RuleEngine:
         "rma",
         "repair",
         "buy",
+        "buy a",
+        "buy new",
+        "buying",
+        "looking to buy",
         "purchase",
+        "purchase a",
         "replacement",
         "recommend a",
         "recommend",
         "alternative",
         "which should i",
+        "vendor",
+        "supplier",
+        "retailer",
+        "store",
+        "dealer",
+        "quote",
+        "estimate",
         "career",
         "job",
         "school",
@@ -910,6 +922,17 @@ class Version2RuleEngine:
         "hardware",
         "device",
         "samsung",
+        "apple",
+        "dell",
+        "hp",
+        "lenovo",
+        "asus",
+        "acer",
+        "microsoft",
+        "sony",
+        "lg",
+        "toshiba",
+        "msi",
         "vevor",
         "goxlr",
     }
@@ -1046,6 +1069,9 @@ class Version2RuleEngine:
         if "job" in text and "advice" in text:
             return "0", "Career advice rant does not require external coordination."
 
+        if any(word in text for word in {"career", "school", "college"}) and "advice" in text:
+            return "0", "Education or career advice does not need external coordination."
+
         if external_hits:
             return "1", f"Requires external coordination ({', '.join(sorted(set(external_hits))[:3])})."
 
@@ -1122,12 +1148,43 @@ def assign_splits(df: pd.DataFrame, cluster_members: Dict[str, List[str]], confi
 def classify_dataframe(
     df: pd.DataFrame,
     *,
-    run_config: RunConfig,
-    cache: ResponseCache,
-    rate_limiter: RateLimiter,
+    run_config: Optional[RunConfig] = None,
+    cache: Optional[ResponseCache] = None,
+    rate_limiter: Optional[RateLimiter] = None,
     historical_metrics: Optional[Sequence[Mapping[str, Any]]] = None,
-) -> Tuple[pd.DataFrame, Dict[str, str], Dict[str, List[str]], Dict[str, Any]]:
-    """Run deduplication and classification on ``df``."""
+    dedupe_config: Optional[DedupeConfig] = None,
+    split_config: Optional[SplitConfig] = None,
+) -> (
+    Tuple[pd.DataFrame, Dict[str, str], Dict[str, List[str]], Dict[str, Any]]
+    | Tuple[pd.DataFrame, Dict[str, str], Dict[str, List[str]]]
+):
+    """Run deduplication and classification on ``df``.
+
+    The function supports both the modern pipeline interface (supplying a
+    ``RunConfig`` along with cache and rate limiter instances) and the legacy
+    test-oriented interface that only provides dedupe/split configuration.  When
+    ``run_config`` is omitted, a simplified, fully in-process path is used and
+    the summary payload is not returned.
+    """
+
+    if run_config is None:
+        dedupe_cfg = dedupe_config or DedupeConfig()
+        split_cfg = split_config or SplitConfig()
+        canonical_df, id_mapping, clusters = deduplicate_dataframe(df.copy(), dedupe_cfg)
+
+        for field in CLASSIFICATION_SCHEMA["properties"].keys():
+            if field not in canonical_df.columns:
+                canonical_df[field] = ""
+
+        engine = Version2RuleEngine()
+        for idx, row in canonical_df.iterrows():
+            text = f"{row.get('title', '')}\n\n{row.get('body', '')}".strip()
+            result = engine.classify(text)
+            for field in CLASSIFICATION_SCHEMA["properties"].keys():
+                canonical_df.at[idx, field] = getattr(result, field)
+
+        canonical_df = assign_splits(canonical_df, clusters, split_cfg)
+        return canonical_df, id_mapping, clusters
 
     random.seed(run_config.model.seed)
     structured_log(
