@@ -86,10 +86,6 @@ def rule_based_classifier(text: str, engine: Any) -> EnsembleMemberResult:
     payload = {field: getattr(classification, field) for field in classification.__dataclass_fields__}
     rationale = classification.problem_reason or classification.software_reason or classification.external_reason
     confidence = float(classification.confidence or 1.0)
-    try:
-        confidence = float(confidence)
-    except ValueError:  # pragma: no cover - defensive
-        confidence = 1.0
     return EnsembleMemberResult(member="rules", payload=payload, confidence=confidence, rationale=rationale)
 
 
@@ -109,7 +105,7 @@ def ensemble_classify(
         return result.payload, metadata
 
     active_members = [member for member in config.members if member in member_callables]
-    priorities = {"rules": 0, "reasoning": 1, "direct": 2}
+    priorities = {"reasoning": 0, "direct": 1, "rules": 2}
 
     member_results: List[EnsembleMemberResult] = []
     member_details: Dict[str, Dict[str, Any]] = {}

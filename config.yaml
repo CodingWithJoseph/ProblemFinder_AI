@@ -2,7 +2,7 @@ model: "gpt-4o"
 temperature: 0.0
 seed: 42
 ensemble:
-  enabled: false
+  enabled: true
   members: ["direct", "reasoning", "rules"]
   disagreement_threshold: 0.3
 cache:
