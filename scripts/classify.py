@@ -373,6 +373,7 @@ def classify_is_external(client: OpenAI, post_text: str) -> Label:
 
 def describe_rationale(client: OpenAI, post_text: str) -> dict[str, str]:
     """Get comprehensive classification with reasoning."""
+    print(FULL_REASON_PROMPT)
     raw = _call_with_retry(client, FULL_REASON_PROMPT.format(post_text=post_text))
     result = _decode_raw_json(raw)
 
