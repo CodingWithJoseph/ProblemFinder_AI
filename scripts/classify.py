@@ -843,6 +843,29 @@ class Version2RuleEngine:
         "workflow",
     }
 
+    ADVICE_CONTEXT_CUES = {
+        "for anyone else",
+        "in case it helps",
+        "hope this helps",
+        "sharing my experience",
+        "wanted to share",
+        "here's what worked",
+        "here's what i did",
+        "here is what i did",
+        "here is what worked",
+        "my solution",
+        "the solution was",
+        "solution:",
+        "i fixed",
+        "i solved",
+        "fixed it by",
+        "solved it by",
+        "fixed this by",
+        "solved this by",
+        "fix was",
+        "worked for me",
+    }
+
     SOFTWARE_CUES = {
         "app",
         "software",
@@ -944,6 +967,18 @@ class Version2RuleEngine:
         "deployment",
     }
 
+    QUESTION_CUES = (
+        "how do i",
+        "how to",
+        "what should i",
+        "can anyone",
+        "does anyone",
+        "anyone know",
+        "is there a way",
+        "who knows",
+        "could someone",
+    )
+
     UNCERTAINTY_WORDS = {
         "maybe",
         "not sure",
@@ -983,12 +1018,29 @@ class Version2RuleEngine:
     # --- private helpers -------------------------------------------------
 
     def _infer_intent(self, text: str) -> str:
-        if any(pattern in text for pattern in self.PROBLEM_CUES):
+        stripped = text.strip()
+
+        has_direct_question = "?" in text or any(
+            stripped.startswith(cue) or cue in text for cue in self.QUESTION_CUES
+        )
+        if has_direct_question:
             return "seeking_help"
+
         if any(pattern in text for pattern in self.ADVICE_PATTERNS):
             return "sharing_advice"
+
+        if any(pattern in text for pattern in self.RESOLVED_PATTERNS):
+            return "sharing_advice"
+
+        if any(pattern in text for pattern in self.ADVICE_CONTEXT_CUES):
+            return "sharing_advice"
+
         if any(phrase in text for phrase in ["i built", "i made", "launch", "showcase"]):
             return "showcasing"
+
+        if any(pattern in text for pattern in self.PROBLEM_CUES):
+            return "seeking_help"
+
         return "discussing"
 
     def _classify_problem(self, text: str, intent: str) -> Tuple[str, str]:
