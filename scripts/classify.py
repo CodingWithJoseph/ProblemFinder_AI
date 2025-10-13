@@ -176,14 +176,14 @@ Rules:
 - Consider the primary intent: seeking help vs. sharing advice vs. showcasing
 
 Return your response as valid JSON in this exact format:
-{
+{{
   "is_problem": "0 or 1",
   "is_software_solvable": "0 or 1", 
   "is_external": "0 or 1",
   "problem_reason": "Brief explanation for is_problem decision",
   "software_reason": "Brief explanation for is_software_solvable decision",
   "external_reason": "Brief explanation for is_external decision"
-}
+}}
 
 Post:
 {post_text}
@@ -373,6 +373,7 @@ def classify_is_external(client: OpenAI, post_text: str) -> Label:
 
 def describe_rationale(client: OpenAI, post_text: str) -> dict[str, str]:
     """Get comprehensive classification with reasoning."""
+    print(FULL_REASON_PROMPT)
     raw = _call_with_retry(client, FULL_REASON_PROMPT.format(post_text=post_text))
     result = _decode_raw_json(raw)
 
