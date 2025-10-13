@@ -505,7 +505,7 @@ def process_posts(client: OpenAI, df: pd.DataFrame, sleep_seconds: float = 1.5) 
     # Ensure desired column order
     out_df = pd.DataFrame(results)[
         ["title", "body", "intent", "is_problem", "is_software_solvable",
-         "is_external", "rationale", "edge_cases", "confidence"]
+         "is_external", "problem_reason", "software_reason", "external_reason", "detected_patterns", "confidence"]
     ]
     return out_df
 
