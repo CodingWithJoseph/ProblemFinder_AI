@@ -267,8 +267,8 @@ def _call_with_retry(
         prompt: str,
         *,
         model: str = "gpt-4o",
-        max_attempts: int = 3,
-        initial_delay: float = 1.0,
+        max_attempts: int = 5,
+        initial_delay: float = 2.0,
 ) -> Optional[str]:
     """Call the OpenAI API with retry logic; return text or None."""
     delay = initial_delay
@@ -330,10 +330,17 @@ def _decode_raw_json(raw: Optional[str]) -> dict:
     if raw is None:
         return {'error': 'No response received'}
     try:
-        return json.loads(raw)
+        # Remove Markdown code fences if present
+        cleaned = raw.strip().strip("`")
+        if cleaned.startswith("json"):
+            cleaned = cleaned[4:].strip()
+        # Or more robust:
+        cleaned = cleaned.replace("```json", "").replace("```", "").strip()
+        return json.loads(cleaned)
     except json.JSONDecodeError:
         logger.warning("Failed to parse JSON response: %r", raw)
         return {'error': raw}
+
 
 
 # -----------------------------
@@ -427,7 +434,7 @@ def detect_edge_cases(post_text: str, labels: tuple[Label, Label, Label]) -> dic
 # -----------------------------
 # Enhanced Processing
 # -----------------------------
-def process_posts(client: OpenAI, df: pd.DataFrame, sleep_seconds: float = 0.5) -> pd.DataFrame:
+def process_posts(client: OpenAI, df: pd.DataFrame, sleep_seconds: float = 1.5) -> pd.DataFrame:
     """
     Enhanced processing pipeline with intent detection and validation.
 
@@ -504,7 +511,7 @@ def process_posts(client: OpenAI, df: pd.DataFrame, sleep_seconds: float = 0.5) 
 def main() -> None:
     """Entry point: load data, classify, and save results."""
     client = init_client()
-    sample_df = load_data("data/raw_data.csv", sample_size=100)
+    sample_df = load_data("data/raw_data.csv", sample_size=30)
     if sample_df.empty:
         logger.warning("No data to process. Exiting.")
         return
