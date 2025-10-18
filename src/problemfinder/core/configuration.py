@@ -23,6 +23,12 @@ from problemfinder.reporting.evaluation import EvaluationConfig
 
 
 def _load_yaml_config(path: Optional[Path]) -> Dict[str, Any]:
+    """
+    - Opens and safely parses a YAML file into a Python dictionary.
+    - Returns an empty dict if the file is missing.
+    - Performs type-checking to ensure the YAML contains a valid dictionary structure.
+    - Used internally by `build_run_config`.
+    """
     if path and path.exists():
         with path.open("r", encoding="utf-8") as handle:
             payload = yaml.safe_load(handle) or {}
@@ -33,9 +39,11 @@ def _load_yaml_config(path: Optional[Path]) -> Dict[str, Any]:
 
 
 def build_run_config(args: argparse.Namespace) -> RunConfig:
+    # Load the YAML configuration and overlay CLI overrides.
     config_path = Path(args.config) if getattr(args, "config", None) else None
     yaml_payload = _load_yaml_config(config_path)
 
+    # Model Configuration
     model_cfg = ModelConfig(
         name=str(getattr(args, "model", yaml_payload.get("model", "gpt-4o"))),
         temperature=float(yaml_payload.get("temperature", 0.0)),
@@ -46,6 +54,7 @@ def build_run_config(args: argparse.Namespace) -> RunConfig:
     if getattr(args, "seed", None) is not None:
         model_cfg.seed = int(args.seed)
 
+    # Ensemble Configuration
     ensemble_section = yaml_payload.get("ensemble", {}) if isinstance(yaml_payload, dict) else {}
     ensemble_cfg = EnsembleConfig(
         enabled=bool(ensemble_section.get("enabled", False)),
@@ -59,6 +68,7 @@ def build_run_config(args: argparse.Namespace) -> RunConfig:
     if getattr(args, "ensemble_disagreement_threshold", None) is not None:
         ensemble_cfg.disagreement_threshold = float(args.ensemble_disagreement_threshold)
 
+    # Cache Configuration
     cache_section = yaml_payload.get("cache", {}) if isinstance(yaml_payload, dict) else {}
     cache_cfg = CacheConfig(
         enabled=bool(cache_section.get("enabled", False)),
@@ -72,6 +82,7 @@ def build_run_config(args: argparse.Namespace) -> RunConfig:
     if getattr(args, "cache_path", None):
         cache_cfg.path = Path(args.cache_path)
 
+    # Parallel Configuration
     parallel_section = yaml_payload.get("parallel", {}) if isinstance(yaml_payload, dict) else {}
     parallel_cfg = ParallelConfig(
         max_workers=int(parallel_section.get("max_workers", 4)),
@@ -85,6 +96,7 @@ def build_run_config(args: argparse.Namespace) -> RunConfig:
     if getattr(args, "chunk_size", None) is not None:
         parallel_cfg.chunk_size = max(1, int(args.chunk_size))
 
+    # Evaluation Configuration
     evaluation_section = yaml_payload.get("evaluation", {}) if isinstance(yaml_payload, dict) else {}
     evaluation_cfg = EvaluationConfig(
         enabled=bool(evaluation_section.get("enabled", False)),
@@ -96,11 +108,13 @@ def build_run_config(args: argparse.Namespace) -> RunConfig:
     if getattr(args, "evaluation_gold_set", None):
         evaluation_cfg.gold_set_path = Path(args.evaluation_gold_set)
 
+    # Reporting Configuration
     report_section = yaml_payload.get("report", {}) if isinstance(yaml_payload, dict) else {}
     report_cfg = ReportConfig(path=Path(report_section.get("path")) if report_section.get("path") else None)
     if getattr(args, "report_path", None):
         report_cfg.path = Path(args.report_path)
 
+    # Deduplication Configuration
     cross_subreddit_setting = yaml_payload.get("cross_subreddit", True)
     if getattr(args, "cross_subreddit_dedupe", False):
         cross_subreddit_setting = True
@@ -118,6 +132,7 @@ def build_run_config(args: argparse.Namespace) -> RunConfig:
     if isinstance(dedupe_cfg.report_path, str):
         dedupe_cfg.report_path = Path(dedupe_cfg.report_path)
 
+    # Split Configuration
     split_cfg = SplitConfig(
         enabled=not args.no_split,
         train_ratio=float(args.train_ratio),
@@ -125,11 +140,13 @@ def build_run_config(args: argparse.Namespace) -> RunConfig:
         test_ratio=float(args.test_ratio),
     )
 
+    # Resume Configuration
     resume_cfg = ResumeConfig(
         enabled=bool(getattr(args, "resume", False)),
         checkpoint_path=Path(args.resume_from) if getattr(args, "resume_from", None) else None,
     )
 
+    # Aggregate all configurations into a single RunConfig object.
     return RunConfig(
         model=model_cfg,
         ensemble=ensemble_cfg,

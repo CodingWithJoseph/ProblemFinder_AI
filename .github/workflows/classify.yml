@@ -21,7 +21,9 @@ jobs:
       REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
       REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
       REDDIT_USER_AGENT: ${{ secrets.REDDIT_USER_AGENT }}
-      PYTHONPATH: src
+      PYTHONPATH:
+        - src
+        - data
 
     steps:
       - name: Checkout repo

@@ -1,6 +1,6 @@
 import pandas as pd
 
-from problemfinder.core.dedupe import normalise_post
+from problemfinder.core.dedupe import safe_normalise
 
 
 def test_normalise_post_removes_urls_markdown_and_mentions():
@@ -14,7 +14,7 @@ def test_normalise_post_removes_urls_markdown_and_mentions():
         name=0,
     )
 
-    post = normalise_post(row, post_id="abc123")
+    post = safe_normalise(row, post_id="abc123")
 
     assert post.normalised_text == "check this out link bold"
     assert post.urls == ["https://example.com"]
