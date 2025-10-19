@@ -304,7 +304,7 @@ def deduplicate_dataframe(
     posts = [normalise_post(df.iloc[i], post_id=post_ids[i]) for i in range(len(df))]
     clusters = cluster_duplicates(posts, config)
 
-    canonical_rows: List[pd.Series] = []
+    canonical_rows: List[pd.DataFrame] = []
     id_mapping: Dict[str, str] = {}
     cluster_members: Dict[str, List[str]] = {}
 
@@ -340,6 +340,13 @@ def deduplicate_dataframe(
             id_mapping[member_id] = canonical_post.post_id
 
         cluster_members[canonical_post.post_id] = member_ids
+
+    if not canonical_rows:
+        empty_df = df.iloc[0:0].copy()
+        for column in ("canonical_post_id", "duplicate_post_ids", "duplicate_subreddits", "normalized_text"):
+            if column not in empty_df.columns:
+                empty_df[column] = pd.Series(dtype="object")
+        return empty_df.reset_index(drop=True), id_mapping, cluster_members
 
     canonical_df = pd.concat(canonical_rows, ignore_index=True)
 
