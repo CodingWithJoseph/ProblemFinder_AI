@@ -11,6 +11,7 @@ from urllib.parse import SplitResult, urlsplit
 
 logger = logging.getLogger(__name__)
 
+MARKDOWN_LINK_PATTERN = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
 URL_PATTERN = re.compile(r"https?://\S+")
 MENTION_PATTERN = re.compile(r"/?u/[A-Za-z0-9_-]+")
 
@@ -40,50 +41,46 @@ def strip_html(text: str) -> str:
     text = re.sub(r"<[^>]+>", " ", text)
     return html.unescape(text)
 
-
-def is_valid_ipv6_url(url: str) -> bool:
-    """Return ``True`` if ``url`` contains a valid IPv6 literal."""
-
-    ipv6_pattern = r'://\[([0-9a-fA-F:]+)\]'
-    return re.search(ipv6_pattern, url) is not None
-
-
 def safe_urlsplit(url: str) -> SplitResult | None:
-    """Safely split ``url`` while tolerating IPv6 edge cases."""
-
+    """Safely split ``url`` and catch any errors."""
     try:
         if not url or not isinstance(url, str):
             return None
-        if "[" in url and "]" in url:
-            if not is_valid_ipv6_url(url):
-                logger.warning("Skipping invalid IPv6 URL: %s", url[:50])
-                return None
         return urlsplit(url)
     except ValueError as exc:
-        logger.warning("ValueError parsing URL %s: %s", url[:50], exc)
+        logger.warning("Invalid URL %s: %s", url[:50], exc)
         return None
-    except Exception as exc:  # pragma: no cover - defensive
+    except Exception as exc:
         logger.warning("Unexpected error parsing URL %s: %s", url[:50], exc)
         return None
 
 
 def remove_urls(text: str) -> Tuple[str, List[str]]:
     """Remove URLs from ``text`` while collecting them."""
-
     urls: List[str] = []
 
+    # First, extract URLs from markdown links
+    def _extract_markdown_url(match: re.Match[str]) -> str:
+        url = match.group(2)  # Get the URL part (inside parentheses)
+        parsed = safe_urlsplit(url)
+        if parsed is not None:
+            urls.append(url)
+        return " "
+
+    # Remove markdown links first
+    cleaned = MARKDOWN_LINK_PATTERN.sub(_extract_markdown_url, text)
+
+    # Then extract remaining bare URLs
     def _collect(match: re.Match[str]) -> str:
         url = match.group(0)
         parsed = safe_urlsplit(url)
         if parsed is not None:
             urls.append(url)
-        else:
-            logger.debug("Skipped malformed URL: %s", url[:50])
         return " "
 
-    cleaned = URL_PATTERN.sub(_collect, text)
-    return cleaned, urls
+    cleaned = URL_PATTERN.sub(_collect, cleaned)
 
+    return cleaned, urls
 
 def remove_crosspost_boilerplate(text: str) -> str:
     """Strip common Reddit cross-post boilerplate lines."""

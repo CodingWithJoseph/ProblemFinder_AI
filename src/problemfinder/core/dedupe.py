@@ -6,6 +6,7 @@ import csv
 import json
 import math
 import re
+import time
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
@@ -74,7 +75,6 @@ class UnionFind:
 
 def normalise_post(row: pd.Series, *, post_id: str) -> NormalisedPost:
     """Create a :class:`NormalisedPost` by applying canonical cleaning steps."""
-
     title = (row.get("title", "") or "")
     body = (row.get("body", "") or "")
     combined = f"{title}\n\n{body}".strip()
@@ -102,57 +102,85 @@ def normalise_post(row: pd.Series, *, post_id: str) -> NormalisedPost:
         body_length=len(body or ""),
     )
 
-
 def _iter_candidate_pairs(posts: Sequence[NormalisedPost]) -> Iterator[Tuple[int, int]]:
-    """Yield pairs of indices that are likely duplicates using blocking heuristics."""
+    """
+    Takes in a list of NormalisedPost objects.
+    Yields pairs of indices (i, j) where post i and post j are potential duplicates.
+    It doesn’t compute similarity here — it just proposes pairs to check.
+    """
 
+    """
+    Build lookup indices
+    Each index maps a feature (token, URL, domain, or normalized text) → list of post indices that share it.
+    
+    token_index["problem"] = [3, 7, 12, 14]
+    url_index["https://example.com"] = [2, 5]
+    
+    This lets us later say “any two posts that appear in the same list might be duplicates.”
+    """
     token_index: Dict[str, List[int]] = defaultdict(list)
     url_index: Dict[str, List[int]] = defaultdict(list)
     domain_index: Dict[str, List[int]] = defaultdict(list)
     text_index: Dict[str, List[int]] = defaultdict(list)
 
+    # Fill the indices: Loop through every normalized post.
+    # If two posts have exactly the same normalized text, they’re probably duplicates.
+    # So we’ll later yield pairs from text_index.
     for idx, post in enumerate(posts):
         text_index[post.normalised_text].append(idx)
+
+        # If two posts share the same URL, they might refer to the same content.
+        # If they share the same domain (like GitHub.com), they might still be related — so we record that too.
         for url in post.urls:
             url_index[url].append(idx)
             domain = urlparse(url).netloc
             if domain:
                 domain_index[domain].append(idx)
 
+        # Index by tokens: Split each post into tokens (words).
+        # Keep only those longer than 3 characters to skip noise like “a”, “is”, “to”.
+        # Use a set (unique_tokens) so each token per post is counted once, preventing self-pair inflation.
         tokens = post.normalised_text.split()
         unique_tokens = {tok for tok in tokens if len(tok) > 3}
         for token in unique_tokens:
             token_index[token].append(idx)
 
-    for indices in text_index.values():
-        if len(indices) > 1:
-            for i in range(len(indices)):
-                for j in range(i + 1, len(indices)):
-                    yield indices[i], indices[j]
-
-    for indices in url_index.values():
-        if len(indices) > 1:
-            for i in range(len(indices)):
-                for j in range(i + 1, len(indices)):
-                    yield indices[i], indices[j]
-
-    for indices in domain_index.values():
-        if len(indices) > 1:
-            for i in range(len(indices)):
-                for j in range(i + 1, len(indices)):
-                    yield indices[i], indices[j]
-
     seen_pairs: set[Tuple[int, int]] = set()
-    for indices in token_index.values():
-        if len(indices) < 2:
-            continue
+    start_time = time.time()
+    count = 0
+
+    def _yield_unique(indices: List[int]):
+        nonlocal count
         for i in range(len(indices)):
             for j in range(i + 1, len(indices)):
                 a, b = indices[i], indices[j]
                 pair = (min(a, b), max(a, b))
                 if pair not in seen_pairs:
                     seen_pairs.add(pair)
+                    count += 1
+                    if count % 10_000 == 0:
+                        elapsed = time.time() - start_time
+                        print(f"[dedupe] generated {count:,} pairs in {elapsed:.1f}s")
                     yield pair
+
+    # Each block type — skip overly large token buckets
+    for indices in text_index.values():
+        if len(indices) > 1:
+            yield from _yield_unique(indices)
+
+    for indices in url_index.values():
+        if len(indices) > 1:
+            yield from _yield_unique(indices)
+
+    for indices in domain_index.values():
+        if len(indices) > 1:
+            yield from _yield_unique(indices)
+
+    for token, indices in token_index.items():
+        if len(indices) < 2 or len(indices) > 100:
+            continue  # ignore rare and super-common tokens
+        yield from _yield_unique(indices)
+
 
 
 def cluster_duplicates(posts: Sequence[NormalisedPost], config: DedupeConfig) -> Dict[int, List[int]]:

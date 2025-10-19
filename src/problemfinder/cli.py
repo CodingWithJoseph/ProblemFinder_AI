@@ -73,7 +73,7 @@ def parse_args(args: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser.add_argument("--report-path", type=Path, default=None, help="Path to summary report JSON")
     parser.add_argument("--resume", action="store_true", help="Resume from existing labeled output")
     parser.add_argument("--resume-from", type=Path, default=None, help="Path to existing labeled CSV for resume")
-    parser.add_argument("--log-level", default=os.environ.get("LOG_LEVEL", "INFO"))
+    parser.add_argument("--log-level", default=os.environ.get("LOG_LEVEL", "DEBUG"))
     return parser.parse_args(args)
 
 
