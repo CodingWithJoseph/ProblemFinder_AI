@@ -54,7 +54,7 @@ def parse_args(args: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser.add_argument("--train-ratio", type=float, default=0.8)
     parser.add_argument("--val-ratio", type=float, default=0.1)
     parser.add_argument("--test-ratio", type=float, default=0.1)
-    parser.add_argument("--ensemble", choices=["on", "off"], default="off", help="Enable ensemble voting")
+    parser.add_argument("--ensemble", choices=["on", "off"], default="on", help="Enable ensemble voting")
     parser.add_argument("--ensemble-members", default="direct,reasoning,rules", help="Comma separated ensemble members")
     parser.add_argument(
         "--ensemble-disagreement-threshold", type=float, default=0.3, help="Threshold for high disagreement logging"

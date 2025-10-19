@@ -5,9 +5,11 @@ from __future__ import annotations
 import csv
 import json
 import math
+import os
 import re
 import time
 from collections import defaultdict
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Iterator, List, Sequence, Tuple
@@ -182,8 +184,28 @@ def _iter_candidate_pairs(posts: Sequence[NormalisedPost]) -> Iterator[Tuple[int
         yield from _yield_unique(indices)
 
 
+def compute_pair_similarity(args):
+    """Compute similarity and matching signals for one post pair."""
+    a_idx, b_idx, posts, config = args
+    post_a, post_b = posts[a_idx], posts[b_idx]
 
-def cluster_duplicates(posts: Sequence[NormalisedPost], config: DedupeConfig) -> Dict[int, List[int]]:
+    sim = combined_similarity(post_a.normalised_text, post_b.normalised_text)
+    shared_url = bool(set(post_a.urls) & set(post_b.urls))
+    soft_match = (
+        sim >= config.soft_similarity_threshold
+        and post_a.subreddit != post_b.subreddit
+    )
+
+    return a_idx, b_idx, sim, shared_url, soft_match
+
+
+# --- Helper: batch processing to reduce IPC overhead ---
+def _process_batch(batch, posts, config):
+    """Compute similarities for a batch of pairs."""
+    return [compute_pair_similarity((a, b, posts, config)) for (a, b) in batch]
+
+
+def cluster_duplicates(posts: Sequence[NormalisedPost], config: DedupeConfig, n_workers=None, batch_size=1000) -> Dict[int, List[int]]:
     """Cluster posts using similarity and URL signals."""
 
     if not config.enabled or len(posts) <= 1:
@@ -191,25 +213,62 @@ def cluster_duplicates(posts: Sequence[NormalisedPost], config: DedupeConfig) ->
 
     uf = UnionFind()
 
-    for a_idx, b_idx in _iter_candidate_pairs(posts):
-        post_a = posts[a_idx]
-        post_b = posts[b_idx]
+    # Generate candidate pairs
+    candidate_pairs = list(_iter_candidate_pairs(posts))
+    total_pairs = len(candidate_pairs)
 
-        similarity = combined_similarity(post_a.normalised_text, post_b.normalised_text)
-        shared_url = bool(set(post_a.urls) & set(post_b.urls))
-        soft_match = similarity >= config.soft_similarity_threshold and (post_a.subreddit != post_b.subreddit)
-        if (
-            post_a.normalised_text == post_b.normalised_text
-            or shared_url
-            or similarity >= config.similarity_threshold
-            or (config.cross_subreddit and soft_match)
-        ):
-            uf.union(a_idx, b_idx)
+    print(f"[dedupe] {total_pairs:,} candidate pairs generated for {len(posts):,} posts")
 
+    # Initialize the process pool
+    n_workers = n_workers or max(1, os.cpu_count()-4 or 4)
+    print(f"[dedupe] Using {n_workers} CPU workers (batch size = {batch_size})")
+
+    # Submit batches of pairs to workers for processing
+    def batch_iter(seq, size):
+        for post in range(0, len(seq), size):
+            yield seq[post:post + size]
+
+
+    processed = 0
+    start_time = time.time()
+
+    unique_pairs = set(candidate_pairs)
+    print(f"Unique pairs: {len(unique_pairs):,}, raw pairs: {len(candidate_pairs):,}")
+
+
+    with ProcessPoolExecutor(max_workers=n_workers) as executor:
+        futures = [
+            executor.submit(_process_batch, batch, posts, config) for batch in batch_iter(candidate_pairs, batch_size)
+        ]
+
+        unique_pairs = set(candidate_pairs)
+        print(f"Unique pairs: {len(unique_pairs):,}, raw pairs: {len(candidate_pairs):,}")
+
+        for future in as_completed(futures):
+            results = future.result()
+            for a_idx, b_idx, similarity, shared_url, soft_match in results:
+                post_a, post_b = posts[a_idx], posts[b_idx]
+                if (
+                        post_a.normalised_text == post_b.normalised_text
+                        or shared_url
+                        or similarity >= config.similarity_threshold
+                        or (config.cross_subreddit and soft_match)
+                ):
+                    uf.union(a_idx, b_idx)
+            processed += len(results)
+            if processed % 10_000 == 0:
+                elapsed = time.time() - start_time
+                rate = processed / elapsed if elapsed else 0
+                print(f"[dedupe] {processed:,}/{total_pairs:,} pairs processed ({rate:,.0f}/s)")
+
+    # Build the final cluster assignments
     clusters: Dict[int, List[int]] = defaultdict(list)
     for idx in range(len(posts)):
         root = uf.find(idx)
         clusters[root].append(idx)
+
+    elapsed = time.time() - start_time
+    print(f"[dedupe] Parallel dedupe complete in {elapsed:.1f}s → {len(clusters):,} clusters")
 
     return dict(clusters)
 

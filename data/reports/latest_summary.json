@@ -1,0 +1,139 @@
+{
+  "inputs": {
+    "total_rows": 5012,
+    "canonical_rows": 4443,
+    "duplicates_removed": 569
+  },
+  "label_distribution": {
+    "intent": {
+      "counts": {
+        "1": 4005,
+        "2": 209,
+        "4": 169,
+        "3": 60
+      },
+      "total": 4443,
+      "confidence_interval": {
+        "1": 0.008765565048564222,
+        "2": 0.0062257284130548705,
+        "4": 0.0056247368975169,
+        "3": 0.0033939306352538646
+      }
+    },
+    "is_problem": {
+      "counts": {
+        "1": 3874,
+        "0": 569
+      },
+      "total": 4443,
+      "confidence_interval": {
+        "1": 0.009826017717481737,
+        "0": 0.009826017717481738
+      }
+    },
+    "is_software_solvable": {
+      "counts": {
+        "0": 2986,
+        "1": 1457
+      },
+      "total": 4443,
+      "confidence_interval": {
+        "0": 0.013804360078338348,
+        "1": 0.013804360078338346
+      }
+    },
+    "is_external": {
+      "counts": {
+        "1": 2735,
+        "0": 1708
+      },
+      "total": 4443,
+      "confidence_interval": {
+        "1": 0.01430422062648075,
+        "0": 0.01430422062648075
+      }
+    }
+  },
+  "cache": {
+    "hits": 0,
+    "misses": 0
+  },
+  "ensemble": {
+    "mean": 0.0,
+    "stdev": 0.0,
+    "count": 4443,
+    "high_disagreement_ids": [],
+    "buckets": {
+      "high": 0,
+      "low": 4443
+    }
+  },
+  "evaluation": {},
+  "performance": {
+    "total_rows": 5012,
+    "total_time_seconds": 9.573415517807007,
+    "avg_latency_seconds": 0.0005208510094710683,
+    "p95_latency_seconds": 0.0011534690856933594,
+    "cache_enabled": true,
+    "cache_hits": 0,
+    "cache_misses": 0,
+    "dead_letter_count": 0
+  },
+  "config": {
+    "model": {
+      "name": "gpt-4o",
+      "temperature": 0.0,
+      "seed": 42
+    },
+    "ensemble": {
+      "enabled": false,
+      "members": [
+        "direct",
+        "reasoning",
+        "rules"
+      ],
+      "disagreement_threshold": 0.3
+    },
+    "cache": {
+      "enabled": true,
+      "path": "data\\.cache\\responses.json",
+      "ttl_hours": 24
+    },
+    "parallel": {
+      "max_workers": 4,
+      "rate_limit": 30,
+      "chunk_size": 50
+    },
+    "evaluation": {
+      "enabled": false,
+      "gold_set_path": "data\\gold_set.csv",
+      "metrics": [
+        "accuracy",
+        "macro_f1",
+        "confusion_matrix"
+      ]
+    },
+    "report": {
+      "path": "data\\reports\\latest_summary.json"
+    },
+    "dedupe": {
+      "enabled": true,
+      "similarity_threshold": 0.5,
+      "canonical_policy": "earliest",
+      "report_path": null,
+      "soft_similarity_threshold": 0.35,
+      "cross_subreddit": true
+    },
+    "split": {
+      "train_ratio": 0.8,
+      "val_ratio": 0.1,
+      "test_ratio": 0.1,
+      "enabled": true
+    },
+    "resume": {
+      "enabled": false,
+      "checkpoint_path": null
+    },
+    "metrics": []
+  }
+}
