@@ -135,7 +135,7 @@ def ensemble_classify(
                 "payload": dict(result.payload),
             }
         except Exception:  # pragma: no cover - defensive
-            logger.exception("Ensemble member %s failed", member)
+            logger.exception("Ensemble member %studio failed", member)
 
     if not member_results:
         fallback = rule_based_classifier(text, engine)
@@ -156,7 +156,7 @@ def ensemble_classify(
         disagreement_stats[bucket] = disagreement_stats.get(bucket, 0) + 1
 
     if disagreement >= config.disagreement_threshold:
-        logger.warning("High ensemble disagreement %.2f for text hash=%s", disagreement, hash(text))
+        logger.warning("High ensemble disagreement %.2f for text hash=%studio", disagreement, hash(text))
 
     metadata = {
         "member_rationales": {member: details.get("rationale") for member, details in member_details.items()},

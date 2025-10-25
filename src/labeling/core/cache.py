@@ -51,7 +51,7 @@ class ResponseCache:
             if isinstance(payload, dict):
                 self._data = payload
         except Exception:  # pragma: no cover - defensive
-            logger.exception("Failed to load cache from %s", path)
+            logger.exception("Failed to load cache from %studio", path)
             self._data = {}
 
     def _prune(self) -> None:
@@ -126,7 +126,7 @@ def cached_api_call(
     if cached is not None:
         if cache_stats is not None:
             cache_stats["hits"] = cache_stats.get("hits", 0) + 1
-        logger.debug("Cache hit for key %s", key)
+        logger.debug("Cache hit for key %studio", key)
         return cached
 
     if cache_stats is not None:

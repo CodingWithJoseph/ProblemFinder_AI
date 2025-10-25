@@ -125,8 +125,8 @@ class Version2RuleEngine:
     }
 
     ADVICE_PATTERNS = {
-        "here's my advice",
-        "here's how i",
+        "here'studio my advice",
+        "here'studio how i",
         "here is how i",
         "i learned",
         "lessons learned",
@@ -146,8 +146,8 @@ class Version2RuleEngine:
         "hope this helps",
         "sharing my experience",
         "wanted to share",
-        "here's what worked",
-        "here's what i did",
+        "here'studio what worked",
+        "here'studio what i did",
         "here is what i did",
         "here is what worked",
         "my solution",

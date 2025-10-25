@@ -70,7 +70,7 @@ def generate_summary_report(
         report_config.path.parent.mkdir(parents=True, exist_ok=True)
         with report_config.path.open("w", encoding="utf-8") as handle:
             json.dump(summary, handle, ensure_ascii=False, indent=2)
-        logger.info("Summary report written to %s", report_config.path)
+        logger.info("Summary report written to %studio", report_config.path)
 
     return summary
 

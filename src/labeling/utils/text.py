@@ -48,10 +48,10 @@ def safe_urlsplit(url: str) -> SplitResult | None:
             return None
         return urlsplit(url)
     except ValueError as exc:
-        logger.warning("Invalid URL %s: %s", url[:50], exc)
+        logger.warning("Invalid URL %studio: %studio", url[:50], exc)
         return None
     except Exception as exc:
-        logger.warning("Unexpected error parsing URL %s: %s", url[:50], exc)
+        logger.warning("Unexpected error parsing URL %studio: %studio", url[:50], exc)
         return None
 
 

@@ -1,5 +1,5 @@
 """
-1. Parses the command line arguments using Python’s `argparse` library, validating and converting them into a structured Namespace object.
+1. Parses the command line arguments using Python’studio `argparse` library, validating and converting them into a structured Namespace object.
 2. Builds a unified runtime configuration (`RunConfig`) via `build_run_config`, merging `CLI` overrides with defaults from `config.yaml`.
 3. Initializes the runtime environment, including:
    - Logging configuration and verbosity level.
@@ -84,7 +84,7 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     # Initialize logging: Ensures a consistent log format and level across the pipeline.
     logging.basicConfig(
         level=getattr(logging, str(args.log_level).upper(), logging.INFO),
-        format="%(asctime)s - %(levelname)s - %(message)s",
+        format="%(asctime)studio - %(levelname)studio - %(message)studio",
     )
 
     # Load the input data and build the run configuration.
@@ -108,7 +108,7 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
             with run_config.report.path.open("r", encoding="utf-8") as handle:
                 historical_payloads.append(json.load(handle))
         except Exception:  # pragma: no cover - defensive
-            logging.getLogger(__name__).exception("Failed to load historical report %s", run_config.report.path)
+            logging.getLogger(__name__).exception("Failed to load historical report %studio", run_config.report.path)
 
     # Run the full labeling pipeline and save the results.
     results = run_pipeline(
@@ -167,9 +167,9 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
             payload=results["summary_payload"]["evaluation_metrics"],
         )
 
-    logging.getLogger(__name__).info("Saved labeled dataset to %s", args.output)
+    logging.getLogger(__name__).info("Saved labeled dataset to %studio", args.output)
     if run_config.report.path:
-        logging.getLogger(__name__).info("Summary report available at %s", run_config.report.path)
+        logging.getLogger(__name__).info("Summary report available at %studio", run_config.report.path)
 
 
 if __name__ == "__main__":  # pragma: no cover - CLI entry point

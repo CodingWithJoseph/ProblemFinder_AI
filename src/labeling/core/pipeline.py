@@ -157,7 +157,7 @@ def classify_dataframe(
 
     if run_config.dedupe.report_path:
         write_dedupe_report(run_config.dedupe.report_path, clusters, canonical_df)
-        logger.info("Dedupe report written to %s", run_config.dedupe.report_path)
+        logger.info("Dedupe report written to %studio", run_config.dedupe.report_path)
 
     for field in CLASSIFICATION_SCHEMA["properties"].keys():
         if field not in canonical_df.columns:
@@ -256,7 +256,7 @@ def classify_dataframe(
                 metadata.setdefault("disagreement", 0.0)
                 return payload, metadata
             except ValidationError as exc:
-                logger.warning("Schema validation failed on attempt %d: %s", attempts, exc)
+                logger.warning("Schema validation failed on attempt %d: %studio", attempts, exc)
                 time.sleep(backoff)
                 backoff = min(backoff * 2, 8.0)
             except Exception as exc:  # pragma: no cover - defensive
