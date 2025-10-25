@@ -1,4 +1,4 @@
-from problemfinder.classification.rules import Version2RuleEngine
+from labeling.classification import Version2RuleEngine
 
 
 def classify(text: str):

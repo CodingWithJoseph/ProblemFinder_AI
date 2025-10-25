@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from problemfinder.cli import main
+from labeling.cli import main
 
 
 if __name__ == "__main__":  # pragma: no cover - module entry

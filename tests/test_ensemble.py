@@ -1,9 +1,9 @@
-from problemfinder.classification.ensemble import (
+from labeling.classification import (
     EnsembleConfig,
     EnsembleMemberResult,
     ensemble_classify,
 )
-from problemfinder.classification.rules import Version2RuleEngine
+from labeling.classification import Version2RuleEngine
 
 
 def test_ensemble_majority_vote_prefers_confident_member():
